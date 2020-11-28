@@ -1,0 +1,66 @@
+\documentclass[article]{jss}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% declarations for jss.cls %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% almost as usual
+\author{Anonymous Giraffe\\Universit\"at Innsbruck \And 
+        Second Author\\Plus Affiliation}
+\title{Evaluating Covid-19 Short-Term Forecasts using \pkg{scoringutils} in \proglang{R}}
+
+%% for pretty printing and a nice hypersummary also set:
+\Plainauthor{Anonymous Giraffe, Second Author} %% comma-separated
+\Plaintitle{Evaluating Covid-19 Short-Term Forecasts using \texttt{scoringutils} in R} %% without formatting
+\Shorttitle{\pkg{foo}: A Capitalized Title} %% a short title (if necessary)
+
+%% an abstract and keywords
+\Abstract{
+  Forecasts play a role in many scientific fields from finance to meteorology and epidemiology. With the emergence of Covid-19 the role of forecasting to inform public policy has again attracted increased attention. In this paper we introduce a complete framework for evaluating different types of forecasts using the R package scoringutils. We discuss different appropriate evaluation metrics and apply the framework to XXXXX. 
+}
+\Keywords{keywords, comma-separated, not capitalized, \proglang{Java}}
+\Plainkeywords{keywords, comma-separated, not capitalized, Java} %% without formatting
+%% at least one keyword must be supplied
+
+%% publication information
+%% NOTE: Typically, this can be left commented and will be filled out by the technical editor
+%% \Volume{50}
+%% \Issue{9}
+%% \Month{June}
+%% \Year{2012}
+%% \Submitdate{2012-06-04}
+%% \Acceptdate{2012-06-04}
+
+%% The address of (at least) one author should be given
+%% in the following format:
+\Address{
+  Nikos Bosse\\
+  Centre for Mathematical Modelling of Infectious Diseases\\
+%%  Faculty of Economics and Statistics\\
+  London School of Hygiene and Tropical Medicine\\
+%%  6020 Innsbruck, Austria\\
+  E-mail: \email{nikos.bosse@lshtm.ac.uk}\\
+  %% URL: \url{http://eeecon.uibk.ac.at/~zeileis/}
+}
+%% It is also possible to add a telephone and fax number
+%% before the e-mail in the following format:
+%% Telephone: +43/512/507-7103
+%% Fax: +43/512/507-2851
+
+%% for those who use Sweave please include the following line (with % symbols):
+%% need no \usepackage{Sweave.sty}
+
+%% end of declarations %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\begin{document}
+
+
+
+%% include your article here, just as usual
+%% Note that you should use the \pkg{}, \proglang{} and \code{} commands.
+
+\section[introduction]{Introduction}
+Good forecasts are of great interest to decision makers in almost every field. An integral part of assessing and improving their usefulness is forecast evaluation. For decades, researchers therefore have developed and refined an arsenal of techniques not only to forecast, but also to evaluate these forecasts [some citations]. Yet even with this rich body of research available, implementing a consistent framework in R to evaluate forecasts is not trivial. We therefore present the scoringutils pacakge. The goal of the scoringuitls package is to facilitate the evaluation process and to allow even inexperienced users access to a consistent evaluation framework. The remainder of the paper is structured as follows. First, different types of forecasts will be discussed. Then the general forecasting paradigm will be reviewed and discussed. Next, the scoringutils package will be introduced and the different metrics included will be discussed. Lastly, the evaluation framework will be applied to forecasts of death numbers from Covid-19 in the United States. 
+
+\end{document}
