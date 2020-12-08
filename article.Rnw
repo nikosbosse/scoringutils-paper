@@ -16,7 +16,11 @@
 
 %% For Sweave-based articles about R packages:
 %% need no \usepackage{Sweave}
-
+\SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE, prefix.string=plots/plot}
+<<preliminaries, echo=FALSE, results=hide>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+library("MASS")
+@
 
 
 %% -- Article metainformation (author, title, ...) -----------------------------
@@ -63,7 +67,7 @@
 }
 
 \begin{document}
-
+\SweaveOpts{concordance=FALSE}
 
 
 %% -- Introduction -------------------------------------------------------------
@@ -125,76 +129,50 @@ When aggregating, \code{eval_forecasts} takes the mean according to the group de
 To evaluate the UK short term forecast data with scoringutils, we first need to obtain the data by installing and loading the \pkg{covid19.forecasts.uk} using the following commands: 
 
 
-\begin{Schunk}
-\begin{Sinput}
-R> # install and load data pacakge from external repository
-R> # remotes::install_github("sbfnk/covid19.forecasts.uk")
-R> library(covid19.forecasts.uk)
-R> # load truth data
-R> data(covid_uk_data)
-R> head(covid_uk_data)
-\end{Sinput}
-\begin{Soutput}
-# A tibble: 6 x 5
-  value_date value_type    geography value_desc          value
-  <date>     <fct>         <fct>     <fct>               <dbl>
-1 2020-03-19 hospital_inc  England   Hospital admissions   425
-2 2020-03-20 hospital_inc  England   Hospital admissions   651
-3 2020-03-20 hospital_prev England   Total beds occupied  1559
-4 2020-03-21 hospital_inc  England   Hospital admissions   703
-5 2020-03-21 hospital_prev England   Total beds occupied  2104
-6 2020-03-22 hospital_inc  England   Hospital admissions   702
-\end{Soutput}
-\begin{Sinput}
-R> # load forecasts
-R> data(uk_forecasts)
-R> head(uk_forecasts)
-\end{Sinput}
-\begin{Soutput}
-# A tibble: 6 x 8
-  model geography value_type creation_date value_date quantile value
-  <fct> <chr>     <fct>      <date>        <date>        <dbl> <dbl>
-1 EpiS… East of … hospital_… 2020-03-31    2020-04-01     0.05    70
-2 EpiS… East of … hospital_… 2020-03-31    2020-04-02     0.05    64
-3 EpiS… East of … hospital_… 2020-03-31    2020-04-03     0.05    53
-4 EpiS… East of … hospital_… 2020-03-31    2020-04-04     0.05    42
-5 EpiS… East of … hospital_… 2020-03-31    2020-04-05     0.05    30
-6 EpiS… East of … hospital_… 2020-03-31    2020-04-06     0.05    19
-# … with 1 more variable: value_desc <fct>
-\end{Soutput}
-\end{Schunk}
+<<load-data>>=
+# install and load data pacakge from external repository
+# remotes::install_github("sbfnk/covid19.forecasts.uk")
+library(covid19.forecasts.uk)
+
+# load truth data
+data(covid_uk_data)
+head(covid_uk_data)
+
+
+# load forecasts
+data(uk_forecasts)
+head(uk_forecasts)
+@
 
 We also need to make some some minor changes to the data. Both data sets need to be joined and variable names for predictions and forecasts need to be changed. This can be achieved using the following commands: 
 
-\begin{Schunk}
-\begin{Sinput}
-R> combined <- dplyr::inner_join(uk_forecasts %>%
-+                                  dplyr::rename(prediction = value), 
-+                                covid_uk_data %>%
-+                                  dplyr::rename(true_value = value))
-\end{Sinput}
-\end{Schunk}
+<<modify-data>>=
+combined <- dplyr::inner_join(uk_forecasts %>%
+                                dplyr::rename(prediction = value), 
+                              covid_uk_data %>%
+                                dplyr::rename(true_value = value))
+@
 
 MAYBE USE DATA.TABLE INSTEAD OF DPLYR IN ORDER TO AVOID MIXING? ALSO MAYBE JUST IMPLEMENT THE JOINING WITHIN SCORINGUTILS DIRECTLY
 
 The scoringutils package has some built-in functionality for visualisation (also see section [visualisation]). In order to plot predictions we are interested in, we could call 
 
-\begin{Schunk}
-\begin{Sinput}
-R> example_subset <- combined %>%
-+    dplyr::filter(model == "SIRCOVID", 
-+                  creation_date == "2020-06-22")
-R> additional_observations <- covid_uk_data %>%
-+    dplyr::rename(true_value = value) %>%
-+    dplyr::filter(value_date <= "2020-06-22", 
-+                  value_date > "2020-06-01", 
-+                  value_type %in% unique(example_subset$value_type))
-R> scoringutils::plot_predictions(example_subset, 
-+                                 additional_observations,
-+                                 x = "value_date",
-+                                 facet_formula = geography ~ value_type)
-\end{Sinput}
-\end{Schunk}
+<<show-forecasts, eval=FALSE>>=
+example_subset <- combined %>%
+  dplyr::filter(model == "SIRCOVID", 
+                creation_date == "2020-06-22")
+
+additional_observations <- covid_uk_data %>%
+  dplyr::rename(true_value = value) %>%
+  dplyr::filter(value_date <= "2020-06-22", 
+                value_date > "2020-06-01", 
+                value_type %in% unique(example_subset$value_type))
+
+scoringutils::plot_predictions(example_subset, 
+                               additional_observations,
+                               x = "value_date",
+                               facet_formula = geography ~ value_type)
+@
 
 The output is shown in Figure \ref{fig:forecast-visualisation}.
 
@@ -202,42 +180,39 @@ MAYBE CHANGE THE SCORINGUTILS CODE TO MAKE THAT A BIT SLICKER. FOR EXAMPLE: HAVE
 
 \begin{figure}[h]
 \centering
-\includegraphics{plots/plot-show-forecasts}
+<<show-forecasts, echo=FALSE, fig=TRUE, height=5.2, width=7>>=
+example_subset <- combined %>%
+  dplyr::filter(model == "SIRCOVID", 
+                creation_date == "2020-06-22")
+
+additional_observations <- covid_uk_data %>%
+  dplyr::rename(true_value = value) %>%
+  dplyr::filter(value_date <= "2020-06-22", 
+                value_date > "2020-06-01", 
+                value_type %in% unique(example_subset$value_type))
+
+scoringutils::plot_predictions(example_subset, 
+                               additional_observations,
+                               x = "value_date",
+                               facet_formula = geography ~ value_type)
+@
 \caption{\label{fig:forecast-visualisation} Short-term forecasts made by the SIRCOVID model on June 22 2020.}
 \end{figure}
 
 
 An evaluation that returns scores for every model and every prediction target can now be performed by simply calling 
-\begin{Schunk}
-\begin{Sinput}
-R> library(scoringutils)
-R> scores <- eval_forecasts(combined, 
-+                           summarise_by = c("model", "value_type"))
-R> dplyr::glimpse(scores)
-\end{Sinput}
-\begin{Soutput}
-Rows: 35
-Columns: 11
-$ model              <fct> SIRCOVID, SIRCOVID, SIRCOVID, SIRCOVID, …
-$ value_type         <fct> hospital_inc, hospital_prev, death_inc_l…
-$ interval_score     <dbl> 13.022238, 137.574205, 8.845734, 5.42272…
-$ sharpness          <dbl> 5.105571, 70.048708, 3.647750, 1.586862,…
-$ underprediction    <dbl> 1.589048e+00, 1.068817e+01, 7.949136e-01…
-$ overprediction     <dbl> 6.327619, 56.837324, 4.403071, 3.798621,…
-$ coverage           <dbl> 0.4219048, 0.4527387, 0.4642994, 0.46620…
-$ coverage_deviation <dbl> -0.028095238, 0.002738730, 0.014299424, …
-$ bias               <dbl> 0.2971428571, 0.3348521571, 0.3913627639…
-$ aem                <dbl> 17.166667, 174.513330, 12.309981, 7.3172…
-$ quantile_coverage  <dbl> 0.66333333, 0.66992244, 0.79510557, 0.79…
-\end{Soutput}
-\end{Schunk}
+<<scoring>>=
+library(scoringutils)
+scores <- eval_forecasts(combined, 
+                         summarise_by = c("model", "value_type"))
+                         
+dplyr::glimpse(scores)
+@
 
 Pairwise comparisons between models [CITATION] can be made using 
-\begin{Schunk}
-\begin{Sinput}
-R> pairwise <- pairwise_comparison(scores)
-\end{Sinput}
-\end{Schunk}
+<<pairwise-comparison>>=
+pairwise <- pairwise_comparison(scores)
+@
 
 This will be explained in more detail in section [visualisation and interpretation of the evaluation]. 
 
@@ -319,12 +294,9 @@ A good starting point for an evaluation is the following score table that visusa
 
 \begin{figure}[h]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> scoringutils::score_table(scores, y = "model", facet_formula = ~ value_type)
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-score-table}
+<<score-table, echo=TRUE, fig=TRUE, height=5.2, width=12>>=
+scoringutils::score_table(scores, y = "model", facet_formula = ~ value_type)
+@
 \caption{\label{fig:score-table} Coloured table to visualise the computed scores}
 \end{figure}
 
@@ -332,12 +304,9 @@ If all we care about is which model performed best, the pairwise comparison is m
 
 \begin{figure}[h]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> scoringutils::plot_pairwise_comparison(pairwise)
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-pairwise-plot}
+<<pairwise-plot, echo=TRUE, fig=TRUE, height=5.2, width=12>>=
+scoringutils::plot_pairwise_comparison(pairwise)
+@
 \caption{\label{fig:pairwise-comparison} XXXX}
 \end{figure}
 
@@ -359,8 +328,8 @@ R> scoringutils::plot_pairwise_comparison(pairwise)
 
 
 % The results in this paper were obtained using
-% \proglang{R}~4.0.3 with the
-% \pkg{MASS}~7.3.53 package. \proglang{R} itself
+% \proglang{R}~\Sexpr{paste(R.Version()[6:7], collapse = ".")} with the
+% \pkg{MASS}~\Sexpr{packageVersion("MASS")} package. \proglang{R} itself
 % and all packages used are available from the Comprehensive
 % \proglang{R} Archive Network (CRAN) at
 % \url{https://CRAN.R-project.org/}.

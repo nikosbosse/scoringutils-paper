@@ -205,7 +205,11 @@
 \DefineVerbatimEnvironment{CodeInput}{Verbatim}{fontshape=sl}
 \DefineVerbatimEnvironment{CodeOutput}{Verbatim}{}
 \newenvironment{CodeChunk}{}{}
-\setkeys{Gin}{width=0.8\textwidth}
+
+
+%manual change: 
+%\setkeys{Gin}{width=0.8\textwidth}
+\setkeys{Gin}{width=1\textwidth}
 %% footer
 \newlength{\footerskip}
 \setlength{\footerskip}{2.5\baselineskip plus 2ex minus 0.5ex}

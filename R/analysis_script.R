@@ -22,6 +22,25 @@ combined <- dplyr::inner_join(uk_forecasts %>%
                               covid_uk_data %>%
                                 dplyr::rename(true_value = value))
 
+example_subset <- combined %>%
+  dplyr::filter(model == "SIRCOVID", 
+                creation_date == "2020-06-22")
+
+# plot predictions -------------------------------------------------------------
+
+additional_observations <- covid_uk_data %>%
+  dplyr::rename(true_value = value) %>%
+  dplyr::filter(value_date <= "2020-06-22", 
+                value_date > "2020-06-01", 
+                value_type %in% unique(example_subset$value_type))
+
+scoringutils::plot_predictions(example_subset, 
+                               additional_observations,
+                               x = "value_date",
+                               facet_formula = geography ~ value_type)
+ggplot2::ggsave("plots/forecast_visualistion.png")
+
+
 
 # create scoring table ---------------------------------------------------------
 scores <- combined %>%
