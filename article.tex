@@ -8,7 +8,10 @@
 \usepackage{bbm}% to get \mathbbmm{1}
 
 %% another package (only for this demo article)
-\usepackage{framed}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{tabularx}
+\usepackage{rotating}
 
 %% new custom commands
 \newcommand{\class}[1]{`\code{#1}'}
@@ -101,6 +104,11 @@ where $P_t$ is the the cumulative density function (CDF) of the predictive distr
 
 % ==============================================================================
 \section[metrics]{Scoring metrics implemented in \pkg{scoringutils}}
+
+Table: 
+
+\input{tables/scores-table.tex}
+
 
 The metrics included in the \pkg{scoringuitls} package can be divided into two categories. The first consists of metrics that aim to capture different aspects of sharpness and calibration, the second comprises various proper scoring rules. We begin with the latter. 
 
@@ -264,7 +272,6 @@ R> show_avail_forecasts(combined,
 +                       facet_formula = ~ value_desc)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-show-availability}
 \caption{\label{fig:avail-forecasts} Overview of the number of forecasts available}
 \end{figure}
 %THINK ABOUT WHETHER THIS FUNCTION CAN BE COMBINED WITH THE OTHER HEATMAP FUNCTION. 
@@ -290,7 +297,6 @@ R> plot_predictions(truth = covid_uk_data,
 +    ggplot2::theme(legend.position = "bottom")
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-show-forecasts}
 \caption{\label{fig:forecast-visualisation} Short-term forecasts made by the SIRCOVID model on June 22 2020.}
 \end{figure}
 % 
@@ -308,21 +314,6 @@ R> scores <- eval_forecasts(combined,
 +                           summarise_by = c("model", "value_desc"))
 R> glimpse(scores)
 \end{Sinput}
-\begin{Soutput}
-Rows: 29
-Columns: 11
-$ model              <chr> "EpiSoon", "StructuredODE", "Microsimula…
-$ value_desc         <fct> Hospital admissions, Hospital admissions…
-$ interval_score     <dbl> 38.56510, 61.75914, 100.71914, 35.44876,…
-$ sharpness          <dbl> 22.886153, 6.133974, 33.985553, 10.36508…
-$ underprediction    <dbl> 3.66782766, 24.82255866, 33.12350598, 8.…
-$ overprediction     <dbl> 12.0111222, 30.8026045, 33.6100814, 16.5…
-$ coverage_deviation <dbl> 0.034531405, -0.268749094, -0.095652174,…
-$ bias               <dbl> 0.26194170, -0.27368253, -0.39217045, -0…
-$ aem                <dbl> 45.96333, 73.38096, 138.14395, 53.22563,…
-$ relative_skill     <dbl> 0.9085917, 1.2479010, 0.7405995, 0.82232…
-$ scaled_rel_skill   <dbl> NaN, NaN, NaN, NaN, NaN, NaN, NaN, NaN, …
-\end{Soutput}
 \end{Schunk}
 % 
 If a more detailed analysis is desired, the level of aggregation can of course be changed to show for example separate scores for the different locations as well. This can be achieved using the \code{summarise_by} argument. To additionally stratify by location, we could specify \code{summarise_by = c("mode", "value_type", "geography")}. If we wanted to have one score per quantile or one per prediction interval range, we could specify something like \code{summarise_by = c("model", "quantile")} or \code{summarise_by = c("model", "quantile", "range")}. This can be useful if we, for example, want to analyse what proportion of true values are covered by certain interval ranges, or if we want to analyse the accuracy of the tails of the forecasts. When aggregating, \fct{eval\_forecasts} takes the mean according to the group defined in \code{summarise_by}. In the above example, if \code{summarise_by = c("model", "value_type")}, then scores would be averaged over all creation dates, forecast horizons (as represented by the the value dates), locations and quantiles to yield one score per model and forecast target. In addition to the mean, we can also obtain the standard deviation of the scores over which we average, as well as any desired quantile, by specifying \code{sd = TRUE} and for example \code{quantiles = c(0.5)} for the median. 
@@ -359,7 +350,6 @@ A good starting point for an evaluation is the following score table that visusa
 R> score_table(scores, y = "model", facet_formula = ~ value_desc)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-score-table}
 \caption{\label{fig:score-table} Coloured table to visualise the computed scores}
 \end{figure}
 
@@ -373,7 +363,6 @@ R> plot_pairwise_comparison(pairwise) +
 +    ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-pairwise-plot}
 \caption{\label{fig:pairwise-comparison} Ratios of mean scores based on overlapping forecast sets. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison. }
 \end{figure}
 
@@ -386,21 +375,7 @@ R> plot_pairwise_comparison(pairwise, type = "pval") +
 +    ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-pairwise-plot-ratio}
 \caption{\label{fig:pairwise-comparison-pval} XXXX}
-\end{figure}
-
-Both plots can be combined in one: PLOT NEEDS FIXING AND ALSO PROBABLY REMOVE THAT FROM THE PAPER? Figure \ref{fig:pairwise-comparison-both}
-\begin{figure}[h!]
-\centering
-\begin{Schunk}
-\begin{Sinput}
-R> plot_pairwise_comparison(pairwise, type = "together") +
-+    ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-pairwise-plot-pval}
-\caption{\label{fig:pairwise-comparison-both} p-values and ratios together.}
 \end{figure}
 
 In terms of actually understanding \textit{why} one model performs well or badly, the other metrics shown in Figure \ref{fig:score-table} provide additional insight. We turn to them in the following. 
@@ -420,7 +395,6 @@ R> wis_components(scores,
 +    ggplot2::theme(legend.position = "bottom")
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-WIS-components}
 \caption{\label{fig:wis-components} p-values and ratios together.}
 \end{figure}
 
@@ -437,7 +411,6 @@ R> scoringutils::interval_coverage(cov_scores)
 R> scoringutils::quantile_coverage(cov_scores)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-coverage}
 
 \begin{Schunk}
 \begin{Sinput}
@@ -447,7 +420,6 @@ R> cov_scores <- eval_forecasts(combined,
 R> scoringutils::quantile_coverage(cov_scores)
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-quantile-coverage}
 
 \caption{\label{fig:coverage} quantile and interval coverage}
 \end{figure}
@@ -483,7 +455,6 @@ R> scoringutils::score_heatmap(scores, metric = "bias",
 +                              scale = "free_x")
 \end{Sinput}
 \end{Schunk}
-\includegraphics{plots/plot-calibration}
 \caption{\label{fig:bias-heatmap} bias by location}
 \end{figure}
 

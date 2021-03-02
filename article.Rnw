@@ -8,7 +8,10 @@
 \usepackage{bbm}% to get \mathbbmm{1}
 
 %% another package (only for this demo article)
-\usepackage{framed}
+\usepackage{booktabs}
+\usepackage{adjustbox}
+\usepackage{tabularx}
+\usepackage{rotating}
 
 %% new custom commands
 \newcommand{\class}[1]{`\code{#1}'}
@@ -112,6 +115,11 @@ where $P_t$ is the the cumulative density function (CDF) of the predictive distr
 
 % ==============================================================================
 \section[metrics]{Scoring metrics implemented in \pkg{scoringutils}}
+
+Table: 
+
+\input{tables/scores-table.tex}
+
 
 The metrics included in the \pkg{scoringuitls} package can be divided into two categories. The first consists of metrics that aim to capture different aspects of sharpness and calibration, the second comprises various proper scoring rules. We begin with the latter. 
 
@@ -238,7 +246,7 @@ Before we start with scoring the forecasts, it makes sense to start the evaluati
 % 
 \begin{figure}[h]
 \centering
-<<show-availability, echo=TRUE, fig=TRUE, height=6.7, width=12>>=
+<<show-availability, echo=TRUE, fig=TRUE, height=6.7, width=12, eval = FALSE>>=
 show_avail_forecasts(combined, 
                      x = "creation_date", 
                      show_numbers = FALSE,
@@ -255,7 +263,7 @@ Forecasts can be visualised using the \fct{plot\_predictions} function. The func
 % 
 \begin{figure}[h!]
 \centering
-<<show-forecasts, echo=TRUE, fig=TRUE, height=5.2, width=7>>=
+<<show-forecasts, echo=TRUE, fig=TRUE, height=5.2, width=7, eval = FALSE>>=
 locations <- 'c("Scotland", "Wales", "Northern Ireland", "England")'
 plot_predictions(truth = covid_uk_data,
                  forecasts = uk_forecasts,
@@ -279,7 +287,7 @@ A full evaluation of all forecasts based on observed values can be performed usi
 
 As a first start for the evaluation of UK short-term forecasts, it makes sense to look at the scores achieved by every model separate for all prediction targets. This can be achieved by calling
 % 
-<<scoring>>=
+<<scoring, eval = FALSE>>=
 scores <- eval_forecasts(combined, 
                          summarise_by = c("model", "value_desc"))
                          
@@ -297,7 +305,7 @@ In the above example, we did not have to explicitly specify the \code{by} argume
 Pairwise comparisons between models [CITATION] can be obtained in two different ways. First, relative skill scores based on pairwise comparisons are by default returned from \fct{eval\_forecasts}. These will be computed separately for the categories defined in the \code{summarise_by} argument (excluding the category 'model'). Alternatively, a set of scores can be post-processed using the separate function \fct{pairwise\_comparison}. This approach is to be used for visualisation and if p-values for the pairwise comparisons are needed, as those are not returned from \fct{eval\_forecasts}. Usually, one would compute scores without specifying a \code{summarise_by} argument, but sometimes it may be sensible to average over certain scores, for example for predictions generated at a certain date. This allows to reduce the correlation between observations that enter the computation of p-values, which in turn makes the test less liberal. 
 Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models as well as the 
 
-<<pairwise-comparison>>=
+<<pairwise-comparison, eval = FALSE>>=
 # unsummarised scores
 unsummarised_scores <- eval_forecasts(combined)
 pairwise <- pairwise_comparison(unsummarised_scores, 
@@ -313,7 +321,7 @@ A good starting point for an evaluation is the following score table that visusa
 
 \begin{figure}[h]
 \centering
-<<score-table, echo=TRUE, fig=TRUE, height=7.2, width=14>>=
+<<score-table, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = FALSE>>=
 score_table(scores, y = "model", facet_formula = ~ value_desc)
 @
 \caption{\label{fig:score-table} Coloured table to visualise the computed scores}
@@ -323,7 +331,7 @@ The most informative metric in terms of model ranking is the relative\_skill. Ho
 
 \begin{figure}[h!]
 \centering
-<<pairwise-plot, echo=TRUE, fig=TRUE, height=7.2, width=14>>=
+<<pairwise-plot, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = FALSE>>=
 plot_pairwise_comparison(pairwise) +
   ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
 @
@@ -333,21 +341,11 @@ plot_pairwise_comparison(pairwise) +
 we can also look at p-values in Figure \ref{fig:pairwise-comparison-pval} PROBABLY REMOVE THAT FROM THE PAPER
 \begin{figure}[h!]
 \centering
-<<pairwise-plot-ratio, echo=TRUE, fig=TRUE, height=7.2, width=14>>=
+<<pairwise-plot-ratio, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = FALSE>>=
 plot_pairwise_comparison(pairwise, type = "pval") +
   ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
 @
 \caption{\label{fig:pairwise-comparison-pval} XXXX}
-\end{figure}
-
-Both plots can be combined in one: PLOT NEEDS FIXING AND ALSO PROBABLY REMOVE THAT FROM THE PAPER? Figure \ref{fig:pairwise-comparison-both}
-\begin{figure}[h!]
-\centering
-<<pairwise-plot-pval, echo=TRUE, fig=TRUE, height=5.2, width=12>>=
-plot_pairwise_comparison(pairwise, type = "together") +
-  ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
-@
-\caption{\label{fig:pairwise-comparison-both} p-values and ratios together.}
 \end{figure}
 
 In terms of actually understanding \textit{why} one model performs well or badly, the other metrics shown in Figure \ref{fig:score-table} provide additional insight. We turn to them in the following. 
@@ -358,7 +356,7 @@ For forecasts in an interval format, looking at the components of the weighted i
 
 \begin{figure}[h!]
 \centering
-<<WIS-components, echo=TRUE, fig=TRUE, height=5.2, width=12>>=
+<<WIS-components, echo=TRUE, fig=TRUE, height=5.2, width=12, eval = FALSE>>=
 wis_components(scores, 
                facet_formula = ~ value_desc, 
                scales = "free_x") + 
@@ -372,7 +370,7 @@ We can have a closer look at calibration using the functions \fct{interval\_cove
 
 \begin{figure}[h!]
 \centering
-<<coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold'>>=
+<<coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold', eval = FALSE>>=
 cov_scores <- eval_forecasts(combined, 
                              summarise_by = c("model", 
                                               "range", "quantile"))
@@ -380,7 +378,7 @@ scoringutils::interval_coverage(cov_scores)
 scoringutils::quantile_coverage(cov_scores)
 @
 
-<<quantile-coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold'>>=
+<<quantile-coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold', eval = FALSE>>=
 cov_scores <- eval_forecasts(combined, 
                              summarise_by = c("model", 
                                               "range", "quantile"))
@@ -409,7 +407,7 @@ Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 
 \begin{figure}[h]
 \centering
-<<calibration, echo=TRUE, fig=TRUE, height=5.2, width=15>>=
+<<calibration, echo=TRUE, fig=TRUE, height=5.2, width=15, eval = FALSE>>=
 scores <- eval_forecasts(combined, 
                          summarise_by = c("model",
                                           "value_desc", 
