@@ -64,7 +64,7 @@ dss <- list(
   `Metric` = "DSS Dawid-Sebastiani score", 
   `Explanation` = r"(The Dawid-Sebastiani-Score is a proper scoring rule proposed by Gneiting and Raftery in [@gneitingStrictlyProperScoring2007] that only relies on the first moments of the predictive distribution and is therefore easy to compute. It is given as 
 
-$$\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right) + 2 \cdot \log \sigma,$$
+$$\text{dss}(F, y) = \left( \frac{y - \mu}{\sigma} \right)^2 + 2 \cdot \log \sigma,$$
 where $F$ is the predictive distribution with mean $\mu$ and standard deviation $\sigma$ and $y$ is the true observed value. 
 
 textbf{Usage and caveats} The dss is applicable to continuous and integer forecasts and easy to compute. Apart from the ease of computation we see little advantage in using it. MAYBE SCRATCH IT ALTOGETHER FROM THE PAPER?)",
@@ -105,6 +105,19 @@ quantile_coverage <- list(
   `References` = ""
 )
 
+sharpness <- list(
+  `Metric` = "Sharpness", 
+  `Explanation` = r"(Sharpness is the ability to produce narrow forecasts and is a feature of the forecasts only and does not depend on the observations. Sharpness is therefore only of interest conditional on calibration: a very precise forecast is not useful if it is clearly wrong. 
+
+As suggested by @funkAssessingPerformanceRealtime2019, we measure sharpness for continuous and integer forecasts represented by predictive samples as the normalised median absolute deviation about the median (MADN) ), i.e. 
+$$ S(F) = \frac{1}{0.675} \cdot \text{median}(|x - \text{median(x)}|), $$ 
+where $x$ is the vector of all predictive samples and $\frac{1}{0.675}$ is a normalising constant. If the predictive distribution $F$ is the CDF of a normal distribution, then sharpness will equal the standard deviation of $F$. 
+
+For quantile forecasts we can directly use the sharpness component of the weighted interval score. Sharpness is then simply the weighted mean of the widths of the central prediction intervals.)",
+  `Caveats` = "",
+  `References` = ""
+)
+
 bias <- list(
   `Metric` = "Bias", 
   `Explanation` = r"(Bias is a measure of the tendency of a forecaster to over- or underpredict. For continuous forecasts, bias is given as 
@@ -119,6 +132,22 @@ For quantile forecasts, Bias can be calculated as the maximum percentile rank fo
 
 \textbf{Usage}:
 In contrast to the over- and underprediction penalties of the interval score it is bound between 0 and 1 and represents the tendency of forecasts to be biased rather than the absolute amount of over- and underprediction. It is therefore a more robust measurement, but harder to interpet. It largely depends on the application whether one is more interested in the tendency to be biased or in the absolute value of over- and underpredictions.)",
+  `Caveats` = "",
+  `References` = ""
+)
+
+pit <- list(
+  `Metric` = "Probability integral transform (PIT)",
+  `Explanation` = r"(The probability integral transform (PIT) @dawidPresentPositionPotential1984 represents a succinct way to visualise deviations between the predictive distribution $F$ and the true data-generating distribution $G$. The idea is to transform the observed values such that agreement between forecasts and data can then be examined by observing whether or not the transformed values follow a uniform distribution. The PIT is given by 
+$$u = F (y),$$
+where $u$ is the transformed variable and $F(y)$ is the predictive distribution $F$ evaluated at the true observed value $y$. If $F = G$, then $u$ follows a uniform distribution (for a proof see e.g. @angusProbabilityIntegralTransform1994). 
+
+For integer outcomes, the PIT is no longer uniform even when forecasts are ideal. Instead, a randomised PIT (@funkAssessingPerformanceRealtime2019) can be used: 
+$$u = P(y) + v \cdot (P(y) - P(y - 1) ),$$
+where $y$ is again the observed value $P()$ is the cumulative probability assigned to all values smaller or equal to $y$ (where $P(-1) = 0$ by definition, and $v$ is a standard uniform variable independent of $y$. If $P$ is equal to the true data-generating distribution function, then $u$ is standard uniform.  also propose a non-randomised version of the PIT for count data that could be used alternatively. 
+
+\textbf{Usage}: 
+One can plot a histogram of $u$ values to look for deviations from uniformity. U-shaped histograms often result from predictions that are too narrow, while hump-shaped histograms indicate that predictions may be too wide. Biased predictions will usually result in a triangle-shaped histogram. One can also test for deviations from normality, using for example an Anderson-Darling test. This, however, proves to be overly strict in practice and even slight deviations from perfect calibration are punished in a way that makes it very hard to compare models at all. I HAVE MADE A SIMULATION TO TEST THAT IN MY MASTER THESIS AND COULD ADD IT TO THE PAPER?)",
   `Caveats` = "",
   `References` = ""
 )
@@ -155,6 +184,8 @@ data <- rbind(as.data.frame(crps),
               as.data.frame(brier_score), 
               as.data.frame(interval_coverage),
               as.data.frame(quantile_coverage), 
+              as.data.frame(pit),
+              as.data.frame(sharpness),
               as.data.frame(bias), 
               as.data.frame(mean_score_ratio), 
               as.data.frame(relative_skill))
