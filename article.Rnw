@@ -161,32 +161,11 @@ To assess empirical coverage at a certain interval range, we simply measure the 
 
 To get an even more precise picture, we can also look at the percentage of true values below every single quantile of the predictive distribution.
 
-A third way to look at calibration is to look a the probability integral tranform. As explained previously, the CDF of predictice distribution $P_t$ should ideally be equal to the CDF of the true unknown distribution $F_t$ that generated the observed value $x_t$. In order to assess whether there are substantial deviations between the two, @dawidPresentPositionPotential1984 suggested to transform the observed values using the probability integral transform (PIT). Agreement between the forecasts and the observed values can then be examined by observing whether or not the transformed values follow a uniform distribution. The PIT is given by 
-$$u_t = P_t (x_t),$$
-where $u_t$ is the transformed variable and $P_t(x_t)$ is the predictive distribution evaluated at the true observed value $x_t$. If $P_t = F_t$ at all times $t$, then $u_t, t = 1 \dots T$ follows a uniform distribution (for a proof see e.g. @angusProbabilityIntegralTransform1994). 
 
-In the case of discrete outcomes, the PIT is no longer uniform even when forecasts are ideal. As @funkAssessingPerformanceRealtime2019 suggest, we use a randomised PIT instead by redefining 
-$$u_t = P_t(x_t) + vt \cdot (P_t(x_t) - P_t(x_t - 1) ),$$
-where $x_t$ is again the observed value at time $t$, $P_t()$ is the CDF of the predictive distribution function, $P_t (-1) = 0$ by definition, and $v_t$ is a standard uniform variable independent of $x_t$. If $P_t$ is equal to the true data-generating distribution function, then $u_t$ is standard uniform. @czadoPredictiveModelAssessment2009 also propose a non-randomised version of the PIT for count data that could be used alternatively. 
-
-One can then plot a histogram of $u_t$ values to look for deviations from uniformity. U-shaped histograms often result from predictions that are too narrow, while hump-shaped histograms indicate that predictions may be too wide. Biased predictions will usually result in a triangle-shaped histogram. 
 
 \subsubsection{Assessing sharpness}
 
-Sharpness is the second property central to model evaluation. The ability to produce narrow forecasts is a quality of the forecasts only and does not depend on the observations. Sharpness is therefore only of interest conditional on calibration: a very precise forecast is not useful if it is clearly wrong. Again we need to take slightly different approaches for continuous, integer and quantile forecasts. For continuous and integer forecasts we follow the suggestion from @funkAssessingPerformanceRealtime2019. For quantile forecasts we propose a novel metric. 
 
-For continuous and integer forecasts, @funkAssessingPerformanceRealtime2019 suggest to measure sharpness as the normalised median absolute deviation about the median (MADN), i.e. 
-$$ S_t(P_t) = \frac{1}{0.675} \cdot \text{median}(|y - \text{median(y)}|), $$ 
-where $y$ is the vector of all predictive samples and $\frac{1}{0.675}$ is a normalising constant that ensures that sharpness will equal the standard deviation of the predictive distribution if $P_t$ is the CDF of a normal distribution. 
-
-MAKE THE FOLLOWING PARAGRAPH SHORTER AND JUST SAY WE USE THE SHARPNESS COMPONENT OF THE WIS. 
-
-For quantile forecasts, we propose to measure sharpness as a weighted mean of the width of the interval ranges. Let $Q_t$ be a set of predicted quantiles for a true $x_t$ at time $t$. This set of quantiles is assumed to be symmetric, such that there exist $K$ corresponding pairs of elements $q_{t, \frac{\alpha}{2}}$ and $q_{t, 1-\frac{\alpha}{2}}$. These $K$ corresponding pairs of quantiles cover a $(1 - \alpha) \cdot 100$ prediction interval. We can, accordingly, also denote $q_{t, \frac{\alpha}{2}}$ as $l_t$ the lower bound of the prediction interval at time $t$ and $q_{t, 1-\frac{\alpha}{2}}$ as $u_t$, the upper bound. We measure the sharpness of a quantile forecast at time $t$ as
-\begin{align*}
-\text{sharpness}_t &= \frac{1}{K} \sum_{\alpha} \frac{\alpha}{2} (q_{t, 1 - \frac{\alpha}{2}} - q_{t, \frac{\alpha}{2}}) \\
-                   &= \frac{1}{K} \sum_{\alpha} \frac{\alpha}{2} (u_t - l_t).
-\end{align*}
-Weighting the width of different intervals with $\frac{\alpha}{2}$ ensures that the score does not grow indefinitely for very large prediction intervals, and correspondingly, very small $\alpha$. We also argue that this sharpness metric for quantile forecasts is a natural choice for quantile forecasts as it corresponds to the sharpness component of the Weighted Interval Score.
 
 \subsection{Pairwise comparisons} 
 
