@@ -1,0 +1,147 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{pdflscape}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{float}
+\usepackage{longtable}
+\begin{document}
+
+<<table, echo=FALSE, results=tex>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+library("MASS")
+library(data.table)
+
+
+crps <- list(
+  `Metric` = "CRPS (Continuous) ranked probability score", 
+  `Target types` = r"(continuous, integer)", 
+  `Forecast formats` = r"(closed-form, samples (approximation))",
+  `Properties` = "proper scoring rule, global, stable handling of outliers",
+  `References` = ""
+)
+
+log_score <- list(
+  `Metric` = "Log score", 
+  `Target types` = r"(continuous, (integer not in scoringutils))", 
+  `Forecast formats` = r"(closed-form, samples (approximation))",
+  `Properties` = "proper scoring rule, local, unstable for outliers",
+  `References` = ""
+)
+
+wis <- list(
+  Metric = "WIS (Weighted) interval score", 
+  `Target types` = r"(continuous, integer)", 
+  `Forecast formats` = r"(quantile or interval predictions)",
+  `Properties` = "proper scoring rule, global, stable handling of outliers, converges to crps",
+  `References` = ""
+)
+
+dss <- list(
+  `Metric` = "DSS Dawid-Sebastiani score", 
+  `Target types` = r"(continuous, integer)", 
+  `Forecast formats` = r"(closed-form, samples (approximation))",
+  `Properties` = "proper scoring rule, somewhat global, somewhat stable handling of outliers",
+  `References` = ""
+)
+
+brier_score <- list(
+  `Metric` = "Brier score", 
+  `Target types` = r"(binary)", 
+  `Forecast formats` = r"(binary probabilities)",
+  `Properties` = "proper scoring rule",
+  `References` = ""
+)
+
+interval_coverage <- list(
+  `Metric` = "Interval coverage", 
+  `Target types` = r"(continuous, integer)", 
+  `Forecast formats` = r"(interval forecasts (needs matching quantiles))",
+  `Properties` = "measure for calibration",
+  `References` = ""
+)
+
+quantile_coverage <- list(
+  `Metric` = "Quantile coverage", 
+  `Target types` = r"(continuous, integer)", 
+  `Forecast formats` = r"(quantile or interval forecasts)",
+  `Properties` = "measure for calibration",
+  `References` = ""
+)
+
+sharpness <- list(
+  `Metric` = "Sharpness", 
+  `Target types` = r"(continuous, integer)", 
+  `Forecast formats` = r"(closed-form, samples, quantile or interval forecasts)",
+  `Properties` = "measures sharpness, slightly different depending on forecast format",
+  `References` = ""
+)
+
+bias <- list(
+  `Metric` = "Bias", 
+  `Target types` = r"(continuous, integer, quantile)", 
+  `Forecast formats` = r"(closed-form, samples, quantile or interval forecasts)",
+  `Properties` = "captures tendency to over-or underpredict (aspect of calibration)",
+  `References` = ""
+)
+
+pit <- list(
+  `Metric` = "Probability integral transform (PIT)",
+  `Target types` = r"(continuous, integer, quantile)", 
+  `Forecast formats` = r"(closed-form, samples, quantile or interval forecasts)",
+  `Properties` = "assesses calibration",
+  `References` = ""
+)
+
+mean_score_ratio <- list(
+  `Metric` = "Mean score ratio", 
+  `Target types` = r"(depends on score)", 
+  `Forecast formats` = r"(depends on score)",
+  `Properties` = "compares performance of two models",
+  `References` = ""
+)
+
+relative_skill <- list(
+  `Metric` = "Relative skill", 
+  `Target types` = r"(depends on scored)", 
+  `Forecast formats` = r"(depends on score)",
+  `Properties` = "Ranks models based on pairwise comparisons",
+  `References` = ""
+)
+
+data <- rbind(as.data.table(crps), 
+              as.data.table(log_score), 
+              as.data.table(wis), 
+              as.data.table(dss), 
+              as.data.table(brier_score), 
+              as.data.table(interval_coverage),
+              as.data.table(quantile_coverage), 
+              as.data.table(pit),
+              as.data.table(sharpness),
+              as.data.table(bias), 
+              as.data.table(mean_score_ratio), 
+              as.data.table(relative_skill))
+
+saveRDS(data, file = "tables/scores-table-summary.rds")
+
+library(kableExtra)
+library(magrittr)
+library(knitr)
+data[, 1:4] %>%
+  kableExtra::kbl(format = "latex", booktabs = TRUE, 
+                  escape = FALSE,
+                  longtable = TRUE,
+                  linesep = c('\\addlinespace')) %>%
+  kableExtra::column_spec(1, width = "2.5cm") %>%
+  kableExtra::column_spec(2, width = "2cm") %>%
+  kableExtra::column_spec(3, width = "4.5cm") %>%
+  kableExtra::column_spec(4, width = "4cm") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header")) 
+
+@
+
+
+\end{document}

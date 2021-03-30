@@ -51,7 +51,8 @@
 \ProcessOptions
 \LoadClass[11pt,a4paper,twoside]{article}
 %% required packages
-\RequirePackage{graphicx,color,ae,fancyvrb}
+\RequirePackage{graphicx,xcolor,colortbl,ae,fancyvrb}
+%change this
 \RequirePackage[T1]{fontenc}
 \IfFileExists{upquote.sty}{\RequirePackage{upquote}}{}
 \IfFileExists{lmodern.sty}{\RequirePackage{lmodern}}{}

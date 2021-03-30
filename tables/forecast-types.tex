@@ -1,0 +1,28 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{pdflscape}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{multirow}
+\usepackage{Sweave}
+\begin{document}
+
+\begin{longtable}[t]{>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{4.5cm}}
+\toprule
+\textbf{Forecast type} & \textbf{Target type} & \textbf{Representation of the predictive distribution}\\
+\midrule
+Point forecast & continuous \newline  integer \newline  binary & one single number for the predicted outcome\\
+\cmidrule{1-3}\pagebreak[0]
+ & continuous \newline  integer & predictive samples \newline   quantiles \newline   closed analytical form\\
+\cmidrule{2-3}\nopagebreak
+\multirow[t]{-2}{3.5cm}{\raggedright\arraybackslash Probabilistic forecast} & binary & binary probabilities\\
+\bottomrule
+\end{longtable}
+
+\end{document}
+

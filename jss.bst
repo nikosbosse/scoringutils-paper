@@ -1354,7 +1354,7 @@ FUNCTION {chop.word}
     's
   if$
 }
-FUNCTION {format.lab.names}
+FUNCTION {format.lab.names2}
 { 's :=
   "" 't :=
   s #1 "{vv~}{ll}" format.name$
@@ -1377,6 +1377,56 @@ FUNCTION {format.lab.names}
     }
   if$
 }
+
+FUNCTION {format.lab.names}
+{'s :=
+ "" 't :=
+  #1 'nameptr :=
+  s num.names$ 'numnames :=
+  numnames 'namesleft :=
+    { namesleft #0 > }
+    { s nameptr
+      "{vv~}{ll}" format.name$
+      't :=
+      nameptr #1 >
+        {
+          nameptr #2 =
+          numnames #3 > and
+            { "others" 't :=
+              #1 'namesleft := }
+            'skip$
+          if$
+          namesleft #1 >
+            { ", " * t * }
+            {
+              s nameptr "{ll}" format.name$ duplicate$ "others" =
+                { 't := }
+                { pop$ }
+              if$
+                  t "others" =
+                {
+                  " " * bbl.etal *
+                }
+                {
+                  numnames #2 >
+                    { "," * }
+                    'skip$
+                  if$
+                  bbl.and
+                  space.word * t *
+                }
+              if$
+            }
+          if$
+        }
+        't
+      if$
+      nameptr #1 + 'nameptr :=
+      namesleft #1 - 'namesleft :=
+    }
+  while$
+}
+
 
 FUNCTION {author.key.label}
 { author empty$

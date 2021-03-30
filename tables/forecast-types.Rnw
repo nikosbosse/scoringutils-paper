@@ -1,0 +1,67 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{pdflscape}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{xcolor}
+\usepackage{colortbl}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{multirow}
+\begin{document}
+
+<<table, echo=FALSE, results=tex>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE, 
+        knitr.kable.NA = '')
+library("MASS")
+library(data.table)
+
+point_forecast <- list(
+  `Forecast type` = c("Point forecast"),
+  `Target type` = c("continuous \n integer \n binary"),
+  `Representation of the predictive distribution` = c("one single number for the predicted outcome")
+)
+
+
+probabilistic_forecast <- list(
+  `Forecast type` = c("Probabilistic forecast", "Probabilistic forecast"), 
+  `Target type` = c("continuous \n integer", 
+                    "binary"), 
+  `Representation of the predictive distribution` = c(
+    "predictive samples \n  quantiles \n  closed analytical form", 
+    "binary probabilities"
+  )
+)
+
+
+data <- rbind(as.data.table(point_forecast),
+              as.data.table(probabilistic_forecast))
+
+saveRDS(data, file = "tables/forecast-types.rds")
+
+library(kableExtra)
+library(magrittr)
+library(knitr)
+data %>%
+  dplyr::mutate_all(linebreak) %>%
+  kableExtra::kbl(format = "latex", 
+                  booktabs = TRUE, 
+                  escape = FALSE,
+                  longtable = TRUE,
+                  linesep = c('\\addlinespace')) %>%
+  kableExtra::column_spec(1, width = "3.5cm") %>%
+  kableExtra::column_spec(2, width = "2.5cm") %>%
+  kableExtra::column_spec(3, width = "4.5cm") %>%
+  kableExtra::row_spec(0, bold = TRUE) %>%
+  kableExtra::row_spec(1, hline = TRUE) %>%
+  kableExtra::kable_styling() %>% 
+  collapse_rows(valign = "middle")
+
+
+
+@
+
+
+\end{document}
+

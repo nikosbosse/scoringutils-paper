@@ -1,4 +1,4 @@
-\documentclass[article]{jss}
+\documentclass[article,shortnames]{jss}
 
 %% -- LaTeX packages and custom commands ---------------------------------------
 
@@ -13,6 +13,19 @@
 \usepackage{tabularx}
 \usepackage{rotating}
 
+%% packages for the table
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{pdflscape}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{multirow}
+
+\usepackage{xcolor}
+\usepackage{colortbl}
+
+
+
 %% new custom commands
 \newcommand{\class}[1]{`\code{#1}'}
 \newcommand{\fct}[1]{\code{#1()}}
@@ -22,7 +35,13 @@
 \SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE, prefix.string=plots/plot}
 <<preliminaries, echo=FALSE, results=hide>>=
 options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+
+# knitr::knit_hooks$set(document = function(x) {sub('\\usepackage[]{color}', '\\usepackage{xcolor}', x, fixed = TRUE)})
+
 library("MASS")
+library(patchwork)
+library(ggplot2)
+library(kableExtra)
 
 system("bibtex article")
 
@@ -52,7 +71,7 @@ knitr::opts_chunk$set(
 
 %% - \Abstract{} almost as usual
 \Abstract{
-  Forecasts play an important role in a variety of fields. Its role in informing public policy has attracted increased attention from the general public with the emergence of the Covid-19 pandemic. Even with a plethora of tools and models available to make forecasts, evaluating the predictions is not trivial. Even though scoring methods such as proper scoring rules have been widely studied in the past, there is a lack of software implementation that allows a forecaster to conveniently evaluate their forecasts. In this paper we introduce \pkg{scoringutils}, an \proglang{R} package that facilitates automated forecast evaluation. It gives the user access to a wide range of scoring metrics for various types of forecasts as well as a variety of ways to visualise the evaluation. We give an overview of the rationale behind forecast evaluation and the metrics implemented in \pkg{scoringutils} and show a full evaluation of a set of short-term forecasts of public health related targets made by SPI-M during the 2020 Covid-19 epidemic in the United Kingdom. 
+  Forecasts play an important role in a variety of fields. Its role in informing public policy has attracted increased attention from the general public with the emergence of the Covid-19 pandemic. Evaluating forecasts, however, is not trivial in practice. Even though scoring methods such as proper scoring rules have been widely studied in the past, there is a lack of software implementation that allows a forecaster to conveniently evaluate their forecasts. In this paper we introduce \pkg{scoringutils}, an \proglang{R} package that facilitates automated forecast evaluation. It gives the user access to a wide range of scoring metrics for various types of forecasts as well as a variety of ways to visualise the evaluation. We give an overview of the evaluation process and the metrics implemented in \pkg{scoringutils} and show a full evaluation of a set of short-term forecasts of public health related targets made by SPI-M during the 2020 Covid-19 epidemic in the United Kingdom. 
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
@@ -94,49 +113,104 @@ knitr::opts_chunk$set(
 %%   "generalized linear models" below).
 
 \section[Introduction]{Introduction}
-Good forecasts are of great interest to decision makers in various fields like finance (), weather predictions or infectious disease modeling \citep{funkShorttermForecastsInform2020}. An integral part of assessing and improving their usefulness is forecast evaluation. For decades, researchers therefore have developed and refined an arsenal of techniques not only to forecast, but also to evaluate these forecasts (see e.g. \cite{bracherEvaluatingEpidemicForecasts2020a}, \cite{FUNK}, \cite{gneitingProbabilisticForecastsCalibration2007}, and \cite{gneitingStrictlyProperScoring2007}). Yet even with this rich body of research available, implementing a complete forecast evaluation in \proglang{R} is not trivial. We therefore present the \pkg{scoringutils} package. The goal of the scoringuitls package is to facilitate the evaluation process and to allow even inexperienced users to perform a thorough evaluation of their forecasts. In this paper we give a quick introduction of the fundamental ideas behind forecast evaluation, explain the evaluation metrics implemented in \pkg{scoringutils} and present a full example evaluation of Covid-19 related short-term forecasts in the UK \citep{funkShorttermForecastsInform2020}. 
+Good forecasts are of great interest to decision makers in various fields like finance (), weather predictions or infectious disease modeling \citep{funkShorttermForecastsInform2020}. An integral part of assessing and improving their usefulness is forecast evaluation. For decades, researchers therefore have developed and refined an arsenal of techniques not only to forecast, but also to evaluate these forecasts (see e.g. \cite{bracherEvaluatingEpidemicForecasts2020a}, \cite{funkAssessingPerformanceRealtime2019}, \cite{gneitingProbabilisticForecastsCalibration2007}, and \cite{gneitingStrictlyProperScoring2007}). Yet even with this rich body of research available, implementing a complete forecast evaluation in \proglang{R} is not trivial. We therefore present the \pkg{scoringutils} package. The goal of the scoringuitls package is to facilitate the evaluation process and to allow even inexperienced users to perform a thorough evaluation of their forecasts. In this paper we give a quick introduction of the fundamental ideas behind forecast evaluation, explain the evaluation metrics implemented in \pkg{scoringutils} and present a full example evaluation of Covid-19 related short-term forecasts in the UK \citep{funkShorttermForecastsInform2020}. 
 
 \subsection{Forecast types and forecast formats}
 
 In its most general sense, a forecast is the forecaster’s stated belief about the future \citep{gneitingStrictlyProperScoring2007} that can come in many different forms. Quantitative forecasts are either point forecasts or probabilistic in nature and can make statements about continuous, discrete or binary outcome variables. Point forecasts only give one single number for the most likely outcome, but do not quantify the forecaster's uncertainty. This limits their usefulness, as a very certain forecast may, for example, warrant a very different course of actions than does a very uncertain one. Probabilistic forecasts, in contrast, by definition provide a full predictive distribution. This makes them much more useful in any applied setting, as we learn about the forecaster's uncertainty and their belief about all aspects of the underlying data-generating distribution (including e.g. skewness or the width of its tails). Probabilistic forecasts are therefore the focus of this paper as well as the \pkg{scoringutils} package. 
 
-The predictive distribution of a probabilistic forecast can be represented in different ways with implications for the appropriate evaluation approach. Forecasts can wither be expressed analytically in a closed form, or more commonly through either predictive samples or quantiles. Predictive samples are useful if no closed-form predictive distribution is available, but require a lot of storage space. They may also come with a loss of precision that is especially pronounced in the tails of the predictive distribution, where quite a lot of samples are needed to accurately characterise the distribution. For that reason, often quantiles or central prediction intervals are reported instead [citation FORECAST HUBS]. For binary prediction targets, common in many classification problems, a probabilistic forecasts is represented by the probability that an outcome will come true. DO I NEED TO TALK ABOUT MULTINOMIAL CLASSIFICATION PROBLEMS? Figure \ref{fig:overview-forecast-types} summarises the different forecast types and formats. The general forecasting paradigm [GNEITING], however, that guides the evaluation process is the same irrespective of the reporting format, even though specific scoring metrics differ. 
+The predictive distribution of a probabilistic forecast can be represented in different ways with implications for the appropriate evaluation approach. For most forecasting problems, predictive distributions are not readily available in a closed form (and the \pkg{scoringutils} package therefore does not support scoring them directly). Instead, predictive distributions are often represented by a set of quantiles or predictive samples. Predictive samples require a lot of storage space and also come with a loss of precision that is especially pronounced in the tails of the predictive distribution, where quite a lot of samples are needed to accurately characterise the distribution. For that reason, often quantiles or central prediction intervals are reported instead [citation FORECAST HUBS]. For binary prediction targets, common in many classification problems, a probabilistic forecasts is represented by the probability that an outcome will come true. DO I NEED TO TALK ABOUT MULTINOMIAL CLASSIFICATION PROBLEMS? Table \ref{tab:forecast-types} summarises the different forecast types and formats. The general forecasting paradigm \cite{gneitingProbabilisticForecastsCalibration2007}, however, that guides the evaluation process is the same irrespective of the reporting format, even though specific scoring metrics differ. 
 
-
-\begin{figure}[h]
+\begin{table}[h!]
 \centering
-\includegraphics{plots/overview-forecast-types.png}
-\caption{\label{fig:overview-forecast-types} Overview of forecast types}
-\end{figure}
+<<forecast-types-table, echo=FALSE, results=tex>>=
+
+data <- readRDS("tables/forecast-types.rds")
+
+data %>%
+  dplyr::mutate_all(linebreak) %>%
+  kableExtra::kbl(format = "latex", 
+                  booktabs = TRUE, 
+                  escape = FALSE,
+                  longtable = TRUE,
+                  linesep = c('\\addlinespace')) %>%
+  kableExtra::column_spec(1, width = "3.5cm") %>%
+  kableExtra::column_spec(2, width = "2.5cm") %>%
+  kableExtra::column_spec(3, width = "4.5cm") %>%
+  kableExtra::row_spec(0, bold = TRUE) %>%
+  kableExtra::kable_styling() %>% 
+  kableExtra::collapse_rows(valign = "middle")
 
 
+@
+\caption{\label{tab:forecast-types} Ssummary of the different forceast types and forecast formats}
+\end{table}
 
 
 \subsection{The forecasting paradigm}
 
-Any forecaster should aim to minimise the difference between the predictive distribution and the unknown true data-generating distribution [@gneitingProbabilisticForecastsCalibration2007]. For an ideal forecast, we therefore have 
+Any forecaster should aim to minimise the difference between the predictive distribution $F$ and the unknown true data-generating distribution $G$ \citep{gneitingProbabilisticForecastsCalibration2007}. For an ideal forecast, we therefore have 
 %
-$$ P_t = F_t, $$
+$$ F = G. $$
 %
-where $P_t$ is the the cumulative density function (CDF) of the predictive distribution at time $t$ and $F_t$ is the CDF of the true, unknown data-generating distribution. As we don't know the true data-generating distribution, we cannot assess the difference between the two distributions directly. [CITATIONS] instead suggest to focus on two central aspects of the predictive distribution, calibration and sharpness. Calibration refers to the statistical consistency between the predictive distribution and the observations. A well calibrated forecast does not systematically differ deviate from the observed values. For an in-depth discussion of different ways in which a forecast can be miscalibrated, we refer to [GneitingProbabilisticForecastsCalibration2007]. Sharpness is a feature of the forecast only and describes how concentrated the predictive distribution is, i.e. how precise the forecasts are. The general forecasting paradigm states that we should maximise sharpness of the predictive distribution subject to calibration. Take for example the task of predicting rainfall in a city like London. A model that made very precise forecasts would not be useful if the forecasts were wrong most of the time. On the other hand, a model that predicts the same rainfall probability for every day can be correct on average [To be precise, this model would be marginally calibrated according to @gneitingProbabilisticForecastsCalibration2007], but is also less useful than a model that were able to accurately predict the weather every single day. %Figure \@ref(fig:forecast-paradigm) illustrates the concepts of calibration and sharpness once again. DO I WANT THAT FIGURE? 
+As we don't know the true data-generating distribution, we cannot assess the difference between the two distributions directly. \cite{gneitingProbabilisticForecastsCalibration2007} instead suggest to focus on two central aspects of the predictive distribution, calibration and sharpness. Calibration refers to the statistical consistency between the predictive distribution and the observations. A well calibrated forecast does not systematically deviate from the observed values. For an in-depth discussion of different ways in which a forecast can be miscalibrated, we refer to \cite{gneitingProbabilisticForecastsCalibration2007}. Sharpness is a feature of the forecast only and describes how concentrated the predictive distribution is, i.e. how precise the forecasts are. The general forecasting paradigm states that we should maximise sharpness of the predictive distribution subject to calibration. A model that made very precise forecasts would be at best useless if the forecasts were wrong most of the time. On the other hand, a model may be well calibrated, but not sharp enough to be useful. Take a weather forecast that would assign 30 percent rain probability for every single day. It may be well calibrated over the course of a year (it would be marginally calibrated according to \cite{gneitingProbabilisticForecastsCalibration2007}), but we would of course prefer a more precise forecast. Figure \ref{fig:forecast-paradigm} illustrates the concepts of calibration and sharpness. 
+
+\begin{figure}[h]
+\centering
+\includegraphics{plots/forecast-paradigm.png}
+\caption{\label{fig:forecast-paradigm} Schematic illustration of calibration and sharpness. True value are represented in red, the predictive distribution is shown in black}
+\end{figure}
 
 
 % ==============================================================================
 \section[metrics]{Scoring metrics implemented in \pkg{scoringutils}}
 
-Table: 
+Some of the metrics in \pkg{scoringuitls} focus only on sharpness or on calibration. Others, called proper scoring rules, combine both aspects into a single number. The former can be helpful to learn about specific model aspects and improve them, the latter are especially useful to assess and rank predictive performance of a forecaster. The following gives an introduction to how these metrics can be used to evaluate forecasts. Table \ref{tab:table-summary-scores} shows an overview of the metrics implemented in \pkg{scoringutils}. Table \ref{tab:score-table} in the Appendix gives a thorough explanation of all the metrics. 
 
-% \input{tables/scores-table.tex}
+\begin{table}[h!]
+\centering
+<<summary-table, echo=FALSE, results=tex>>=
 
+data <- readRDS("tables/scores-table-summary.rds")
 
-The metrics included in the \pkg{scoringuitls} package can be divided into two categories. The first consists of metrics that aim to capture different aspects of sharpness and calibration, the second comprises various proper scoring rules. We begin with the latter. 
+library(kableExtra)
+library(magrittr)
+library(knitr)
+data[, 1:4] %>%
+  kableExtra::kbl(format = "latex", booktabs = TRUE, 
+                  escape = FALSE,
+                  longtable = TRUE,
+                  linesep = c('\\addlinespace')) %>%
+  kableExtra::column_spec(1, width = "2.5cm") %>%
+  kableExtra::column_spec(2, width = "2cm") %>%
+  kableExtra::column_spec(3, width = "4.5cm") %>%
+  kableExtra::column_spec(4, width = "4cm") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header")) 
+
+@
+\caption{\label{tab:table-summary-scores} Summary table of scores available in scoringutils}
+\end{table}
+
 
 \subsection{Proper scoring rules}
 
-Proper scoring rules [CITATION] jointly assess sharpness and calibration and assign a single numeric value to a forecast. A scoring rule is proper if a perfect forecaster (the predictive distribution equals the data-generating distribution) receives the lowest score on average. This makes sure that a forecaster evaluated by a proper scoring rule is always incentivised to state state their true best belief. The following scoring rules are implemented in \pkg{scoringutils}: The (continuous) ranked probability score (crps) [CITATION], the log score (logs) [CITATION], the Dawid-Sebastiani-score (dss) [CITATION], the (weighted) interval score (wis), and the Brier score (bs). The first three proper scoring rules are implemented as wrappers around functions from the \pkg{scoringRules} package. They are suitable for any sample-based prediction format. The Log Score, however, is not applied if integer-valued forecasts are supplied, as the implementation in \pkg{scoringRules} requires a kernel density estimation that may be inappropriate for integer values. The interval score is appropriate for forecasts in a quantile formats. For every central prediction interval, the interval score is computed as the sum of separate penalties for overprediction, underprediction and sharpness (i.e. width) of the forecast. By default, the weighted interval score is returned. The overall score for a forecast is obtained as the mean of all scores for the individual central prediction intervals, weighted according to the range of the prediction interval. This ensures that the weighted interval score converges to the continuous ranked probability score for an increasing number of available prediction intervals. 
-DO I WANT FORMULAS FOR ALL THE SCORES? The Brier score is used for binary predictions. 
+Proper scoring rules \citep{gneitingStrictlyProperScoring2007} jointly assess sharpness and calibration and assign a single numeric value to a forecast. A scoring rule is proper if a perfect forecaster (the predictive distribution equals the data-generating distribution) receives the lowest score on average. This makes sure that a forecaster evaluated by a proper scoring rule is always incentivised to state their best estimate. 
 
-TALK ABOUT CAVEATS (LATER?) E.G. THAT THE MEAN WIS IS INFLUENCED BY THE ABSOLUTE VALUE OF THE TARGET?
+For sample-based forecasts, the (continuous) ranked probability score (crps) [CITATION], the log score (logs) [CITATION], and the Dawid-Sebastiani-score (dss) [CITATION] are available in \pkg{scoringutils}. These are implemented as wrappers around functions from the \pkg{scoringRules} package (which also has closed-form versions of the scoring rules available). They are in principle applicable to continuous as well as integer forecasts. The \pkg{scoringRules} implementation of the log score, however, requires a kernel density estimation that may be inappropriate for integer values (see also Table \ref{tab:table-summary-scores}) and is therefore not available for discrete predictions in \pkg{scoringutils}. 
+For forecasts in an interval or quantile format, the weighted interval score (wis) \citep{bracherEvaluatingEpidemicForecasts2020a} is available. For an increasing number of equally-spaced prediction intervals, the wis converges to the crps and therefore has very similar properties. Binary forecasts can be scored using the Brier score (bs) [CITATION]. 
+
+%sample-based proper scoring rules\usepackage{multirow}
+When scoring forecasts in a sample-based format, the choice is usually between the log score and the crps. The dss is much less commonly used. It is easier to compute, but apart from that does not have immediate advantages over the former two. Crps and log score differ in two important aspects: the first is sensitivity to distance \cite{winklerScoringRulesEvaluation1996}, the second is how harshly far-off predictions are punished. 
+
+The crps is a so-called global scoring rule, which means that the entire predictive distribution is taken into account when scoring a single forecast. The log score, on the other hand is local. The resulting score does not depend on the overall distance between the observed value and the distribution, but only on the probality density assigend to the actual outcome. Imagine two forecasters, A and B, who forecast the number of points scored in a basketball game. If both forecasters assigned the same probability to the true outcome (100 points), but A assigned higher probability to extreme outcomes far away from the actually observed outcome, then A will receive a worse score than B. The log score, in contrast, is a local scoring rule that only scores the probability assigned to the actual outcome and ignores the rest of the predictive distribution. Judged by the log score, A and B would receive exactly the same score. Sensitivity to distance (taking the entire predictive distribution into account) is arguably an advantage in most settings that involve decision making. Forecaster A's prediction that assigns high probability to results far away from the observed value is arguably less useful than B's forecast that assigns higher probability to values closer to it (the probability assigned to the actual outcome being equal for both forecasts). The log score is only implicitly sensitive to distance if we assume that values close to the observed value are actually more likely to occur. It may, however, be more appropriate for inferential purposes (see \cite{winklerScoringRulesEvaluation1996}). 
+
+% stable vs. non-stable
+A second important difference is how forecasts are treated that deviate strongly from the observered outcome. The crps can be thought of as a generalisation of the absolute error to a predictive distribution. It therefore scales linearly with the distance between forecast distribution and true value. The log score, however, is the log of the predictive density evaluated at the observed value. It can therfore quickly go to negative infinity if the probability assigned to the observed outcome is close to zero. The crps is therefore considered more stable than the log score. The behaviour of the dss is in between the two. Whether or not harsh punishment of bad predictions is desirable or not depends of course on the setting. \cite{bracherEvaluatingEpidemicForecasts2020a} exemplify that in practice there may indeed be substantial differences between how the crps and log score judge the same forecast. 
+
+% properties of the WIS + decomposition
+For quantile forecasts the wis is the best available option and can be understood as an approximation to the crps. One additional benefit of the wis is that it can easily be decomposed into three additive components: an uncertainty penalty (sharpness) for the width of a prediction interval and penalties for over- and underprediction (if a value falls outside of a prediction interval). This can be very helpful in diagnosing model problems. It may therefore even be useful to convert samples into quantiles and use the wis instead of the crps to make use of this decomposition for the purpose of model diagnostics. 
+% fact that scores scale with the overall level of the prediction
+Both crps and wis, as generalisations of the absolute value, suffer from the fact that overall scores depend on the order of magnitude of the quantity we try to forecast. It can therefore be difficult to compare forecasts for very different targets. One possibility to address this is the use of pairwise comparisons introduced later. In general, this is much less of a problem for the log score and the dss. IS IT ONE AT ALL? 
 
 \subsection{Evaluating calibration and sharpness independently}
 
@@ -144,42 +218,101 @@ In addition to the proper scoring rules outlined above, \pkg{scoringutils} makes
 
 \subsubsection{Assessing calibration} 
 
-Several strategies have been proposed to detect systematic deviations of the predictive distributions from the observations (see e.g. @funkAssessingPerformanceRealtime2019; @gneitingProbabilisticForecastsCalibration2007; @gneitingStrictlyProperScoring2007). Using \pkg{scoringutils}, we can look at three different aspects of calibration: bias, empirical coverage, and the probability integral transform (PIT). 
+Several strategies have been proposed to detect systematic deviations of the predictive distributions from the observations (see e.g. \cite{funkAssessingPerformanceRealtime2019}; \cite{gneitingProbabilisticForecastsCalibration2007}; \cite{gneitingStrictlyProperScoring2007}). Using \pkg{scoringutils}, we can look at three different aspects of calibration: bias, empirical coverage, and the probability integral transform (PIT). 
 
-Bias, i.e. systematic over- or underprediction, is a very common form of miscalibration. For continuous forecasts, assessing whether a predictive distribution has a tendency to over- or underpredict can be very easily achieved by simply evaluating the predictive distribution at the true observed value. This metric is a generalisation of the integer-valued one @funkAssessingPerformanceRealtime2019 have proposed. It is also closely related to the probability integral transform (PIT) discussed later in this chapter. To improve the interpretability of the score we can transform it to a value between -1 (under-prediction) and 1 (over-prediction). Consequently, we measure bias as
-$$B_t (P_t, x_t) = 1 - 2 \cdot (P_t (x_t)),$$
-where $P_t$ is the cumulative distribution function of the predictive distribution for the true value $x_t$. When using predictive samples, $P_t (x_t)$ is simply the fraction of predictive samples for $x_t$ that are smaller than the true observed $x_t$.
+% Bias
+Bias, i.e. systematic over- or underprediction, is a very common form of miscalibration which therefore deserves separate attention. The bias metric (with slightly different versions for the various forecast types and formats) captures a general tendency to over- and underpredict that is bound to be between minus one (underpredicton) and one (overprediction), where zero is ideal. It is derived by looking at how much of the probability mass of the predictive distribution is below or above the true observed value. For quantile forecasts we have second alternative approach available to assess over- and underprediction - by simply looking at the corresponding components of the weighted interval score. What is different between the over- and underprediction components and bias as described above is its sensitivity to outliers. The former are derived from absolute differences, while the latter is bound and rather captures a general tendency to be biased. 
 
-For integer valued forecasts, we use the metric proposed by @funkAssessingPerformanceRealtime2019: 
-$$B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t + 1)).$$
-Bias can again assume values between -1 (under-prediction) and 1 (over-prediction) and is 0 ideally. 
-
-For quantile forecasts, we propose the following metric to assess bias: 
-\begin{align*}
-  B_t =& (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t \}) \mathbbm{1}( x_t \leq q_{t, 0.5}) \\
-  &+ (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\}) \mathbbm{1}( x_t \geq q_{t, 0.5}),
-\end{align*}
-where $Q_t$ is the set of quantiles that form the predictive distribution at time $t$. They represent our belief about what the true value $x_t$ will be. For consistency, we define $Q_t$ such that it always includes the element $q_{t, 0} = - \infty$ and $q_{t,1} = \infty$. $\mathbbm{1}()$ is the indicator function that is $1$ if the condition is satisfied and $0$ otherwise. In clearer terms, $B_t$ is defined as the maximum percentile rank for which the corresponding quantile is still below the true value, if the true value is smaller than the median of the predictive distribution. If the true value is above the median of the predictive distribution, then $B_t$ is the minimum percentile rank for which the corresponding quantile is still larger than the true value. If the true value is exactly the median, both terms cancel out and $B_t$ is zero. For a large enough number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed true value, and this metric coincides with the one for continuous forecasts. For quantile forecasts, an alternative approach is to look at the over- and underprediction components of the weighted interval score. These however, capture the bias in absolute terms, while the above proposed metric captures a tendency to over- and underpredict that is less sensitive to outliers. 
-
-I ASSUME ALL OF THIS IS A BIT TOO LONG? 
-
-Another way to look at calibration[precisely: probabilistic calibration in @gneitingProbabilisticForecastsCalibration2007] is to compare the proportion of observed values covered by different parts of the predictive distribution with the nominal coverage implied by the CDF of the distribution. This is most easily understood in the context of quantile forecasts, but can in principle be transferred to continuous and integer forecasts as well. 
-
+% interval coverage and quantile coverage
+Another way to look at calibration (precisely: probabilistic calibration in \cite{gneitingProbabilisticForecastsCalibration2007}) is to compare the proportion of observed values covered by different parts of the predictive distribution with the nominal coverage implied by the CDF of the distribution. This is most easily understood in the context of quantile forecasts, but can easily be transferred to sample-based continuous and integer forecasts as well. 
+%
 To assess empirical coverage at a certain interval range, we simply measure the proportion of true observed values that fall into corresponding range of the predictive distribution. If the 0.05, 0.25, 0.75, and 0.95 quantiles are given, then 50\% of the true values should fall between the 0.25 and 0.75 quantiles and 90\% should fall between the 0.05 and 0.95 quantiles. We can calculate and plot these values to inspect how well different parts of the forecast distribution are calibrated. 
+%
+To get an even more precise picture, we can also look at the percentage of true values below every single quantile of the predictive distribution. This allows to diagnose issues in the lower and upper tails of the prediction intervals separately. A similar way to visualise the same information is a PIT histogram. In order to conveniently assess deviations between the predictive distribution and the true data-generating distribution we can transform the observed values using the probability integral transformation (PIT) \citep{dawidPresentPositionPotential1984} (see more details in Table \ref{tab:score-table}). If both distributions are equal, the transformed values will follow a uniform distribution. A histogram of the transformed values can help to diagnose systematic differences between the predictions and the observed values. Figure \ref{fig:calibration-plots} exemplifies the characteristic shape of certain systematic deviations of the predicitve distribution from the true data-generating distribution. In the PIT histograms, bias leads to a triangular shape, overdispersion results in a hump shaped form and underdispersion in a U-shape. ADD INTERPRETATION FOR QUANTILE AND INTERVAL COVERAGE PLOTS HERE. 
 
-To get an even more precise picture, we can also look at the percentage of true values below every single quantile of the predictive distribution.
+\begin{figure}[h]
+\centering
+\includegraphics{plots/calibration-diagnostic-examples.png}
+\caption{\label{fig:calibration-plots} Calibration plots for different forecast distributions. I plan to add interval and quantile coverage plots, but these still have to be made.}
+\end{figure}
 
+
+<<example-calibration, echo=FALSE, fig=TRUE, height=7.2, width=14, eval = FALSE>>=
+n_truth = 1000
+n_samples = 100
+true_values <- rnorm(n_truth, 0, 1)
+predictions1 <- rnorm(n_truth * n_samples)
+predictions2 <- rnorm(n_truth * n_samples, mean = 0.5)
+predictions3 <- rnorm(n_truth * n_samples, sd = 1.4)
+predictions4 <- rnorm(n_truth * n_samples, sd =  0.7)
+predictions5 <- rnorm(n_truth * n_samples, mean = 0.2, sd =  0.7)
+
+df <- data.table::data.table(true_value = rep(true_values, each = n_samples), 
+                             id = rep(1:n_truth, each = n_samples),
+                             prediction = c(predictions1, predictions2, 
+                                            predictions3, predictions4, 
+                                            predictions5), 
+                             sample = 1:n_samples,
+                             model = rep(c("Normal(0,1)", "Normal(0.5, 1)", 
+                                       "Normal(0, 1.4)", "Normal(0, 0.7)", 
+                                       "Normal(0.2, 0.7)"), each = n_truth * n_samples))
+
+res <- eval_forecasts(df, 
+                      by = c("model", "id"), 
+                      summarise_by = c("model", "range"), 
+                      pit_plots = TRUE)
+
+# plot with observations
+true_value_plot <- ggplot2::ggplot(data = data.frame(x = true_values),
+                ggplot2::aes(x = x)) +
+  ggplot2::geom_histogram(ggplot2::aes(y = ..density..),
+                          fill = "grey",
+                          colour = "dark grey") +
+  cowplot::theme_cowplot() +
+  ggplot2::labs(x = "True values",
+                y = "Density") +
+  ggplot2::theme(legend.position = "bottom")
+
+# plot with standard normal distribution
+standard_normal <- true_value_plot +
+  ggplot2::geom_function(fun = dnorm, colour = "black") +
+  ggplot2::ggtitle("Normal(0, 1)")
+
+# plot with shifted mean
+shifted_mean <- true_value_plot +
+  ggplot2::geom_function(fun = dnorm, colour = "black", args = list(mean = 0.5)) +
+  ggplot2::ggtitle("Normal(0.5, 1)")
+
+# plot with overdispersion
+overdispersion <- true_value_plot +
+  ggplot2::geom_function(fun = dnorm, colour = "black", args = list(sd = 1.4)) +
+  ggplot2::ggtitle("Normal(0, 1.4)")
+
+# plot with underdispersion
+underdispersion <- true_value_plot +
+  ggplot2::geom_function(fun = dnorm, colour = "black", args = list(sd = 0.7)) +
+  ggplot2::ggtitle("Normal(0, 0.7)")
+
+
+(standard_normal | shifted_mean | overdispersion | underdispersion) /
+  (res$pit_plots$`Normal(0,1)` | res$pit_plots$`Normal(0.5, 1)` | res$pit_plots$`Normal(0, 1.4)` | res$pit_plots$`Normal(0, 0.7)`)
+
+ggsave("plots/calibration-diagnostic-examples.png", width = 12.5, height = 6)
+@
 
 
 \subsubsection{Assessing sharpness}
 
+Sharpness is the ability to produce narrow forecasts. It does not depend on the actual observations and is a quality of the forecast only \ref{gneitingProbabilisticForecastsCalibration2007}. Sharpness is therefore only useful subject to calibration, as exemplified above in Figure \ref{fig:calibration-example}. We may be willing to trade off a little calibration for a lot more sharpness, but usually not much. For sample-based forecasts, \pkg{scoringutils} calculates sharpness as the normalised median absolute deviation about the median (MADN) [funkAssessingPerformanceRealtime2019] (for details see Table \ref{tab:score-overview}). For quantile forecasts, we take the sharpness component of the wis which corresponds to a weighted average of the individual interval widths. 
 
+WHAT WOULD BE REALLY COOL IS TO DETERMINE A WAY TO FIND THE OPTIMAL SHARPNESS OF A FORECAST. AS IS, I FEEL THIS PARAGRAPH IS SOMEWHAT USELESS. 
 
 \subsection{Pairwise comparisons} 
 
-If what we care about is to determine which model performs best, pairwise comparisons between models are a suitable approach [CITATION]. In turn, each pair of models is evaluated based on the targets that that both models have predicted. The mean score by one model is divided by the mean score of the other model to obtain a measure of relative performance. Relative skill scores [citation (not sure there is something published, preprint fron Estee Cramer and Nick Reich)] for every model can then be obtained by taking the geometric mean of all pairwise ratios calculated for each model (omitting comparisons where there is no overlapping set of forecasts). ADD FORMULAS. A skill score smaller than 1 indicates that a model is performing better than the average model. One can also scale the skill by a reference baseline. A scaled relative skill smaller than one then means that the model in question performed better than the baseline. 
+If what we care about is to determine which model performs best, pairwise comparisons between models are a suitable approach [CITATION CRAMER et al.]. In turn, each pair of models is evaluated based on the targets that both models have predicted. The mean score by one model is divided by the mean score of the other model to obtain the mean score ratio (see Table \ref{tab:score-overview}, a measure of relative performance. To obtain an overall relative skill score for a model, we take the geomatric mean of all mean score ratios that involve that model  (omitting comparisons where there is no overlapping set of forecasts). This gives us an indicator of performance relative to all other models. The orientation depends on the score used. For the proper scoring rules described above, smaller is better and a relative skill score smaller than 1 indicates that a model is performing better than the average model. We can obtain a scaled relative skill score by dividing a model's relative skill by the relative skill of a baseline model. A scaled relative skill smaller than one then means that the model in question performed better than the baseline. 
 
-By applying a permutation test or non-parametric test like the Wilcoxon rank sum test we can also obtain p-values that help determine whether or not models perform significantly differently. THERE IS AN ISSUE WITH CORRELATION: THE TEST WOULD TREAT ALL OBSERVATIONS AS INDEPENDENT, WHICH THEY ARENT'T, SO I WOULD ASSUME THAT IT IS TOO LIBERAL. CURRENTLY, NO ADJUSTMENTS ARE IMPLEMENTED, I'M NOT REALLY SURE WHETHER TO DISCUSS THIS HERE OR NOT. 
+It is in principle possible to obtain p-values that help determine whether two models perform significantly differently. \pkg{scoringutils} allows to compute these using eitab:score-tablether the Wilcoxon rank sum test or a permutation test. In practice, this is slightly complicated by the fact that both tests assume independent observations. In reality, however, forecasts by a model may be correlated across time or another dimension (e.g. if a forecaster has a bad day, they will likely perform badly across different targets for a given forecast date). P-values may therefore be too quick to suggest significant differences where there aren't any. One way to mitigate this is to aggregate observations over a category where one suspects correlation. A test that is performed on aggregate scores will likely be more conservative. 
+
 
 
 % ==============================================================================
@@ -233,7 +366,7 @@ Before we start with scoring the forecasts, it makes sense to start the evaluati
 % 
 \begin{figure}[h]
 \centering
-<<show-availability, echo=TRUE, fig=TRUE, height=6.7, width=12, eval = FALSE>>=
+<<show-availability, echo=TRUE, fig=TRUE, height=6.7, width=12, eval = TRUE>>=
 show_avail_forecasts(combined, 
                      x = "creation_date", 
                      show_numbers = FALSE,
@@ -273,8 +406,8 @@ The output is shown in Figure \ref{fig:forecast-visualisation}.
 A full evaluation of all forecasts based on observed values can be performed using the function \fct{eval\_forecasts}. This requires a \code{data.frame} or similar which has at least a column called "prediction" and one called "true\_value". Depending on the exact input format, additional columns like "sample", "quantile", or "range" and "boundary" are needed. Additional columns may be present to indicate a grouping of forecasts, for example forecasts made in different locations or over different forecast horizons. We will not discuss all possible input formats here, but instead refer to the example data for each format that is provided with the package. Where possible, \pkg{scoringutils} also provides functionality to transform between various formats, e.g. from a sample based format to a quantile format. The \fct{eval\_forecasts} function automatically recognises the prediction type and input format, applies the appropriate scoring metrics and aggregates results as desired by the user. Internally, operations are handled using \pkg{data.table} to allow for fast and efficient computation.
 
 As a first start for the evaluation of UK short-term forecasts, it makes sense to look at the scores achieved by every model separate for all prediction targets. This can be achieved by calling
-% 
-<<scoring, eval = FALSE>>=
+% ion G
+<<scoring, eval = TRUE>>=
 scores <- eval_forecasts(combined, 
                          summarise_by = c("model", "value_desc"))
                          
@@ -292,7 +425,7 @@ In the above example, we did not have to explicitly specify the \code{by} argume
 Pairwise comparisons between models [CITATION] can be obtained in two different ways. First, relative skill scores based on pairwise comparisons are by default returned from \fct{eval\_forecasts}. These will be computed separately for the categories defined in the \code{summarise_by} argument (excluding the category 'model'). Alternatively, a set of scores can be post-processed using the separate function \fct{pairwise\_comparison}. This approach is to be used for visualisation and if p-values for the pairwise comparisons are needed, as those are not returned from \fct{eval\_forecasts}. Usually, one would compute scores without specifying a \code{summarise_by} argument, but sometimes it may be sensible to average over certain scores, for example for predictions generated at a certain date. This allows to reduce the correlation between observations that enter the computation of p-values, which in turn makes the test less liberal. 
 Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models as well as the 
 
-<<pairwise-comparison, eval = FALSE>>=
+<<pairwise-comparison, eval = TRUE>>=
 # unsummarised scores
 unsummarised_scores <- eval_forecasts(combined)
 pairwise <- pairwise_comparison(unsummarised_scores, 
@@ -308,7 +441,7 @@ A good starting point for an evaluation is the following score table that visusa
 
 \begin{figure}[h]
 \centering
-<<score-table, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = FALSE>>=
+<<score-table, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = TRUE>>=
 score_table(scores, y = "model", facet_formula = ~ value_desc)
 @
 \caption{\label{fig:score-table} Coloured table to visualise the computed scores}
@@ -318,7 +451,7 @@ The most informative metric in terms of model ranking is the relative\_skill. Ho
 
 \begin{figure}[h!]
 \centering
-<<pairwise-plot, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = FALSE>>=
+<<pairwise-plot, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = TRUE>>=
 plot_pairwise_comparison(pairwise) +
   ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
 @
@@ -328,7 +461,7 @@ plot_pairwise_comparison(pairwise) +
 we can also look at p-values in Figure \ref{fig:pairwise-comparison-pval} PROBABLY REMOVE THAT FROM THE PAPER
 \begin{figure}[h!]
 \centering
-<<pairwise-plot-ratio, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = FALSE>>=
+<<pairwise-plot-ratio, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = TRUE>>=
 plot_pairwise_comparison(pairwise, type = "pval") +
   ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
 @
@@ -343,7 +476,7 @@ For forecasts in an interval format, looking at the components of the weighted i
 
 \begin{figure}[h!]
 \centering
-<<WIS-components, echo=TRUE, fig=TRUE, height=5.2, width=12, eval = FALSE>>=
+<<WIS-components, echo=TRUE, fig=TRUE, height=5.2, width=12, eval = TRUE>>=
 wis_components(scores, 
                facet_formula = ~ value_desc, 
                scales = "free_x") + 
@@ -353,11 +486,11 @@ wis_components(scores,
 \caption{\label{fig:wis-components} p-values and ratios together.}
 \end{figure}
 
-We can have a closer look at calibration using the functions \fct{interval\_coverage} and \fct{quantile\_coverage}. The interval coverage plot shows the proportion of all true values that fall within all the different prediction intervals. This gives a visual impression of probabilistic calibration [GNEITING]. Ideally, $x$ percent of true values should be covered by the $x$\%-prediction intervals, resulting in a 45° line. Areas shaded in green indicate that the model is covering more true values than it actually should, while areas in white indicate that the model fails to cover the desired proportion of true values with its prediction intervals. The majority of the models were too confident in their predictions, while some showed showed good calibration. The quantile coverage plot shows the proportion of all true values below certain predictive quantiles. While this plot is slightly harder to interpret, it also includes information about bias as and allows to separate the lower and upper boundaries of the prediction intervals. We can see, for example, that the Exponential growth/decline model was consistently biased downwards. Figure \ref{fig:coverage}
+We can have a closer look at calibration using the functions \fct{interval\_coverage} and \fct{quantile\_coverage}. The interval coverage plot shows the proportion of all true values that fall within all the different prediction intervals. This gives a visual impression of probabilistic calibration \ref{gneitingProbabilisticForecastsCalibration2007}. Ideally, $x$ percent of true values should be covered by the $x$\%-prediction intervals, resulting in a 45° line. Areas shaded in green indicate that the model is covering more true values than it actually should, while areas in white indicate that the model fails to cover the desired proportion of true values with its prediction intervals. The majority of the models were too confident in their predictions, while some showed showed good calibration. The quantile coverage plot shows the proportion of all true values below certain predictive quantiles. While this plot is slightly harder to interpret, it also includes information about bias as and allows to separate the lower and upper boundaries of the prediction intervals. We can see, for example, that the Exponential growth/decline model was consistently biased downwards. Figure \ref{fig:coverage}
 
 \begin{figure}[h!]
 \centering
-<<coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold', eval = FALSE>>=
+<<coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold', eval = TRUE>>=
 cov_scores <- eval_forecasts(combined, 
                              summarise_by = c("model", 
                                               "range", "quantile"))
@@ -365,7 +498,7 @@ scoringutils::interval_coverage(cov_scores)
 scoringutils::quantile_coverage(cov_scores)
 @
 
-<<quantile-coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold', eval = FALSE>>=
+<<quantile-coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold', eval = TRUE>>=
 cov_scores <- eval_forecasts(combined, 
                              summarise_by = c("model", 
                                               "range", "quantile"))
@@ -394,7 +527,7 @@ Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 
 \begin{figure}[h]
 \centering
-<<calibration, echo=TRUE, fig=TRUE, height=5.2, width=15, eval = FALSE>>=
+<<calibration, echo=TRUE, fig=TRUE, height=5.2, width=15, eval = TRUE>>=
 scores <- eval_forecasts(combined, 
                          summarise_by = c("model",
                                           "value_desc", 
@@ -452,7 +585,7 @@ COMING SOON.
 %% - Titles in the .bib should be in title case.
 %% - DOIs should be included where available.
 
-\bibliography{refs}
+\bibliography{references}
 
 
 %% -- Appendix (if any) --------------------------------------------------------
@@ -465,9 +598,51 @@ COMING SOON.
 
 \section{Appendix section} \label{app:technical}
 
+\begin{table}[h!]
+\centering
+<<scores-table, echo=FALSE, results=tex>>=
+
+data <- readRDS("tables/scores-table.rds")
+
+# data[, 1:4] %>%
+#   kableExtra::kbl(format = "latex", booktabs = TRUE, 
+#                   escape = FALSE,
+#                   longtable = TRUE,
+#                   linesep = c('\\addlinespace')) %>%
+#   kableExtra::column_spec(1, width = "2.5cm") %>%
+#   kableExtra::column_spec(2, width = "2cm") %>%
+#   kableExtra::column_spec(3, width = "4.5cm") %>%
+#   kableExtra::column_spec(4, width = "4cm") %>%
+#   kableExtra::kable_styling(latex_options = c("striped", "repeat_header")) 
+
+
+@
+\caption{\label{tab:score-table} Explanation of all the scores}
+\end{table}
+
+
 \end{appendix}
 
 %% -----------------------------------------------------------------------------
 
 
 \end{document}
+
+
+
+
+%BIAS
+% For continuous forecasts, assessing whether a predictive distribution has a tendency to over- or underpredict can be very easily achieved by simply evaluating the predictive distribution at the true observed value. This metric is a generalisation of the integer-valued one @funkAssessingPerformanceRealtime2019 have proposed. It is also closely related to the probability integral transform (PIT) discussed later in this chapter. To improve the interpretability of the score we can transform it to a value between -1 (under-prediction) and 1 (over-prediction). Consequently, we measure bias as
+% $$B_t (P_t, x_t) = 1 - 2 \cdot (P_t (x_t)),$$
+% where $P_t$ is the cumulative distribution function of the predictive distribution for the true value $x_t$. When using predictive samples, $P_t (x_t)$ is simply the fraction of predictive samples for $x_t$ that are smaller than the true observed $x_t$.
+% 
+% For integer valued forecasts, we use the metric proposed by @funkAssessingPerformanceRealtime2019: 
+% $$B_t (P_t, x_t) = 1 - (P_t (x_t) + P_t (x_t + 1)).$$
+% Bias can again assume values between -1 (under-prediction) and 1 (over-prediction) and is 0 ideally. 
+% 
+% For quantile forecasts, we propose the following metric to assess bias: 
+% \begin{align*}
+%   B_t =& (1 - 2 \cdot \max \{i | q_{t,i} \in Q_t \land q_{t,i} \leq x_t \}) \mathbbm{1}( x_t \leq q_{t, 0.5}) \\
+%   &+ (1 - 2 \cdot \min \{i | q_{t,i} \in Q_t \land q_{t,i} \geq x_t\}) \mathbbm{1}( x_t \geq q_{t, 0.5}),
+% \end{align*}
+% where $Q_t$ is the set of quantiles that form the predictive distribution at time $t$. They represent our belief about what the true value $x_t$ will be. For consistency, we define $Q_t$ such that it always includes the element $q_{t, 0} = - \infty$ and $q_{t,1} = \infty$. $\mathbbm{1}()$ is the indicator function that is $1$ if the condition is satisfied and $0$ otherwise. In clearer terms, $B_t$ is defined as the maximum percentile rank for which the corresponding quantile is still below the true value, if the true value is smaller than the median of the predictive distribution. If the true value is above the median of the predictive distribution, then $B_t$ is the minimum percentile rank for which the corresponding quantile is still larger than the true value. If the true value is exactly the median, both terms cancel out and $B_t$ is zero. For a large enough number of quantiles, the percentile rank will equal the proportion of predictive samples below the observed true value, and this metric coincides with the one for continuous forecasts. 

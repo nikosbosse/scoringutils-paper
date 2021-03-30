@@ -1,0 +1,53 @@
+\documentclass{article}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{pdflscape}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{xcolor}
+% \usepackage{colortbl}
+\usepackage{float}
+\usepackage{longtable}
+\usepackage{Sweave}
+\begin{document}
+
+\begin{longtable}[t]{>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{2cm}>{\raggedright\arraybackslash}p{4.5cm}>{\raggedright\arraybackslash}p{4cm}}
+\toprule
+Metric & Target types & Forecast formats & Properties\\
+\midrule
+\endfirsthead
+\multicolumn{4}{@{}l}{\textit{(continued)}}\\
+\toprule
+Metric & Target types & Forecast formats & Properties\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+\cellcolor{gray!6}{CRPS (Continuous) ranked probability score} & \cellcolor{gray!6}{continuous, integer} & \cellcolor{gray!6}{closed-form, samples (approximation)} & \cellcolor{gray!6}{proper scoring rule, global, stable handling of outliers}\\
+\addlinespace
+Log score & continuous, (integer not in scoringutils) & closed-form, samples (approximation) & proper scoring rule, local, unstable for outliers\\
+\addlinespace
+\cellcolor{gray!6}{WIS (Weighted) interval score} & \cellcolor{gray!6}{continuous, integer} & \cellcolor{gray!6}{quantile or interval predictions} & \cellcolor{gray!6}{proper scoring rule, global, stable handling of outliers, converges to crps}\\
+\addlinespace
+DSS Dawid-Sebastiani score & continuous, integer & closed-form, samples (approximation) & proper scoring rule, somewhat global, somewhat stable handling of outliers\\
+\addlinespace
+\cellcolor{gray!6}{Brier score} & \cellcolor{gray!6}{binary} & \cellcolor{gray!6}{binary probabilities} & \cellcolor{gray!6}{proper scoring rule}\\
+\addlinespace
+Interval coverage & continuous, integer & interval forecasts (needs matching quantiles) & measure for calibration\\
+\addlinespace
+\cellcolor{gray!6}{Quantile coverage} & \cellcolor{gray!6}{continuous, integer} & \cellcolor{gray!6}{quantile or interval forecasts} & \cellcolor{gray!6}{measure for calibration}\\
+\addlinespace
+Probability integral transform (PIT) & continuous, integer, quantile & closed-form, samples, quantile or interval forecasts & assesses calibration\\
+\addlinespace
+\cellcolor{gray!6}{Sharpness} & \cellcolor{gray!6}{continuous, integer} & \cellcolor{gray!6}{closed-form, samples, quantile or interval forecasts} & \cellcolor{gray!6}{measures sharpness, slightly different depending on forecast format}\\
+\addlinespace
+Bias & continuous, integer, quantile & closed-form, samples, quantile or interval forecasts & captures tendency to over-or underpredict (aspect of calibration)\\
+\addlinespace
+\cellcolor{gray!6}{Mean score ratio} & \cellcolor{gray!6}{depends on score} & \cellcolor{gray!6}{depends on score} & \cellcolor{gray!6}{compares performance of two models}\\
+\addlinespace
+Relative skill & depends on scored & depends on score & Ranks models based on pairwise comparisons\\*
+\end{longtable}
+
+\end{document}
