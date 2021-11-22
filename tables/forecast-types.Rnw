@@ -19,14 +19,14 @@ library(data.table)
 
 point_forecast <- list(
   `Forecast type` = c("Point forecast"),
-  `Target type` = c("continuous \n integer \n binary"),
+  `Target type` = c("continuous \n discrete \n binary"),
   `Representation of the predictive distribution` = c("one single number for the predicted outcome")
 )
 
 
 probabilistic_forecast <- list(
   `Forecast type` = c("Probabilistic forecast", "Probabilistic forecast"), 
-  `Target type` = c("continuous \n integer", 
+  `Target type` = c("continuous \n discrete", 
                     "binary"), 
   `Representation of the predictive distribution` = c(
     "predictive samples \n  quantiles \n  closed analytical form", 

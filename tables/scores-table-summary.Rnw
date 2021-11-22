@@ -15,41 +15,42 @@ options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
 library("MASS")
 library(data.table)
 
+# create checkmark with $\checkmark$
 
 crps <- list(
-  `Metric` = "CRPS (Continuous) ranked probability score", 
-  `Target types` = r"(continuous, integer)", 
+  `Metric` = "(Continuous) ranked probability score (CRPS)", 
+  `Target types` = r"(continuous, discrete)", 
   `Forecast formats` = r"(closed-form, samples (approximation))",
   `Properties` = "proper scoring rule, global, stable handling of outliers",
   `References` = ""
 )
 
 log_score <- list(
-  `Metric` = "Log score", 
-  `Target types` = r"(continuous, (integer not in scoringutils))", 
+  `Metric` = "Log score (logS)", 
+  `Target types` = r"(continuous, (discrete not in scoringutils))", 
   `Forecast formats` = r"(closed-form, samples (approximation))",
   `Properties` = "proper scoring rule, local, unstable for outliers",
   `References` = ""
 )
 
 wis <- list(
-  Metric = "WIS (Weighted) interval score", 
-  `Target types` = r"(continuous, integer)", 
+  Metric = "(Weighted) interval score (WIS)", 
+  `Target types` = r"(continuous, discrete)", 
   `Forecast formats` = r"(quantile or interval predictions)",
   `Properties` = "proper scoring rule, global, stable handling of outliers, converges to crps",
   `References` = ""
 )
 
 dss <- list(
-  `Metric` = "DSS Dawid-Sebastiani score", 
-  `Target types` = r"(continuous, integer)", 
+  `Metric` = "Dawid-Sebastiani score (DSS)", 
+  `Target types` = r"(continuous, discrete)", 
   `Forecast formats` = r"(closed-form, samples (approximation))",
   `Properties` = "proper scoring rule, somewhat global, somewhat stable handling of outliers",
   `References` = ""
 )
 
 brier_score <- list(
-  `Metric` = "Brier score", 
+  `Metric` = "Brier score (BS)", 
   `Target types` = r"(binary)", 
   `Forecast formats` = r"(binary probabilities)",
   `Properties` = "proper scoring rule",
@@ -58,7 +59,7 @@ brier_score <- list(
 
 interval_coverage <- list(
   `Metric` = "Interval coverage", 
-  `Target types` = r"(continuous, integer)", 
+  `Target types` = r"(continuous, discrete)", 
   `Forecast formats` = r"(interval forecasts (needs matching quantiles))",
   `Properties` = "measure for calibration",
   `References` = ""
@@ -66,7 +67,7 @@ interval_coverage <- list(
 
 quantile_coverage <- list(
   `Metric` = "Quantile coverage", 
-  `Target types` = r"(continuous, integer)", 
+  `Target types` = r"(continuous, discrete)", 
   `Forecast formats` = r"(quantile or interval forecasts)",
   `Properties` = "measure for calibration",
   `References` = ""
@@ -74,7 +75,7 @@ quantile_coverage <- list(
 
 sharpness <- list(
   `Metric` = "Sharpness", 
-  `Target types` = r"(continuous, integer)", 
+  `Target types` = r"(continuous, discrete)", 
   `Forecast formats` = r"(closed-form, samples, quantile or interval forecasts)",
   `Properties` = "measures sharpness, slightly different depending on forecast format",
   `References` = ""
@@ -82,7 +83,7 @@ sharpness <- list(
 
 bias <- list(
   `Metric` = "Bias", 
-  `Target types` = r"(continuous, integer, quantile)", 
+  `Target types` = r"(continuous, discrete, quantile)", 
   `Forecast formats` = r"(closed-form, samples, quantile or interval forecasts)",
   `Properties` = "captures tendency to over-or underpredict (aspect of calibration)",
   `References` = ""
@@ -90,7 +91,7 @@ bias <- list(
 
 pit <- list(
   `Metric` = "Probability integral transform (PIT)",
-  `Target types` = r"(continuous, integer, quantile)", 
+  `Target types` = r"(continuous, discrete, quantile)", 
   `Forecast formats` = r"(closed-form, samples, quantile or interval forecasts)",
   `Properties` = "assesses calibration",
   `References` = ""
@@ -125,7 +126,7 @@ data <- rbind(as.data.table(crps),
               as.data.table(mean_score_ratio), 
               as.data.table(relative_skill))
 
-saveRDS(data, file = "tables/scores-table-summary.rds")
+# saveRDS(data, file = "tables/scores-table-summary.rds")
 
 library(kableExtra)
 library(magrittr)
@@ -140,6 +141,195 @@ data[, 1:4] %>%
   kableExtra::column_spec(3, width = "4.5cm") %>%
   kableExtra::column_spec(4, width = "4cm") %>%
   kableExtra::kable_styling(latex_options = c("striped", "repeat_header")) 
+
+@
+
+<<table2, echo=FALSE, results=tex>>=
+options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
+library("MASS")
+library(data.table)
+
+# create checkmark with $\checkmark$
+
+crps <- list(
+  `Metric` = "(Continuous) ranked probability score (CRPS)", 
+  `Discrete` = r"($\checkmark$)",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"()",
+  `Closed-form` = r"($\checkmark$)",
+  `Samples (approx.)` = r"($\checkmark$)",
+  `Quantiles` = r"()",
+  `Properties` = "proper scoring rule, global, stable handling of outliers",
+  `References` = ""
+)
+
+log_score <- list(
+  `Metric` = "Log score (logS)", 
+  `Discrete` = r"(($\checkmark$))",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"()",
+  `Closed-form` = r"($\checkmark$)",
+  `Samples (approx.)` = r"($\checkmark$)",
+  `Quantiles` = r"()",
+  `Properties` = "proper scoring rule, local, unstable for outliers",
+  `References` = ""
+)
+
+wis <- list(
+  Metric = "(Weighted) interval score (WIS)", 
+  `Discrete` = r"($\checkmark$)",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"()",
+  `Closed-form` = r"()",
+  `Samples (approx.)` = r"(THINK )",
+  `Quantiles` = r"($\checkmark$)",
+  `Properties` = "proper scoring rule, global, stable handling of outliers, converges to crps",
+  `References` = ""
+)
+
+dss <- list(
+  `Metric` = "Dawid-Sebastiani score (DSS)", 
+  `Discrete` = r"($\checkmark$)",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"()",
+  `Closed-form` = r"($\checkmark$)",
+  `Samples (approx.)` = r"($\checkmark$)",
+  `Quantiles` = r"()",
+  `Properties` = "proper scoring rule, somewhat global, somewhat stable handling of outliers",
+  `References` = ""
+)
+
+brier_score <- list(
+  `Metric` = "Brier score (BS)", 
+  `Discrete` = r"()",
+  `Continuous` = r"()",
+  `Binary` = r"($\checkmark$)",
+  `Closed-form` = r"()",
+  `Samples (approx.)` = r"($\checkmark$)",
+  `Quantiles` = r"()",
+  #`Forecast formats` = r"(binary probabilities)",
+  `Properties` = "proper scoring rule",
+  `References` = ""
+)
+
+interval_coverage <- list(
+  `Metric` = "Interval coverage", 
+  `Discrete` = r"($\checkmark$)",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"()",
+  `Closed-form` = r"()",
+  `Samples (approx.)` = r"(THINK )",
+  `Quantiles` = r"($\checkmark$)",
+  `Properties` = "measure for calibration",
+  `References` = ""
+)
+
+quantile_coverage <- list(
+  `Metric` = "Quantile coverage", 
+  `Discrete` = r"($\checkmark$)",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"()",
+  `Closed-form` = r"()",
+  `Samples (approx.)` = r"(THINK )",
+  `Quantiles` = r"($\checkmark$)",
+  `Properties` = "measure for calibration",
+  `References` = ""
+)
+
+sharpness <- list(
+  `Metric` = "Sharpness", 
+  `Discrete` = r"($\checkmark$)",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"()",
+  `Closed-form` = r"($\checkmark$)",
+  `Samples (approx.)` = r"($\checkmark$)",
+  `Quantiles` = r"($\checkmark$)",
+  `Properties` = "measures forecast dispersions",
+  `References` = ""
+)
+
+bias <- list(
+  `Metric` = "Bias", 
+  `Discrete` = r"($\checkmark$)",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"($\checkmark$???)",
+  `Closed-form` = r"($\checkmark$)",
+  `Samples (approx.)` = r"($\checkmark$)",
+  `Quantiles` = r"($\checkmark$)",
+  `Properties` = "captures tendency to over-or underpredict (aspect of calibration)",
+  `References` = ""
+)
+
+pit <- list(
+  `Metric` = "Probability integral transform (PIT)",
+  `Discrete` = r"($\checkmark$)",
+  `Continuous` = r"($\checkmark$)",
+  `Binary` = r"()",
+  `Closed-form` = r"($\checkmark$)",
+  `Samples (approx.)` = r"($\checkmark$)",
+  `Quantiles` = r"($\checkmark$)",
+  `Properties` = "assesses calibration",
+  `References` = ""
+)
+
+mean_score_ratio <- list(
+  `Metric` = "Mean score ratio", 
+  `Discrete` = r"(depends)",
+  `Continuous` = r"(depends)",
+  `Binary` = r"(depends)",
+  `Closed-form` = r"(depends)",
+  `Samples (approx.)` = r"(depends)",
+  `Quantiles` = r"(depends)",
+  `Properties` = "compares performance of two models",
+  `References` = ""
+)
+
+relative_skill <- list(
+  `Metric` = "Relative skill", 
+  `Discrete` = r"(depends)",
+  `Continuous` = r"(depends)",
+  `Binary` = r"(depends)",
+  `Closed-form` = r"(depends)",
+  `Samples (approx.)` = r"(depends)",
+  `Quantiles` = r"(depends)",
+  `Properties` = "Ranks models based on pairwise comparisons",
+  `References` = ""
+)
+
+data <- rbind(as.data.table(crps), 
+              as.data.table(log_score), 
+              as.data.table(wis), 
+              as.data.table(dss), 
+              as.data.table(brier_score), 
+              as.data.table(interval_coverage),
+              as.data.table(quantile_coverage), 
+              as.data.table(pit),
+              as.data.table(sharpness),
+              as.data.table(bias), 
+              as.data.table(mean_score_ratio), 
+              as.data.table(relative_skill))
+
+# saveRDS(data, file = "tables/scores-table-summary2.rds")
+
+library(kableExtra)
+library(magrittr)
+library(knitr)
+data[, 1:8] %>%
+  kableExtra::kbl(format = "latex", booktabs = TRUE, 
+                  escape = FALSE,
+                  longtable = TRUE,
+                  align = c("lccccccl"),
+                  linesep = c('\\addlinespace')) %>%
+  kableExtra::column_spec(1, width = "3.2cm") %>%
+  kableExtra::column_spec(2, width = "1.5cm") %>%
+  kableExtra::column_spec(3, width = "1.5cm") %>%
+  kableExtra::column_spec(4, width = "1.3cm") %>%
+  kableExtra::column_spec(5, width = "1.3cm") %>%
+  kableExtra::column_spec(6, width = "1.5cm") %>%
+  kableExtra::column_spec(7, width = "1.3cm") %>%
+  kableExtra::column_spec(8, width = "6.0cm") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header")) %>%
+  kableExtra::landscape()
 
 @
 

@@ -1,4 +1,4 @@
-\begin{thebibliography}{7}
+\begin{thebibliography}{9}
 \newcommand{\enquote}[1]{``#1''}
 \providecommand{\natexlab}[1]{#1}
 \providecommand{\url}[1]{\texttt{#1}}
@@ -9,83 +9,103 @@
   \urlstyle{rm}\Url}\fi
 \providecommand{\eprint}[2][]{\url{#2}}
 
-\bibitem[{Bracher et~al.(2020)Bracher, Ray, Gneiting, and
-  Reich}]{bracherEvaluatingEpidemicForecasts2020a}
-Bracher J, Ray EL, Gneiting T, Reich NG (2020).
-\newblock \enquote{Evaluating epidemic forecasts in an interval format.}
-\newblock \emph{arXiv:2005.12881 [q-bio, stat]}.
-\newblock ArXiv: 2005.12881, \urlprefix\url{http://arxiv.org/abs/2005.12881}.
+\bibitem[{Bracher et~al.()Bracher, Ray, Gneiting, and
+  Reich}]{bracherEvaluatingEpidemicForecasts2021}
+Bracher J, Ray EL, Gneiting T, Reich NG (????).
+\newblock \enquote{Evaluating Epidemic Forecasts in an Interval Format.}
+\newblock \textbf{17}(2), e1008618.
+\newblock ISSN 1553-7358.
+\newblock \doi{10.1371/journal.pcbi.1008618}.
+\newblock \eprint{33577550}.
 
-\bibitem[{Dawid(1984)}]{dawidPresentPositionPotential1984}
-Dawid AP (1984).
-\newblock \enquote{Present {{Position}} and {{Potential Developments}}: {{Some
-  Personal Views Statistical Theory}} the {{Prequential Approach}}.}
-\newblock \emph{Journal of the Royal Statistical Society: Series A (General)},
-  \textbf{147}(2), 278--290.
+\bibitem[{Dawid()}]{dawidPresentPositionPotential1984}
+Dawid AP (????).
+\newblock \enquote{Present {{Position}} and {{Potential Developments}}: Some
+  {{Personal Views Statistical Theory}} the {{Prequential Approach}}.}
+\newblock \textbf{147}(2), 278--290.
 \newblock ISSN 2397-2327.
 \newblock \doi{10.2307/2981683}.
+\newblock
+  \urlprefix\url{https://rss.onlinelibrary.wiley.com/doi/abs/10.2307/2981683}.
 
-\bibitem[{Funk et~al.(2020)Funk, Abbott, Atkins, Baguelin, Baillie, Birrell,
-  Blake, Bosse, Burton, Carruthers, Davies, Angelis, Dyson, Edmunds, Eggo,
-  Ferguson, Gaythorpe, Gorsich, Guyver-Fletcher, Hellewell, Hill, Holmes,
+\bibitem[{Funk et~al.({\natexlab{a}})Funk, Abbott, Atkins, Baguelin, Baillie,
+  Birrell, Blake, Bosse, Burton, Carruthers, Davies, Angelis, Dyson, Edmunds,
+  Eggo, Ferguson, Gaythorpe, Gorsich, Guyver-Fletcher, Hellewell, Hill, Holmes,
   House, Jewell, Jit, Jombart, Joshi, Keeling, Kendall, Knock, Kucharski,
   Lythgoe, Meakin, Munday, Openshaw, Overton, Pagani, Pearson, Perez-Guzman,
-  Pellis, Scarabel, Semple, Sherratt, Tang, Tildesley, Leeuwen, and
-  Whittles}]{funkShorttermForecastsInform2020}
+  Pellis, Scarabel, Semple, Sherratt, Tang, Tildesley, Leeuwen, Whittles,
+  Group, Team, and Investigators}]{funkShorttermForecastsInform2020}
 Funk S, Abbott S, Atkins BD, Baguelin M, Baillie JK, Birrell P, Blake J, Bosse
   NI, Burton J, Carruthers J, Davies NG, Angelis DD, Dyson L, Edmunds WJ, Eggo
   RM, Ferguson NM, Gaythorpe K, Gorsich E, Guyver-Fletcher G, Hellewell J, Hill
   EM, Holmes A, House TA, Jewell C, Jit M, Jombart T, Joshi I, Keeling MJ,
   Kendall E, Knock ES, Kucharski AJ, Lythgoe KA, Meakin SR, Munday JD, Openshaw
   PJM, Overton CE, Pagani F, Pearson J, Perez-Guzman PN, Pellis L, Scarabel F,
-  Semple MG, Sherratt K, Tang M, Tildesley MJ, Leeuwen EV, Whittles LK (2020).
-\newblock \enquote{Short-term forecasts to inform the response to the
-  {Covid}-19 epidemic in the {UK}.}
-\newblock \emph{medRxiv}, p. 2020.11.11.20220962.
+  Semple MG, Sherratt K, Tang M, Tildesley MJ, Leeuwen EV, Whittles LK, Group
+  CCW, Team ICCR, Investigators I (????{\natexlab{a}}).
+\newblock \enquote{Short-Term Forecasts to Inform the Response to the
+  {{Covid}}-19 Epidemic in the {{UK}}.}
+\newblock p. 2020.11.11.20220962.
 \newblock \doi{10.1101/2020.11.11.20220962}.
-\newblock Publisher: Cold Spring Harbor Laboratory Press,
+\newblock
   \urlprefix\url{https://www.medrxiv.org/content/10.1101/2020.11.11.20220962v1}.
 
-\bibitem[{Funk et~al.(2019)Funk, Camacho, Kucharski, Lowe, Eggo, and
+\bibitem[{Funk et~al.({\natexlab{b}})Funk, Camacho, Kucharski, Lowe, Eggo, and
   Edmunds}]{funkAssessingPerformanceRealtime2019}
-Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ (2019).
-\newblock \enquote{Assessing the Performance of Real-Time Epidemic Forecasts:
-  {{A}} Case Study of {{Ebola}} in the {{Western Area}} Region of {{Sierra
-  Leone}}, 2014-15.}
-\newblock \emph{PLOS Computational Biology}, \textbf{15}(2), e1006785.
+Funk S, Camacho A, Kucharski AJ, Lowe R, Eggo RM, Edmunds WJ
+  (????{\natexlab{b}}).
+\newblock \enquote{Assessing the Performance of Real-Time Epidemic Forecasts: A
+  Case Study of {{Ebola}} in the {{Western Area}} Region of {{Sierra Leone}},
+  2014-15.}
+\newblock \textbf{15}(2), e1006785.
 \newblock ISSN 1553-7358.
 \newblock \doi{10.1371/journal.pcbi.1006785}.
+\newblock
+  \urlprefix\url{https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1006785}.
 
 \bibitem[{Gneiting, Balabdaoui, and
-  Raftery(2007)}]{gneitingProbabilisticForecastsCalibration2007}
-Gneiting T, Balabdaoui F, Raftery AE (2007).
-\newblock \enquote{Probabilistic forecasts, calibration and sharpness.}
-\newblock \emph{Journal of the Royal Statistical Society: Series B (Statistical
-  Methodology)}, \textbf{69}(2), 243--268.
+  Raftery()}]{gneitingProbabilisticForecastsCalibration2007}
+Gneiting T, Balabdaoui F, Raftery AE (????).
+\newblock \enquote{Probabilistic Forecasts, Calibration and Sharpness.}
+\newblock \textbf{69}(2), 243--268.
 \newblock ISSN 1467-9868.
 \newblock \doi{10.1111/j.1467-9868.2007.00587.x}.
 \newblock
   \urlprefix\url{https://rss.onlinelibrary.wiley.com/doi/abs/10.1111/j.1467-9868.2007.00587.x}.
 
-\bibitem[{Gneiting and Raftery(2007)}]{gneitingStrictlyProperScoring2007}
-Gneiting T, Raftery AE (2007).
-\newblock \enquote{Strictly {Proper} {Scoring} {Rules}, {Prediction}, and
-  {Estimation}.}
-\newblock \emph{Journal of the American Statistical Association},
-  \textbf{102}(477), 359--378.
+\bibitem[{Gneiting and Raftery()}]{gneitingStrictlyProperScoring2007}
+Gneiting T, Raftery AE (????).
+\newblock \enquote{Strictly {{Proper Scoring Rules}}, {{Prediction}}, and
+  {{Estimation}}.}
+\newblock \textbf{102}(477), 359--378.
 \newblock ISSN 0162-1459, 1537-274X.
 \newblock \doi{10.1198/016214506000001437}.
 \newblock
   \urlprefix\url{http://www.tandfonline.com/doi/abs/10.1198/016214506000001437}.
 
-\bibitem[{Winkler et~al.(1996)Winkler, Mu{\~n}oz, Cervera, Bernardo,
-  Blattenberger, Kadane, Lindley, Murphy, Oliver, and
-  R\'ios-Insua}]{winklerScoringRulesEvaluation1996}
-Winkler RL, Mu{\~n}oz J, Cervera JL, Bernardo JM, Blattenberger G, Kadane JB,
-  Lindley DV, Murphy AH, Oliver RM, R\'ios-Insua D (1996).
+\bibitem[{Jordan, Kr\"uger, and Lerch(2019)}]{scoringRules}
+Jordan A, Kr\"uger F, Lerch S (2019).
+\newblock \enquote{Evaluating Probabilistic Forecasts with {scoringRules}.}
+\newblock \emph{Journal of Statistical Software}, \textbf{90}(12), 1--37.
+\newblock \doi{10.18637/jss.v090.i12}.
+
+\bibitem[{Timmermann()}]{timmermannForecastingMethodsFinance2018}
+Timmermann A (????).
+\newblock \enquote{Forecasting {{Methods}} in {{Finance}}.}
+\newblock \textbf{10}(1), 449--479.
+\newblock \doi{10.1146/annurev-financial-110217-022713}.
+\newblock
+  \urlprefix\url{https://doi.org/10.1146/annurev-financial-110217-022713}.
+
+\bibitem[{Winkler et~al.()Winkler, Muñoz, Cervera, Bernardo, Blattenberger,
+  Kadane, Lindley, Murphy, Oliver, and
+  Ríos-Insua}]{winklerScoringRulesEvaluation1996}
+Winkler RL, Muñoz J, Cervera JL, Bernardo JM, Blattenberger G, Kadane JB,
+  Lindley DV, Murphy AH, Oliver RM, Ríos-Insua D (????).
 \newblock \enquote{Scoring Rules and the Evaluation of Probabilities.}
-\newblock \emph{Test}, \textbf{5}(1), 1--60.
+\newblock \textbf{5}(1), 1--60.
 \newblock ISSN 1863-8260.
 \newblock \doi{10.1007/BF02562681}.
+\newblock \urlprefix\url{https://doi.org/10.1007/BF02562681}.
 
 \end{thebibliography}

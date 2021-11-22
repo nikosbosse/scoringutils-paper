@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.3.8)  30 MAR 2021 19:25
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.4.13)  14 APR 2021 16:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -316,7 +316,7 @@ G,.JBIG2,.JB2,.eps]
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Underfull \vbox (badness 10000) detected at line 25
+Underfull \vbox (badness 10000) detected at line 26
  []
 
 [1
@@ -324,7 +324,7 @@ Underfull \vbox (badness 10000) detected at line 25
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./forecast-types.aux) ) 
 Here is how much of TeX's memory you used:
  3956 strings out of 479383
- 53859 string characters out of 5875831
+ 53859 string characters out of 5875830
  341683 words of memory out of 5000000
  20997 multiletter control sequences out of 15000+600000
  409132 words of font info for 36 fonts, out of 8000000 for 9000
@@ -333,7 +333,7 @@ Here is how much of TeX's memory you used:
 </
 usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmb10.pfb></usr/share/texmf
 -dist/fonts/type1/public/amsfonts/cm/cmr10.pfb>
-Output written on forecast-types.pdf (1 page, 26147 bytes).
+Output written on forecast-types.pdf (1 page, 26158 bytes).
 PDF statistics:
  16 PDF objects out of 1000 (max. 8388607)
  10 compressed objects within 1 object stream

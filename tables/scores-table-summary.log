@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.2.18)  7 MAR 2021 15:36
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020/Arch Linux) (preloaded format=pdflatex 2021.5.23)  28 MAY 2021 15:00
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -162,20 +162,25 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
+(/usr/share/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
+\everycr=\toks22
+\minrowclearance=\skip54
+)
 (/usr/share/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count267
-\float@exts=\toks22
+\float@exts=\toks23
 \float@box=\box51
-\@float@everytoks=\toks23
+\@float@everytoks=\toks24
 \@floatcapt=\box52
 )
 (/usr/share/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
-\LTleft=\skip54
-\LTright=\skip55
-\LTpre=\skip56
-\LTpost=\skip57
+\LTleft=\skip55
+\LTright=\skip56
+\LTpre=\skip57
+\LTpost=\skip58
 \LTchunksize=\count268
 \LTcapwidth=\dimen163
 \LT@head=\box53
@@ -186,7 +191,7 @@ Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
 \LT@rows=\count270
 \c@LT@tables=\count271
 \c@LT@chunks=\count272
-\LT@p@ftn=\toks24
+\LT@p@ftn=\toks25
 )
 (/usr/share/texmf/tex/latex/Sweave.sty
 Package: Sweave 
@@ -199,7 +204,7 @@ Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
 
 (/usr/share/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks25
+\KV@toks@=\toks26
 )
 \Gin@req@height=\dimen164
 \Gin@req@width=\dimen165
@@ -259,12 +264,12 @@ LaTeX Font Info:    ... okay on input line 12.
 \scratchbox=\box59
 \nofMPsegments=\count278
 \nofMParguments=\count279
-\everyMPshowfont=\toks26
+\everyMPshowfont=\toks27
 \MPscratchCnt=\count280
 \MPscratchDim=\dimen167
 \MPnumerator=\count281
 \makeMPintoPDFobject=\count282
-\everyMPtoPDFconversion=\toks27
+\everyMPtoPDFconversion=\toks28
 ) (/usr/share/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 
@@ -323,257 +328,6 @@ Overfull \hbox (72.8858pt too wide) in alignment at lines 25--27
  [] [] [] [] 
  []
 
-! Undefined control sequence.
-l.28 \cellcolor
-               {gray!6}{CRPS (Continuous) ranked probability score} & \cellc...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.28 ...us) ranked probability score} & \cellcolor
-                                                  {gray!6}{continuous, integ...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Overfull \hbox (19.23372pt too wide) in paragraph at lines 28--28
-[]|\T1/aer/m/n/10 gray!6continuous, 
- []
-
-! Undefined control sequence.
-l.28 ...{gray!6}{continuous, integer} & \cellcolor
-                                                  {gray!6}{closed-form, samp...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.28 ...orm, samples (approximation)} & \cellcolor
-                                                  {gray!6}{proper scoring ru...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-<recently read> \cellcolor 
-                           
-l.32 \cellcolor
-               {gray!6}{WIS (Weighted) interval score} & \cellcolor{gray!6}{...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.32 ...IS (Weighted) interval score} & \cellcolor
-                                                  {gray!6}{continuous, integ...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Overfull \hbox (19.23372pt too wide) in paragraph at lines 32--32
-[]|\T1/aer/m/n/10 gray!6continuous, 
- []
-
-! Undefined control sequence.
-l.32 ...{gray!6}{continuous, integer} & \cellcolor
-                                                  {gray!6}{quantile or inter...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.32 ...tile or interval predictions} & \cellcolor
-                                                  {gray!6}{proper scoring ru...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-<recently read> \cellcolor 
-                           
-l.36 \cellcolor
-               {gray!6}{Brier score} & \cellcolor{gray!6}{binary} & \cellcol...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.36 \cellcolor{gray!6}{Brier score} & \cellcolor
-                                                 {gray!6}{binary} & \cellcol...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.36 ... & \cellcolor{gray!6}{binary} & \cellcolor
-                                                  {gray!6}{binary probabilit...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.36 ...gray!6}{binary probabilities} & \cellcolor
-                                                  {gray!6}{proper scoring ru...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-<recently read> \cellcolor 
-                           
-l.40 \cellcolor
-               {gray!6}{Quantile coverage} & \cellcolor{gray!6}{continuous, ...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.40 ...or{gray!6}{Quantile coverage} & \cellcolor
-                                                  {gray!6}{continuous, integ...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Overfull \hbox (19.23372pt too wide) in paragraph at lines 40--40
-[]|\T1/aer/m/n/10 gray!6continuous, 
- []
-
-! Undefined control sequence.
-l.40 ...{gray!6}{continuous, integer} & \cellcolor
-                                                  {gray!6}{quantile or inter...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.40 ...antile or interval forecasts} & \cellcolor
-                                                  {gray!6}{measure for calib...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-<recently read> \cellcolor 
-                           
-l.44 \cellcolor
-               {gray!6}{Sharpness} & \cellcolor{gray!6}{continuous, integer}...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.44 \cellcolor{gray!6}{Sharpness} & \cellcolor
-                                               {gray!6}{continuous, integer}...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Overfull \hbox (19.23372pt too wide) in paragraph at lines 44--44
-[]|\T1/aer/m/n/10 gray!6continuous, 
- []
-
-! Undefined control sequence.
-l.44 ...{gray!6}{continuous, integer} & \cellcolor
-                                                  {gray!6}{closed-form, samp...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.44 ...antile or interval forecasts} & \cellcolor
-                                                  {gray!6}{measures sharpnes...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-<recently read> \cellcolor 
-                           
-l.48 \cellcolor
-               {gray!6}{Mean score ratio} & \cellcolor{gray!6}{depends on sc...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.48 ...lor{gray!6}{Mean score ratio} & \cellcolor
-                                                  {gray!6}{depends on score}...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-
-Overfull \hbox (5.06372pt too wide) in paragraph at lines 48--48
-[]|\T1/aer/m/n/10 gray!6depends 
- []
-
-! Undefined control sequence.
-l.48 ...lor{gray!6}{depends on score} & \cellcolor
-                                                  {gray!6}{depends on score}...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
-! Undefined control sequence.
-l.48 ...lor{gray!6}{depends on score} & \cellcolor
-                                                  {gray!6}{compares performa...
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
 
 Overfull \hbox (72.8858pt too wide) in alignment at lines 27--51
  [] [] [] [] 
@@ -582,21 +336,78 @@ Overfull \hbox (72.8858pt too wide) in alignment at lines 27--51
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-(./scores-table-summary.aux) ) 
+Overfull \hbox (6.79044pt too wide) in paragraph at lines 55--55
+ []|\T1/aer/m/n/10 Continuous| 
+ []
+
+
+Overfull \hbox (4.41072pt too wide) in paragraph at lines 55--55
+ []|\T1/aer/m/n/10 Quantiles| 
+ []
+
+
+Overfull \hbox (46.7686pt too wide) in alignment at lines 53--57
+ [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (6.79044pt too wide) in paragraph at lines 60--60
+ []|\T1/aer/m/n/10 Continuous| 
+ []
+
+
+Overfull \hbox (4.41072pt too wide) in paragraph at lines 60--60
+ []|\T1/aer/m/n/10 Quantiles| 
+ []
+
+
+Overfull \hbox (46.7686pt too wide) in alignment at lines 57--62
+ [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (46.7686pt too wide) in alignment at lines 62--64
+ [] [] [] [] [] [] [] [] 
+ []
+
+
+Overfull \hbox (46.7686pt too wide) in alignment at lines 64--66
+ [] [] [] [] [] [] [] [] 
+ []
+
+LaTeX Font Info:    Trying to load font information for U+msa on input line 67.
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 67.
+
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+Overfull \hbox (46.7686pt too wide) in alignment at lines 66--90
+ [] [] [] [] [] [] [] [] 
+ []
+
+[2
+
+] (./scores-table-summary.aux) ) 
 Here is how much of TeX's memory you used:
- 3848 strings out of 479383
- 52399 string characters out of 5875830
- 348902 words of memory out of 5000000
- 20901 multiletter control sequences out of 15000+600000
- 408127 words of font info for 32 fonts, out of 8000000 for 9000
+ 3932 strings out of 479383
+ 53546 string characters out of 5875830
+ 366172 words of memory out of 5000000
+ 20966 multiletter control sequences out of 15000+600000
+ 412818 words of font info for 42 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 80i,5n,85p,273b,153s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texmf-dist/fonts/type1/public/amsfont
-s/cm/cmr10.pfb>
-Output written on scores-table-summary.pdf (1 page, 21021 bytes).
+ 80i,13n,85p,429b,268s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/share/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/symbols/msa
+m10.pfb>
+Output written on scores-table-summary.pdf (2 pages, 31258 bytes).
 PDF statistics:
- 12 PDF objects out of 1000 (max. 8388607)
- 7 compressed objects within 1 object stream
+ 19 PDF objects out of 1000 (max. 8388607)
+ 12 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

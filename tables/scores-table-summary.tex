@@ -5,7 +5,7 @@
 \usepackage{amsfonts}
 \usepackage{amsmath}
 \usepackage{xcolor}
-% \usepackage{colortbl}
+\usepackage{colortbl}
 \usepackage{float}
 \usepackage{longtable}
 \usepackage{Sweave}
@@ -25,29 +25,69 @@ Metric & Target types & Forecast formats & Properties\\
 \endfoot
 \bottomrule
 \endlastfoot
-\cellcolor{gray!6}{CRPS (Continuous) ranked probability score} & \cellcolor{gray!6}{continuous, integer} & \cellcolor{gray!6}{closed-form, samples (approximation)} & \cellcolor{gray!6}{proper scoring rule, global, stable handling of outliers}\\
+\cellcolor{gray!6}{(Continuous) ranked probability score (CRPS)} & \cellcolor{gray!6}{continuous, discrete} & \cellcolor{gray!6}{closed-form, samples (approximation)} & \cellcolor{gray!6}{proper scoring rule, global, stable handling of outliers}\\
 \addlinespace
-Log score & continuous, (integer not in scoringutils) & closed-form, samples (approximation) & proper scoring rule, local, unstable for outliers\\
+Log score (logS) & continuous, (discrete not in scoringutils) & closed-form, samples (approximation) & proper scoring rule, local, unstable for outliers\\
 \addlinespace
-\cellcolor{gray!6}{WIS (Weighted) interval score} & \cellcolor{gray!6}{continuous, integer} & \cellcolor{gray!6}{quantile or interval predictions} & \cellcolor{gray!6}{proper scoring rule, global, stable handling of outliers, converges to crps}\\
+\cellcolor{gray!6}{(Weighted) interval score (WIS)} & \cellcolor{gray!6}{continuous, discrete} & \cellcolor{gray!6}{quantile or interval predictions} & \cellcolor{gray!6}{proper scoring rule, global, stable handling of outliers, converges to crps}\\
 \addlinespace
-DSS Dawid-Sebastiani score & continuous, integer & closed-form, samples (approximation) & proper scoring rule, somewhat global, somewhat stable handling of outliers\\
+Dawid-Sebastiani score (DSS) & continuous, discrete & closed-form, samples (approximation) & proper scoring rule, somewhat global, somewhat stable handling of outliers\\
 \addlinespace
-\cellcolor{gray!6}{Brier score} & \cellcolor{gray!6}{binary} & \cellcolor{gray!6}{binary probabilities} & \cellcolor{gray!6}{proper scoring rule}\\
+\cellcolor{gray!6}{Brier score (BS)} & \cellcolor{gray!6}{binary} & \cellcolor{gray!6}{binary probabilities} & \cellcolor{gray!6}{proper scoring rule}\\
 \addlinespace
-Interval coverage & continuous, integer & interval forecasts (needs matching quantiles) & measure for calibration\\
+Interval coverage & continuous, discrete & interval forecasts (needs matching quantiles) & measure for calibration\\
 \addlinespace
-\cellcolor{gray!6}{Quantile coverage} & \cellcolor{gray!6}{continuous, integer} & \cellcolor{gray!6}{quantile or interval forecasts} & \cellcolor{gray!6}{measure for calibration}\\
+\cellcolor{gray!6}{Quantile coverage} & \cellcolor{gray!6}{continuous, discrete} & \cellcolor{gray!6}{quantile or interval forecasts} & \cellcolor{gray!6}{measure for calibration}\\
 \addlinespace
-Probability integral transform (PIT) & continuous, integer, quantile & closed-form, samples, quantile or interval forecasts & assesses calibration\\
+Probability integral transform (PIT) & continuous, discrete, quantile & closed-form, samples, quantile or interval forecasts & assesses calibration\\
 \addlinespace
-\cellcolor{gray!6}{Sharpness} & \cellcolor{gray!6}{continuous, integer} & \cellcolor{gray!6}{closed-form, samples, quantile or interval forecasts} & \cellcolor{gray!6}{measures sharpness, slightly different depending on forecast format}\\
+\cellcolor{gray!6}{Sharpness} & \cellcolor{gray!6}{continuous, discrete} & \cellcolor{gray!6}{closed-form, samples, quantile or interval forecasts} & \cellcolor{gray!6}{measures sharpness, slightly different depending on forecast format}\\
 \addlinespace
-Bias & continuous, integer, quantile & closed-form, samples, quantile or interval forecasts & captures tendency to over-or underpredict (aspect of calibration)\\
+Bias & continuous, discrete, quantile & closed-form, samples, quantile or interval forecasts & captures tendency to over-or underpredict (aspect of calibration)\\
 \addlinespace
 \cellcolor{gray!6}{Mean score ratio} & \cellcolor{gray!6}{depends on score} & \cellcolor{gray!6}{depends on score} & \cellcolor{gray!6}{compares performance of two models}\\
 \addlinespace
 Relative skill & depends on scored & depends on score & Ranks models based on pairwise comparisons\\*
 \end{longtable}
+\begin{landscape}
+\begin{longtable}[t]{>{\raggedright\arraybackslash}p{3.2cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1.3cm}>{\centering\arraybackslash}p{1.3cm}>{\centering\arraybackslash}p{1.5cm}>{\centering\arraybackslash}p{1.3cm}>{\raggedright\arraybackslash}p{6.0cm}}
+\toprule
+Metric & Discrete & Continuous & Binary & Closed-form & Samples (approx.) & Quantiles & Properties\\
+\midrule
+\endfirsthead
+\multicolumn{8}{@{}l}{\textit{(continued)}}\\
+\toprule
+Metric & Discrete & Continuous & Binary & Closed-form & Samples (approx.) & Quantiles & Properties\\
+\midrule
+\endhead
+
+\endfoot
+\bottomrule
+\endlastfoot
+\cellcolor{gray!6}{(Continuous) ranked probability score (CRPS)} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{proper scoring rule, global, stable handling of outliers}\\
+\addlinespace
+Log score (logS) & ($\checkmark$) & $\checkmark$ &  & $\checkmark$ & $\checkmark$ &  & proper scoring rule, local, unstable for outliers\\
+\addlinespace
+\cellcolor{gray!6}{(Weighted) interval score (WIS)} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{THINK} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{proper scoring rule, global, stable handling of outliers, converges to crps}\\
+\addlinespace
+Dawid-Sebastiani score (DSS) & $\checkmark$ & $\checkmark$ &  & $\checkmark$ & $\checkmark$ &  & proper scoring rule, somewhat global, somewhat stable handling of outliers\\
+\addlinespace
+\cellcolor{gray!6}{Brier score (BS)} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{proper scoring rule}\\
+\addlinespace
+Interval coverage & $\checkmark$ & $\checkmark$ &  &  & THINK & $\checkmark$ & measure for calibration\\
+\addlinespace
+\cellcolor{gray!6}{Quantile coverage} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{THINK} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{measure for calibration}\\
+\addlinespace
+Probability integral transform (PIT) & $\checkmark$ & $\checkmark$ &  & $\checkmark$ & $\checkmark$ & $\checkmark$ & assesses calibration\\
+\addlinespace
+\cellcolor{gray!6}{Sharpness} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{$\checkmark$} & \cellcolor{gray!6}{measures forecast dispersions}\\
+\addlinespace
+Bias & $\checkmark$ & $\checkmark$ & $\checkmark$??? & $\checkmark$ & $\checkmark$ & $\checkmark$ & captures tendency to over-or underpredict (aspect of calibration)\\
+\addlinespace
+\cellcolor{gray!6}{Mean score ratio} & \cellcolor{gray!6}{depends} & \cellcolor{gray!6}{depends} & \cellcolor{gray!6}{depends} & \cellcolor{gray!6}{depends} & \cellcolor{gray!6}{depends} & \cellcolor{gray!6}{depends} & \cellcolor{gray!6}{compares performance of two models}\\
+\addlinespace
+Relative skill & depends & depends & depends & depends & depends & depends & Ranks models based on pairwise comparisons\\*
+\end{longtable}
+\end{landscape}
 
 \end{document}
