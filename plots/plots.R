@@ -1,4 +1,3 @@
-
 library(scoringutils)
 library(patchwork)
 library(ggplot2)
@@ -25,9 +24,11 @@ df <- data.table::data.table(true_value = rep(true_values, each = n_samples),
                                          each = n_truth * n_samples))
 
 res <- eval_forecasts(df, 
-                      by = c("model", "id"), 
-                      summarise_by = c("model"), 
-                      pit_plots = TRUE)
+                      summarise_by = c("model"))
+
+pit <- scoringutils::pit_df(df, summarise_by = "model")
+pit_plots <- scoringutils::hist_PIT(pit)
+
 
 # plot with observations
 true_value_plot <- ggplot2::ggplot(data = data.frame(x = true_values),
@@ -35,7 +36,7 @@ true_value_plot <- ggplot2::ggplot(data = data.frame(x = true_values),
   ggplot2::geom_histogram(ggplot2::aes(y = ..density..),
                           fill = "grey",
                           colour = "dark grey") +
-  cowplot::theme_cowplot() +
+  theme_minimal() +
   ggplot2::labs(x = "True values",
                 y = "Density") +
   ggplot2::theme(legend.position = "bottom") 
@@ -60,7 +61,7 @@ underdispersion <- true_value_plot +
   ggplot2::geom_function(fun = dnorm, colour = "black", args = list(sd = 0.7)) +
   ggplot2::ggtitle("Normal(0, 0.7)")
 
-scores_table <- dcast(melt(res$scores, id.vars = "model", 
+scores_table <- dcast(melt(res, id.vars = "model", 
                            variable.name = "score"), 
                       score ~ model)
 scores_table <- scores_table[, lapply(.SD, round, 2), by = score]
@@ -71,7 +72,7 @@ setcolorder(
 )
 
 (standard_normal | shifted_mean | overdispersion | underdispersion) /
-  (res$pit_plots$`Normal(0, 1)` | res$pit_plots$`Normal(0.5, 1)` | res$pit_plots$`Normal(0, 1.4)` | res$pit_plots$`Normal(0, 0.7)`) / 
+  (pit_plots$`Normal(0, 1)` | pit_plots$`Normal(0.5, 1)` | pit_plots$`Normal(0, 1.4)` | pit_plots$`Normal(0, 0.7)`) / 
   gridExtra::tableGrob(scores_table)
 
 

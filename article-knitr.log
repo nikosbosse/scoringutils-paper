@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2021.6.9)  10 DEC 2021 09:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2021.6.9)  10 DEC 2021 10:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1179,7 +1179,7 @@ e1/public/lm/lmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmtt12.pfb
 ></usr/share/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/share/texmf-dis
 t/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/fonts/t
 ype1/urw/zapfchan/uzcmi8a.pfb>
-Output written on article-knitr.pdf (20 pages, 768666 bytes).
+Output written on article-knitr.pdf (20 pages, 796855 bytes).
 PDF statistics:
  444 PDF objects out of 1000 (max. 8388607)
  380 compressed objects within 4 object streams
