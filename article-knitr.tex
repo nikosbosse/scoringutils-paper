@@ -1,4 +1,54 @@
-\documentclass[article,shortnames]{jss}
+\documentclass[article,shortnames]{jss}\usepackage[]{graphicx}\usepackage[]{color}
+% maxwidth is the original width if it is less than linewidth
+% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+\let\hlipl\hlkwb
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
 
 %% -- LaTeX packages and custom commands ---------------------------------------
 
@@ -45,6 +95,9 @@
 
 
 
+
+
+
 %% -- Article metainformation (author, title, ...) -----------------------------
 
 %% - \author{} with primary affiliation
@@ -87,8 +140,10 @@
   E-mail: \email{nikos.bosse@lshtm.ac.uk}\\
   % URL: \url{https://eeecon.uibk.ac.at/~zeileis/}
 }
-
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
+
+
 
 
 
@@ -119,6 +174,7 @@ The predictive distribution of a probabilistic forecast can be represented in di
 
 \begin{table}[h!]
 \centering
+
 \begin{longtable}[t]{>{\raggedright\arraybackslash}p{3.5cm}>{\raggedright\arraybackslash}p{2.5cm}>{\raggedright\arraybackslash}p{4.5cm}}
 \toprule
 \textbf{Forecast type} & \textbf{Target type} & \textbf{Representation of the predictive distribution}\\
@@ -129,7 +185,10 @@ Point forecast & continuous \newline  discrete \newline  binary & one single num
 \cmidrule{2-3}\nopagebreak
 \multirow{-2}{3.5cm}{\raggedright\arraybackslash Probabilistic forecast} & binary & binary probabilities\\
 \bottomrule
-\end{longtable}\caption{\label{tab:forecast-types} Forecasts can be distinguished by whether they are probabilistic in nature, or a point forecast only. Depending on the type of the target (discrete, continuous or binary) different representation of the predictive distribution are possible.} 
+\end{longtable}
+
+
+\caption{\label{tab:forecast-types} Forecasts can be distinguished by whether they are probabilistic in nature, or a point forecast only. Depending on the type of the target (discrete, continuous or binary) different representation of the predictive distribution are possible.} 
 \end{table}
 
 
@@ -155,6 +214,7 @@ Some of the metrics in \pkg{scoringuitls} focus only on sharpness or on calibrat
 
 % \begin{table}[h!]
 % \centering
+
 
 % \caption{\label{tab:table-summary-scores} Summary table of scores available in scoringutils}
 % \end{table}
@@ -193,7 +253,10 @@ Bias & $\checkmark$ & $\checkmark$ & $\checkmark$??? & $\checkmark$ & $\checkmar
 Relative skill & depends & depends & depends & depends & depends & depends & Ranks models based on pairwise comparisons\\
 \bottomrule
 \end{longtable}
-\endgroup{}\caption{\label{tab:table-summary-scores2} Summary table of scores available in scoringutils}
+\endgroup{}
+
+
+\caption{\label{tab:table-summary-scores2} Summary table of scores available in scoringutils}
 \end{table}
 
 \newpage
@@ -206,6 +269,10 @@ Relative skill & depends & depends & depends & depends & depends & depends & Ran
 
 \begin{figure}[h]
 \centering
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
+\includegraphics[width=0.98\textwidth]{/mnt/data/GoogleDrive/Uni/PhD/scoringutils-paper/plots/calibration-diagnostic-examples} 
+\end{knitrout}
 
 \caption{\label{fig:calibration-plots} Calibration plots for different forecast distributions. I plan to add interval and quantile coverage plots, but these still have to be made.}
 \end{figure}
@@ -282,82 +349,89 @@ The evaluation process looks as follows: First we load, prepare and visualise (s
 
 We first need to obtain the data by installing and loading the \pkg{covid19.forecasts.uk} using the following commands: 
 % 
-\begin{Schunk}
-\begin{Sinput}
-R> # install and load data pacakge from external repository
-R> # remotes::install_github("sbfnk/covid19.forecasts.uk")
-R> 
-R> # load packages
-R> library(covid19.forecasts.uk)
-R> library(dplyr)
-R> library(scoringutils)
-R> # load truth data
-R> data(covid_uk_data)
-R> # head(covid_uk_data)
-R> 
-R> # load forecasts
-R> data(uk_forecasts)
-R> # head(uk_forecasts)
-\end{Sinput}
-\end{Schunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# install and load data pacakge from external repository}
+\hlcom{# remotes::install_github('sbfnk/covid19.forecasts.uk')}
+
+\hlcom{# load packages}
+\hlkwd{library}\hlstd{(covid19.forecasts.uk)}
+\hlkwd{library}\hlstd{(dplyr)}
+\hlkwd{library}\hlstd{(scoringutils)}
+
+\hlcom{# load truth data}
+\hlkwd{data}\hlstd{(covid_uk_data)}
+\hlcom{# head(covid_uk_data)}
+
+\hlcom{# load forecasts}
+\hlkwd{data}\hlstd{(uk_forecasts)}
+\hlcom{# head(uk_forecasts)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 % 
 Let us take a first look a the data:
 % 
-\begin{Schunk}
-\begin{Sinput}
-R> glimpse(covid_uk_data)
-\end{Sinput}
-\begin{Soutput}
-Rows: 4,174
-Columns: 6
-$ geography  <fct> London, London, London, London, London, London, L…
-$ value_type <fct> hospital_inc, hospital_inc, hospital_inc, hospita…
-$ value_desc <fct> Hospital admissions, Hospital admissions, Hospita…
-$ truncation <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0…
-$ value_date <date> 2020-03-20, 2020-03-21, 2020-03-22, 2020-03-23, …
-$ value      <dbl> 18, 232, 280, 241, 313, 353, 516, 637, 677, 546, …
-\end{Soutput}
-\begin{Sinput}
-R> glimpse(uk_forecasts)
-\end{Sinput}
-\begin{Soutput}
-Rows: 1,254,513
-Columns: 8
-$ model         <fct> EpiSoon, EpiSoon, EpiSoon, EpiSoon, EpiSoon, E…
-$ geography     <chr> "East of England", "East of England", "East of…
-$ value_type    <fct> hospital_inc, hospital_inc, hospital_inc, hosp…
-$ creation_date <date> 2020-03-31, 2020-03-31, 2020-03-31, 2020-03-3…
-$ value_date    <date> 2020-04-01, 2020-04-02, 2020-04-03, 2020-04-0…
-$ quantile      <dbl> 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05…
-$ value         <dbl> 70, 64, 53, 42, 30, 19, 4, 0, 0, 0, 0, 0, 0, 0…
-$ value_desc    <fct> Hospital admissions, Hospital admissions, Hosp…
-\end{Soutput}
-\end{Schunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{glimpse}\hlstd{(covid_uk_data)}
+\end{alltt}
+\begin{verbatim}
+## Rows: 4,174
+## Columns: 6
+## $ geography  <fct> London, London, London, London, London, London, L~
+## $ value_type <fct> hospital_inc, hospital_inc, hospital_inc, hospita~
+## $ value_desc <fct> Hospital admissions, Hospital admissions, Hospita~
+## $ truncation <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
+## $ value_date <date> 2020-03-20, 2020-03-21, 2020-03-22, 2020-03-23, ~
+## $ value      <dbl> 18, 232, 280, 241, 313, 353, 516, 637, 677, 546, ~
+\end{verbatim}
+\begin{alltt}
+\hlkwd{glimpse}\hlstd{(uk_forecasts)}
+\end{alltt}
+\begin{verbatim}
+## Rows: 1,254,513
+## Columns: 8
+## $ model         <fct> EpiSoon, EpiSoon, EpiSoon, EpiSoon, EpiSoon, E~
+## $ geography     <chr> "East of England", "East of England", "East of~
+## $ value_type    <fct> hospital_inc, hospital_inc, hospital_inc, hosp~
+## $ creation_date <date> 2020-03-31, 2020-03-31, 2020-03-31, 2020-03-3~
+## $ value_date    <date> 2020-04-01, 2020-04-02, 2020-04-03, 2020-04-0~
+## $ quantile      <dbl> 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05~
+## $ value         <dbl> 70, 64, 53, 42, 30, 19, 4, 0, 0, 0, 0, 0, 0, 0~
+## $ value_desc    <fct> Hospital admissions, Hospital admissions, Hosp~
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 % 
 Some minor changes need to be made to the data before we can evaluate the forecasts. The names of the columns that hold the forecasts and the true observed values need to be changed to \code{prediction} and \code{true_value}. While we could also proceed with separate data sets for the evaluation, we merge the two data sets in order to remove all instances where the forecasts, but not the true observations were made public. The \pkg{scoringutils} package provides a function that attempts to merge the data sets in a sensible way. 
 % 
-\begin{Schunk}
-\begin{Sinput}
-R> uk_forecasts <- rename(uk_forecasts, prediction = value)
-R> covid_uk_data <-rename(covid_uk_data, true_value = value)
-R> combined <- merge_pred_and_obs(uk_forecasts, covid_uk_data)
-\end{Sinput}
-\end{Schunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{uk_forecasts} \hlkwb{<-} \hlkwd{rename}\hlstd{(uk_forecasts,} \hlkwc{prediction} \hlstd{= value)}
+\hlstd{covid_uk_data} \hlkwb{<-} \hlkwd{rename}\hlstd{(covid_uk_data,} \hlkwc{true_value} \hlstd{= value)}
+
+\hlstd{combined} \hlkwb{<-} \hlkwd{merge_pred_and_obs}\hlstd{(uk_forecasts, covid_uk_data)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 % 
 It is helpful to start the evaluation process by visualising the available data, as missing forecasts can impact the evaluation if missingness is not random, but instead correlates with performance. The function \fct{show\_avail\_forecasts} returns a heatmap with the number of available forecasts. By default, the function treats a set of different quantiles or samples as one forecast. However, the user can specify manually which elements to treat as one forecast and which categories to sum over to count the number of available forecasts. 
 % 
 \begin{figure}[h]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> show_avail_forecasts(data = combined, 
-+                       x = "creation_date", 
-+                       show_numbers = FALSE,
-+                       legend_position = "bottom",
-+                       facet_formula = ~ value_desc)
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-show-availability}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{show_avail_forecasts}\hlstd{(}\hlkwc{data} \hlstd{= combined,} \hlkwc{x} \hlstd{=} \hlstr{"creation_date"}\hlstd{,} \hlkwc{show_numbers} \hlstd{=} \hlnum{FALSE}\hlstd{,}
+    \hlkwc{legend_position} \hlstd{=} \hlstr{"bottom"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{value_desc)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=0.98\textwidth]{plots/plot-show-availability-1} 
+\end{knitrout}
 \caption{\label{fig:avail-forecasts} Overview of the number of available forecasts}
 \end{figure}
 %THINK ABOUT WHETHER THIS FUNCTION CAN BE COMBINED WITH THE OTHER HEATMAP FUNCTION. 
@@ -365,22 +439,18 @@ R> show_avail_forecasts(data = combined,
 The forecasts and observed values themselves can be visualised using the \fct{plot\_predictions} function. Data visualisation is of course highly context-dependent, but the function tries to accommodate most practical use-cases. In addition to basic plotting functionality it offers the user an optional ad hoc way to filter both forecasts and observed values. This makes it possible to tweak the plot in a beginner-friendly way without having to manipulate the data separately. Forecasts and observed values can be passed in separately (and are merged internally) or as a single data.frame. Conditions to filter on need to be provided as a list of strings, where each of the strings represents an expression that can be evaluated to filter the data. To display, for example, death forecasts from the SIRCOVID model made on the 22nd July 2020 for the four UK countries and add three weeks of prior observations to the plot, we can call: % 
 \begin{figure}[h!]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> locations <- 'c("Scotland", "Wales", "Northern Ireland", "England")'
-R> plot_predictions(truth = covid_uk_data,
-+                   forecasts = uk_forecasts,
-+                   filter_both = list(paste("geography %in%", locations, collapse = ""), 
-+                                      'value_type == "death_inc_line"'),
-+                   filter_truth = list('value_date <= "2020-06-22"',
-+                                       'value_date > "2020-06-01"'), 
-+                   filter_forecasts = list('model == "SIRCOVID"', 
-+                                           'creation_date == "2020-06-22"'),
-+                   x = "value_date",
-+                   facet_formula = ~ geography) + 
-+    ggplot2::theme(legend.position = "bottom")
-\end{Sinput}
-\end{Schunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{locations} \hlkwb{<-} \hlstr{"c(\textbackslash{}"Scotland\textbackslash{}", \textbackslash{}"Wales\textbackslash{}", \textbackslash{}"Northern Ireland\textbackslash{}", \textbackslash{}"England\textbackslash{}")"}
+\hlkwd{plot_predictions}\hlstd{(}\hlkwc{truth} \hlstd{= covid_uk_data,} \hlkwc{forecasts} \hlstd{= uk_forecasts,} \hlkwc{filter_both} \hlstd{=} \hlkwd{list}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"geography %in%"}\hlstd{,}
+    \hlstd{locations,} \hlkwc{collapse} \hlstd{=} \hlstr{""}\hlstd{),} \hlstr{"value_type == \textbackslash{}"death_inc_line\textbackslash{}""}\hlstd{),} \hlkwc{filter_truth} \hlstd{=} \hlkwd{list}\hlstd{(}\hlstr{"value_date <= \textbackslash{}"2020-06-22\textbackslash{}""}\hlstd{,}
+    \hlstr{"value_date > \textbackslash{}"2020-06-01\textbackslash{}""}\hlstd{),} \hlkwc{filter_forecasts} \hlstd{=} \hlkwd{list}\hlstd{(}\hlstr{"model == \textbackslash{}"SIRCOVID\textbackslash{}""}\hlstd{,}
+    \hlstr{"creation_date == \textbackslash{}"2020-06-22\textbackslash{}""}\hlstd{),} \hlkwc{x} \hlstd{=} \hlstr{"value_date"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{geography)} \hlopt{+}
+    \hlstd{ggplot2}\hlopt{::}\hlkwd{theme}\hlstd{(}\hlkwc{legend.position} \hlstd{=} \hlstr{"bottom"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 \caption{\label{fig:forecast-visualisation} Short-term forecasts for incident deaths made by the SIRCOVID model on June 22 2020.}
 \end{figure}
 % 
@@ -392,26 +462,28 @@ The actual scoring of forecasts based on observed values can be performed using 
 
 When conducting an evaluation, we need to decide on the level of grouping over which we want to aggregate scores. For the UK short-term forecasts it makes sense to look at the scores achieved by every model separate for all prediction targets. This can be achieved by calling
 % ion G
-\begin{Schunk}
-\begin{Sinput}
-R> scores <- eval_forecasts(combined, 
-+                           summarise_by = c("model", "value_desc"))
-R> glimpse(scores)
-\end{Sinput}
-\begin{Soutput}
-Rows: 29
-Columns: 9
-$ model              <fct> EpiSoon, StructuredODE, Microsimulation, …
-$ value_desc         <fct> Hospital admissions, Hospital admissions,…
-$ interval_score     <dbl> 38.56510, 61.75914, 100.71914, 35.44876, …
-$ sharpness          <dbl> 22.886153, 6.133974, 33.985553, 10.365082…
-$ underprediction    <dbl> 3.66782766, 24.82255866, 33.12350598, 8.5…
-$ overprediction     <dbl> 12.0111222, 30.8026045, 33.6100814, 16.55…
-$ coverage_deviation <dbl> 0.034531405, -0.268749094, -0.095652174, …
-$ bias               <dbl> 0.26194170, -0.27368253, -0.39217045, -0.…
-$ aem                <dbl> 45.96333, 73.38096, 138.14395, 53.22563, …
-\end{Soutput}
-\end{Schunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(combined,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,} \hlstr{"value_desc"}\hlstd{))}
+
+\hlkwd{glimpse}\hlstd{(scores)}
+\end{alltt}
+\begin{verbatim}
+## Rows: 29
+## Columns: 9
+## $ model              <fct> EpiSoon, StructuredODE, Microsimulation, ~
+## $ value_desc         <fct> Hospital admissions, Hospital admissions,~
+## $ interval_score     <dbl> 38.56510, 61.75914, 100.71914, 35.44876, ~
+## $ dispersion         <dbl> 22.886153, 6.133974, 33.985553, 10.365082~
+## $ underprediction    <dbl> 3.66782766, 24.82255866, 33.12350598, 8.5~
+## $ overprediction     <dbl> 12.0111222, 30.8026045, 33.6100814, 16.55~
+## $ coverage_deviation <dbl> 0.034531405, -0.268749094, -0.095652174, ~
+## $ bias               <dbl> 0.26194170, -0.27368253, -0.39217045, -0.~
+## $ aem                <dbl> 45.96333, 73.38096, 138.14395, 53.22563, ~
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
 % 
 \fct{eval\_forecasts} aggregates scores by taking the mean over according to the grouping specified in \code{summarise_by}. In the above example, if \code{summarise_by = c("model", "value_type")}, then scores would be averaged over all creation dates, forecast horizons (as represented by the the value dates), locations and quantiles to yield one score per model and forecast target. For a more detailed analysis we could for example specifiy \code{summarise_by = c("mode", "value_type", "geography")} to additionally stratify by location. If we wanted to have one score per quantile or one per prediction interval range, we could use something like \code{summarise_by = c("model", "quantile", "range")}. This would allow us to examine interval or quantile coverage or makes it possible to analyse the accuracy of the tails of the forecasts. In addition to the mean, we can also obtain the standard deviation of the scores over which we average, as well as any desired quantile, by specifying \code{sd = TRUE} and for example \code{quantiles = c(0.5)} for the median. 
 
@@ -427,14 +499,15 @@ In order to obtain a model ranking, we recommend to look at the relative skill i
 Pairwise comparisons between models [CITATION] can be obtained in two different ways. First, relative skill scores based on pairwise comparisons are by default returned from \fct{eval\_forecasts}. These will be computed separately for the categories defined in the \code{summarise_by} argument (excluding the category 'model'). Alternatively, a set of scores can be post-processed using the separate function \fct{pairwise\_comparison}. This approach is to be used for visualisation and if p-values for the pairwise comparisons are needed, as those are not returned from \fct{eval\_forecasts}. Usually, one would compute scores without specifying a \code{summarise_by} argument, but sometimes it may be sensible to average over certain scores, for example for predictions generated at a certain date. This allows to reduce the correlation between observations that enter the computation of p-values, which in turn makes the test less liberal. 
 Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models as well as the 
 
-\begin{Schunk}
-\begin{Sinput}
-R> # unsummarised scores
-R> unsummarised_scores <- eval_forecasts(combined)
-R> pairwise <- pairwise_comparison(unsummarised_scores, 
-+                                  summarise_by = "value_desc")
-\end{Sinput}
-\end{Schunk}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# unsummarised scores}
+\hlstd{unsummarised_scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(combined)}
+\hlstd{pairwise} \hlkwb{<-} \hlkwd{pairwise_comparison}\hlstd{(unsummarised_scores,} \hlkwc{summarise_by} \hlstd{=} \hlstr{"value_desc"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
 The result is a \code{data.table} with different scores and metrics in a tidy format that can easily be used for further manipulation and plotting. 
 
@@ -445,12 +518,14 @@ A good starting point for an evaluation is the following score table that visusa
 
 \begin{figure}[h]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> score_table(scores, y = "model", facet_formula = ~ value_desc)
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-score-table}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{score_table}\hlstd{(scores,} \hlkwc{y} \hlstd{=} \hlstr{"model"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{value_desc)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=0.98\textwidth]{plots/plot-score-table-1} 
+\end{knitrout}
 \caption{\label{fig:score-table} Coloured table to visualise the computed scores}
 \end{figure}
 
@@ -458,13 +533,14 @@ The most informative metric in terms of model ranking is the relative\_skill. Ho
 
 \begin{figure}[h!]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> plot_pairwise_comparison(pairwise) +
-+    ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-pairwise-plot}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{plot_pairwise_comparison}\hlstd{(pairwise)} \hlopt{+} \hlstd{ggplot2}\hlopt{::}\hlkwd{facet_wrap}\hlstd{(}\hlopt{~}\hlstd{value_desc,} \hlkwc{scales} \hlstd{=} \hlstr{"free_x"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=0.98\textwidth]{plots/plot-pairwise-plot-1} 
+\end{knitrout}
 \caption{\label{fig:pairwise-comparison} Ratios of mean scores based on overlapping forecast sets. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison. }
 \end{figure}
 
@@ -476,18 +552,16 @@ For forecasts in an interval format, looking at the components of the weighted i
 
 \begin{figure}[h!]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> wis_components(scores, 
-+                 facet_formula = ~ value_desc, 
-+                 scales = "free_x", 
-+                 relative_contributions = TRUE, 
-+                 x_text_angle = 0) + 
-+    ggplot2::coord_flip() + 
-+    ggplot2::theme(legend.position = "bottom")
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-WIS-components}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{wis_components}\hlstd{(scores,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{value_desc,} \hlkwc{scales} \hlstd{=} \hlstr{"free_x"}\hlstd{,}
+    \hlkwc{relative_contributions} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{x_text_angle} \hlstd{=} \hlnum{0}\hlstd{)} \hlopt{+} \hlstd{ggplot2}\hlopt{::}\hlkwd{coord_flip}\hlstd{()} \hlopt{+}
+    \hlstd{ggplot2}\hlopt{::}\hlkwd{theme}\hlstd{(}\hlkwc{legend.position} \hlstd{=} \hlstr{"bottom"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=0.98\textwidth]{plots/plot-WIS-components-1} 
+\end{knitrout}
 \caption{\label{fig:wis-components} p-values and ratios together.}
 \end{figure}
 
@@ -495,16 +569,18 @@ We can have a closer look at calibration using the functions \fct{interval\_cove
 
 \begin{figure}[h!]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> cov_scores <- eval_forecasts(combined, 
-+                               summarise_by = c("model", 
-+                                                "range", "quantile"))
-R> scoringutils::interval_coverage(cov_scores)
-R> scoringutils::quantile_coverage(cov_scores)
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-coverage}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{cov_scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(combined,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,} \hlstr{"range"}\hlstd{,}
+    \hlstr{"quantile"}\hlstd{))}
+\hlstd{scoringutils}\hlopt{::}\hlkwd{interval_coverage}\hlstd{(cov_scores)}
+\hlstd{scoringutils}\hlopt{::}\hlkwd{quantile_coverage}\hlstd{(cov_scores)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=0.4\linewidth]{plots/plot-coverage-1} 
+\includegraphics[width=0.4\linewidth]{plots/plot-coverage-2} 
+\end{knitrout}
 
 \caption{\label{fig:coverage} quantile and interval coverage}
 \end{figure}
@@ -528,19 +604,17 @@ Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 
 \begin{figure}[h]
 \centering
-\begin{Schunk}
-\begin{Sinput}
-R> scores <- eval_forecasts(combined, 
-+                           summarise_by = c("model",
-+                                            "value_desc", 
-+                                            "geography"), 
-+                           compute_relative_skill = FALSE)
-R> scoringutils::score_heatmap(scores, metric = "bias", 
-+                              x = "geography", facet_formula = ~ value_desc, 
-+                              scale = "free_x")
-\end{Sinput}
-\end{Schunk}
-\includegraphics{plots/plot-calibration}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(combined,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,} \hlstr{"value_desc"}\hlstd{,}
+    \hlstr{"geography"}\hlstd{),} \hlkwc{compute_relative_skill} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\hlstd{scoringutils}\hlopt{::}\hlkwd{score_heatmap}\hlstd{(scores,} \hlkwc{metric} \hlstd{=} \hlstr{"bias"}\hlstd{,} \hlkwc{x} \hlstd{=} \hlstr{"geography"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{value_desc,}
+    \hlkwc{scale} \hlstd{=} \hlstr{"free_x"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=0.98\textwidth]{plots/plot-calibration-1} 
+\end{knitrout}
 \caption{\label{fig:bias-heatmap} bias by location}
 \end{figure}
 
@@ -561,8 +635,8 @@ COMING SOON.
 
 
 % The results in this paper were obtained using
-% \proglang{R}~4.1.2 with the
-% \pkg{MASS}~7.3.54 package. \proglang{R} itself
+% \proglang{R}~paste(R.Version()[6:7], collapse = ".") with the
+% \pkg{MASS}~packageVersion("MASS") package. \proglang{R} itself
 % and all packages used are available from the Comprehensive
 % \proglang{R} Archive Network (CRAN) at
 % \url{https://CRAN.R-project.org/}.
@@ -600,6 +674,7 @@ COMING SOON.
 
 \begin{table}[h!]
 \centering
+
 \caption{\label{tab:score-table} Explanation of all the scores}
 \end{table}
 

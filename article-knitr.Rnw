@@ -42,8 +42,19 @@
 
 %% For Sweave-based articles about R packages:
 %% need no \usepackage{Sweave}
-\SweaveOpts{engine=R, eps=FALSE, keep.source = TRUE, prefix.string=plots/plot}
-<<preliminaries, echo=FALSE, results=hide>>=
+
+<<include=FALSE>>=
+library(knitr)
+opts_chunk$set(
+  engine='R', 
+  tidy=TRUE, 
+  fig.path='plots/plot-', 
+  message = FALSE, 
+  warning = FALSE
+)
+@
+
+<<preliminaries, echo=FALSE, results='hide'>>=
 options(prompt = "R> ", continue = "+  ", width = 70, useFancyQuotes = FALSE)
 
 # knitr::knit_hooks$set(document = function(x) {sub('\\usepackage[]{color}', '\\usepackage{xcolor}', x, fixed = TRUE)})
@@ -57,6 +68,7 @@ library(data.table)
 library(kableExtra)
 library(magrittr)
 library(knitr)
+library(here)
 
 system("bibtex article")
 
@@ -111,7 +123,14 @@ knitr::opts_chunk$set(
 }
 
 \begin{document}
-\SweaveOpts{concordance=FALSE}
+
+<<include=FALSE>>=
+library(knitr)
+opts_chunk$set(
+concordance=FALSE
+)
+@
+
 
 
 %% -- Introduction -------------------------------------------------------------
@@ -141,7 +160,7 @@ The predictive distribution of a probabilistic forecast can be represented in di
 
 \begin{table}[h!]
 \centering
-<<forecast-types-table, echo=FALSE, results=tex>>=
+<<forecast-types-table, echo=FALSE, results='asis'>>=
 
 data <- readRDS("tables/forecast-types.rds")
 
@@ -188,7 +207,7 @@ Some of the metrics in \pkg{scoringuitls} focus only on sharpness or on calibrat
 % \begin{table}[h!]
 % \centering
 
-<<summary-table, echo=FALSE, eval = FALSE, results=tex>>=
+<<summary-table, echo=FALSE, eval = FALSE, results='asis'>>=
 
 data <- readRDS("tables/scores-table-summary.rds")
 
@@ -210,7 +229,7 @@ data[, 1:4] %>%
 \newpage
 \begin{table}[h!]
 \centering
-<<summary-table, echo=FALSE, results=tex>>=
+<<summary-table2, echo=FALSE, results='asis'>>=
 
 data <- readRDS("tables/scores-table-summary2.rds")
 
@@ -244,75 +263,8 @@ data[, 1:8] %>%
 
 \begin{figure}[h]
 \centering
-<<example-calibration, echo=FALSE, fig=TRUE, height=7.2, width=14, eval = FALSE>>=
-n_truth = 1000
-n_samples = 100
-true_values <- rnorm(n_truth, 0, 1)
-predictions1 <- rnorm(n_truth * n_samples)
-predictions2 <- rnorm(n_truth * n_samples, mean = 0.5)
-predictions3 <- rnorm(n_truth * n_samples, sd = 1.4)
-predictions4 <- rnorm(n_truth * n_samples, sd =  0.7)
-# predictions5 <- rnorm(n_truth * n_samples, mean = 0.2, sd =  0.7)
-
-df <- data.table::data.table(true_value = rep(true_values, each = n_samples), 
-                             id = rep(1:n_truth, each = n_samples),
-                             prediction = c(predictions1, predictions2, 
-                                            predictions3, predictions4), 
-                             sample = 1:n_samples,
-                             model = rep(c("Normal(0, 1)", "Normal(0.5, 1)", 
-                                       "Normal(0, 1.4)", "Normal(0, 0.7)"), 
-                                       each = n_truth * n_samples))
-
-res <- eval_forecasts(df, 
-                      by = c("model", "id"), 
-                      summarise_by = c("model"), 
-                      pit_plots = TRUE)
-
-# plot with observations
-true_value_plot <- ggplot2::ggplot(data = data.frame(x = true_values),
-                ggplot2::aes(x = x)) +
-  ggplot2::geom_histogram(ggplot2::aes(y = ..density..),
-                          fill = "grey",
-                          colour = "dark grey") +
-  cowplot::theme_cowplot() +
-  ggplot2::labs(x = "True values",
-                y = "Density") +
-  ggplot2::theme(legend.position = "bottom")
-
-# plot with standard normal distribution
-standard_normal <- true_value_plot +
-  ggplot2::geom_function(fun = dnorm, colour = "black") +
-  ggplot2::ggtitle("Normal(0, 1)")
-
-# plot with shifted mean
-shifted_mean <- true_value_plot +
-  ggplot2::geom_function(fun = dnorm, colour = "black", args = list(mean = 0.5)) +
-  ggplot2::ggtitle("Normal(0.5, 1)")
-
-# plot with overdispersion
-overdispersion <- true_value_plot +
-  ggplot2::geom_function(fun = dnorm, colour = "black", args = list(sd = 1.4)) +
-  ggplot2::ggtitle("Normal(0, 1.4)")
-
-# plot with underdispersion
-underdispersion <- true_value_plot +
-  ggplot2::geom_function(fun = dnorm, colour = "black", args = list(sd = 0.7)) +
-  ggplot2::ggtitle("Normal(0, 0.7)")
-
-scores_table <- dcast(melt(res$scores, id.vars = "model", 
-                           variable.name = "score"), 
-                      score ~ model)
-setcolorder(
-  scores_table, 
-  c("score", "Normal(0, 1)", "Normal(0.5, 1)", "Normal(0, 1.4)", "Normal(0, 0.7)")
-)
-
-(standard_normal | shifted_mean | overdispersion | underdispersion) /
-  (res$pit_plots$`Normal(0, 1)` | res$pit_plots$`Normal(0.5, 1)` | res$pit_plots$`Normal(0, 1.4)` | res$pit_plots$`Normal(0, 0.7)`) / 
-  gridExtra::tableGrob(scores_table)
-
-
-ggsave("plots/calibration-diagnostic-examples.png", width = 12.5, height = 6)
+<<example-calibration2, echo=FALSE, fig.height=7.2, fig.width=14, eval = TRUE>>=
+knitr::include_graphics(here("plots", "calibration-diagnostic-examples.png"))
 @
 
 \caption{\label{fig:calibration-plots} Calibration plots for different forecast distributions. I plan to add interval and quantile coverage plots, but these still have to be made.}
@@ -428,7 +380,7 @@ It is helpful to start the evaluation process by visualising the available data,
 % 
 \begin{figure}[h]
 \centering
-<<show-availability, echo=TRUE, fig=TRUE, height=6.7, width=12, eval = TRUE>>=
+<<show-availability, echo=TRUE, fig.height=6.7, fig.width=12, eval = TRUE>>=
 show_avail_forecasts(data = combined, 
                      x = "creation_date", 
                      show_numbers = FALSE,
@@ -442,7 +394,7 @@ show_avail_forecasts(data = combined,
 The forecasts and observed values themselves can be visualised using the \fct{plot\_predictions} function. Data visualisation is of course highly context-dependent, but the function tries to accommodate most practical use-cases. In addition to basic plotting functionality it offers the user an optional ad hoc way to filter both forecasts and observed values. This makes it possible to tweak the plot in a beginner-friendly way without having to manipulate the data separately. Forecasts and observed values can be passed in separately (and are merged internally) or as a single data.frame. Conditions to filter on need to be provided as a list of strings, where each of the strings represents an expression that can be evaluated to filter the data. To display, for example, death forecasts from the SIRCOVID model made on the 22nd July 2020 for the four UK countries and add three weeks of prior observations to the plot, we can call: % 
 \begin{figure}[h!]
 \centering
-<<show-forecasts, echo=TRUE, fig=TRUE, height=5.2, width=7, eval = FALSE>>=
+<<show-forecasts, echo=TRUE, fig.height=5.2, fig.width=7, eval = FALSE>>=
 locations <- 'c("Scotland", "Wales", "Northern Ireland", "England")'
 plot_predictions(truth = covid_uk_data,
                  forecasts = uk_forecasts,
@@ -504,7 +456,7 @@ A good starting point for an evaluation is the following score table that visusa
 
 \begin{figure}[h]
 \centering
-<<score-table, echo=TRUE, fig=TRUE, height=7.2, width=15, eval = TRUE>>=
+<<score-table, echo=TRUE, fig.height=7.2, fig.width=15, eval = TRUE>>=
 score_table(scores, y = "model", facet_formula = ~ value_desc)
 @
 \caption{\label{fig:score-table} Coloured table to visualise the computed scores}
@@ -514,7 +466,7 @@ The most informative metric in terms of model ranking is the relative\_skill. Ho
 
 \begin{figure}[h!]
 \centering
-<<pairwise-plot, echo=TRUE, fig=TRUE, height=7.2, width=14, eval = TRUE>>=
+<<pairwise-plot, echo=TRUE, fig.height=7.2, fig.width=14, eval = TRUE>>=
 plot_pairwise_comparison(pairwise) +
   ggplot2::facet_wrap(~ value_desc, scales = "free_x") 
 @
@@ -529,7 +481,7 @@ For forecasts in an interval format, looking at the components of the weighted i
 
 \begin{figure}[h!]
 \centering
-<<WIS-components, echo=TRUE, fig=TRUE, height=5.2, width=12, eval = TRUE>>=
+<<WIS-components, echo=TRUE, fig.height=5.2, fig.width=12, eval = TRUE>>=
 wis_components(scores, 
                facet_formula = ~ value_desc, 
                scales = "free_x", 
@@ -545,7 +497,7 @@ We can have a closer look at calibration using the functions \fct{interval\_cove
 
 \begin{figure}[h!]
 \centering
-<<coverage, echo=TRUE, fig=TRUE, height=5.2, width=14, out.width = '0.4\\linewidth', fig.show='hold', eval = TRUE>>=
+<<coverage, echo=TRUE, fig.height=5.2, fig.width=14, out.width="40%", fig.show='hold', eval = TRUE>>=
 cov_scores <- eval_forecasts(combined, 
                              summarise_by = c("model", 
                                               "range", "quantile"))
@@ -575,7 +527,7 @@ Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 
 \begin{figure}[h]
 \centering
-<<calibration, echo=TRUE, fig=TRUE, height=5.2, width=15, eval = TRUE>>=
+<<calibration, echo=TRUE, fig.height=5.2, fig.width=15, eval = TRUE>>=
 scores <- eval_forecasts(combined, 
                          summarise_by = c("model",
                                           "value_desc", 
@@ -644,7 +596,7 @@ COMING SOON.
 
 \begin{table}[h!]
 \centering
-<<scores-table, echo=FALSE, results=tex>>=
+<<scores-table, echo=FALSE, results='asis'>>=
 
 data <- readRDS("tables/scores-table.rds")
 
