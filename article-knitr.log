@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2021.6.9)  10 DEC 2021 10:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2021/Arch Linux) (preloaded format=pdflatex 2021.6.9)  10 DEC 2021 11:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -719,60 +719,21 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.222 \newpage
+l.218 \newpage
                <./plots/forecast-paradigm.png (PNG copy)>]
-Overfull \hbox (9.66599pt too wide) in paragraph at lines 229--229
- []|\T1/lmr/m/n/10 Continuous| 
+Overfull \hbox (7.93272pt too wide) in paragraph at lines 225--225
+ []|\T1/lmr/m/n/8 Continuous| 
  []
 
 
-Overfull \hbox (7.30148pt too wide) in paragraph at lines 229--229
- []|\T1/lmr/m/n/10 Quantiles| 
+Overfull \hbox (3.93033pt too wide) in paragraph at lines 225--225
+ []|\T1/lmr/m/n/8 Quantiles| 
  []
 
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 231.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 231.
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 231.
+(Font)              <5> on input line 227.
 
-Overfull \hbox (1.19005pt too wide) in paragraph at lines 251--251
- []|\T1/lmr/m/n/10 depends| 
- []
-
-
-Overfull \hbox (1.19005pt too wide) in paragraph at lines 251--251
- []|\T1/lmr/m/n/10 depends| 
- []
-
-
-Overfull \hbox (1.19005pt too wide) in paragraph at lines 251--251
- []|\T1/lmr/m/n/10 depends| 
- []
-
-
-Overfull \hbox (1.19005pt too wide) in paragraph at lines 253--253
- []|\T1/lmr/m/n/10 depends| 
- []
-
-
-Overfull \hbox (1.19005pt too wide) in paragraph at lines 253--253
- []|\T1/lmr/m/n/10 depends| 
- []
-
-
-Overfull \hbox (1.19005pt too wide) in paragraph at lines 253--253
- []|\T1/lmr/m/n/10 depends| 
- []
-
-
-Overfull \hbox (60.21985pt too wide) in alignment at lines 227--255
- [] [] [] [] [] [] [] [] 
- []
-
-
-Underfull \vbox (badness 10000) detected at line 255
+Underfull \vbox (badness 10000) detected at line 251
  []
 
 
@@ -784,17 +745,17 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 as been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.262 \newpage
+l.258 \newpage
               ]
 </mnt/data/GoogleDrive/Uni/PhD/scoringutils-paper/plots/calibration-diagnostic-
-examples.png, id=162, 903.375pt x 433.62pt>
+examples.png, id=164, 903.375pt x 722.7pt>
 File: /mnt/data/GoogleDrive/Uni/PhD/scoringutils-paper/plots/calibration-diagno
 stic-examples.png Graphic file (type png)
 <use /mnt/data/GoogleDrive/Uni/PhD/scoringutils-paper/plots/calibration-diagnos
 tic-examples.png>
 Package pdftex.def Info: /mnt/data/GoogleDrive/Uni/PhD/scoringutils-paper/plots
-/calibration-diagnostic-examples.png  used on input line 274.
-(pdftex.def)             Requested size: 433.79877pt x 208.22786pt.
+/calibration-diagnostic-examples.png  used on input line 270.
+(pdftex.def)             Requested size: 433.79877pt x 347.04643pt.
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 6 []
@@ -804,31 +765,27 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.298 
+l.287 
        </mnt/data/GoogleDrive/Uni/PhD/scoringutils-paper/plots/calibration-diag
-nostic-examples.png>]
+nostic-examples.png (PNG copy)>]
 
 LaTeX Warning: Reference `gneitingProbabilisticForecastsCalibration2007' on pag
-e 7 undefined on input line 301.
+e 7 undefined on input line 297.
 
 
 LaTeX Warning: Reference `fig:calibration-example' on page 7 undefined on input
- line 301.
+ line 297.
 
 
 LaTeX Warning: Reference `tab:score-overview' on page 7 undefined on input line
- 301.
+ 297.
 
 
 LaTeX Warning: Reference `tab:table-summary-scores' on page 7 undefined on inpu
-t line 309.
+t line 305.
 
 
-LaTeX Warning: Reference `tab:table-summary-scores' on page 7 undefined on inpu
-t line 312.
-
-
-Underfull \vbox (badness 2096) has occurred while \output is active []
+Underfull \vbox (badness 3780) has occurred while \output is active []
 
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
@@ -836,7 +793,9 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
  []
 
 [7]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+
+LaTeX Warning: Reference `tab:table-summary-scores' on page 8 undefined on inpu
+t line 308.
 
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
@@ -846,10 +805,7 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 [8]
 
 LaTeX Warning: Reference `tab:score-overview' on page 9 undefined on input line
- 332.
-
-
-Underfull \vbox (badness 5533) has occurred while \output is active []
+ 328.
 
 
 Overfull \hbox (5.47499pt too wide) has occurred while \output is active
@@ -858,38 +814,38 @@ Overfull \hbox (5.47499pt too wide) has occurred while \output is active
 
 [9]
 LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 3
-54.
+50.
  (/usr/share/texmf-dist/tex/latex/lm/t1lmtt.fd
 File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-356.
+352.
 
 (/usr/share/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10.95> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 359.
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 355.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 10 []
  []
 
 [10]
-Overfull \hbox (17.24493pt too wide) in paragraph at lines 429--429
+Overfull \hbox (17.24493pt too wide) in paragraph at lines 425--425
 [][]\T1/lmtt/b/n/10.95 show_avail_forecasts[][]\T1/lmtt/m/n/10.95 ([][]data[] [
 ]= combined,[] []x[] []=[] []"creation_date"[][],[] []show_numbers[] []=[] []FA
 LSE[][],[][] 
  []
 
-<plots/plot-show-availability-1.pdf, id=215, 867.24pt x 483.8075pt>
+<plots/plot-show-availability-1.pdf, id=216, 867.24pt x 483.8075pt>
 File: plots/plot-show-availability-1.pdf Graphic file (type pdf)
 <use plots/plot-show-availability-1.pdf>
 Package pdftex.def Info: plots/plot-show-availability-1.pdf  used on input line
- 433.
+ 429.
 (pdftex.def)             Requested size: 433.79877pt x 242.0065pt.
 
-Overfull \hbox (178.20947pt too wide) in paragraph at lines 446--446
+Overfull \hbox (178.20947pt too wide) in paragraph at lines 442--442
 [][]\T1/lmtt/b/n/10.95 plot_predictions[][]\T1/lmtt/m/n/10.95 ([][]truth[] []= 
 covid_uk_data,[] []forecasts[] []= uk_forecasts,[] []filter_both[] []=[] []\T1/
 lmtt/b/n/10.95 list[][]\T1/lmtt/m/n/10.95 ([][]\T1/lmtt/b/n/10.95 paste[][]\T1/
@@ -897,30 +853,27 @@ lmtt/m/n/10.95 ([][]"geography %in%"[][],[][]
  []
 
 
-Overfull \hbox (241.44554pt too wide) in paragraph at lines 447--447
+Overfull \hbox (241.44554pt too wide) in paragraph at lines 443--443
 []    []\T1/lmtt/m/n/10.95 locations,[] []collapse[] []=[] []""[][]),[] []"valu
 e_type == \"death_inc_line\""[][]),[] []filter_truth[] []=[] []\T1/lmtt/b/n/10.
 95 list[][]\T1/lmtt/m/n/10.95 ([][]"value_date <= \"2020-06-22\""[][],[][] 
  []
 
 
-Overfull \hbox (40.23987pt too wide) in paragraph at lines 448--448
+Overfull \hbox (40.23987pt too wide) in paragraph at lines 444--444
 []    []\T1/lmtt/m/n/10.95 "value_date > \"2020-06-01\""[][]),[] []filter_forec
 asts[] []=[] []\T1/lmtt/b/n/10.95 list[][]\T1/lmtt/m/n/10.95 ([][]"model == \"S
 IRCOVID\""[][],[][] 
  []
 
 
-Overfull \hbox (57.48607pt too wide) in paragraph at lines 449--449
+Overfull \hbox (57.48607pt too wide) in paragraph at lines 445--445
 []    []\T1/lmtt/m/n/10.95 "creation_date == \"2020-06-22\""[][]),[] []x[] []=[
 ] []"value_date"[][],[] []facet_formula[] []=[] []~[][]geography)[] []+[][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
-
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
@@ -936,25 +889,17 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.466 ....969, 0.969}\color{fgcolor}\begin{kframe}
-                                                  pdfTeX warning (ext4): destin
-ation with the same identifier (name{figure.4}) has been already used, duplicat
-e ignored
+l.458 
+      pdfTeX warning (ext4): destination with the same identifier (name{figure.
+4}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.466 ....969, 0.969}\color{fgcolor}\begin{kframe}
-                                                   <./plots/plot-show-availabil
-ity-1.pdf>]
-Overfull \hbox (5.79814pt too wide) in paragraph at lines 488--489
+l.458 
+       <./plots/plot-show-availability-1.pdf>]
+Overfull \hbox (5.79814pt too wide) in paragraph at lines 484--485
 \T1/lmr/m/n/10.95 fied in \T1/lmtt/m/n/10.95 summarise_by\T1/lmr/m/n/10.95 . In
  the above ex-am-ple, if \T1/lmtt/m/n/10.95 summarise_by = c("model", "value_ty
 pe")\T1/lmr/m/n/10.95 ,
- []
-
-
-Overfull \hbox (71.17355pt too wide) in paragraph at lines 492--493
-\T1/lmr/m/n/10.95 be \T1/lmtt/m/n/10.95 by = c("model", "geography", "value_typ
-e", "creation_date", "value_date", "value_desc")
  []
 
 
@@ -963,23 +908,29 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  []
 
 [13]
-Overfull \hbox (51.37335pt too wide) in paragraph at lines 499--501
+Overfull \hbox (71.17355pt too wide) in paragraph at lines 488--489
+\T1/lmr/m/n/10.95 be \T1/lmtt/m/n/10.95 by = c("model", "geography", "value_typ
+e", "creation_date", "value_date", "value_desc")
+ []
+
+
+Overfull \hbox (51.37335pt too wide) in paragraph at lines 495--497
 \T1/lmr/m/n/10.95 First, rel-a-tive skill scores based on pair-wise com-par-iso
 ns are by de-fault re-turned from \T1/lmtt/m/n/10.95 eval_forecasts()\T1/lmr/m/
 n/10.95 .
  []
 
 
-Overfull \hbox (22.99367pt too wide) in paragraph at lines 507--507
+Overfull \hbox (22.99367pt too wide) in paragraph at lines 503--503
 [][]\T1/lmtt/m/n/10.95 pairwise[] []<-[] []\T1/lmtt/b/n/10.95 pairwise_comparis
 on[][]\T1/lmtt/m/n/10.95 (unsummarised_scores,[] []summarise_by[] []=[] []"valu
 e_desc"[][])[][] 
  []
 
-<plots/plot-score-table-1.pdf, id=240, 1084.05pt x 519.9425pt>
+<plots/plot-score-table-1.pdf, id=241, 1084.05pt x 519.9425pt>
 File: plots/plot-score-table-1.pdf Graphic file (type pdf)
 <use plots/plot-score-table-1.pdf>
-Package pdftex.def Info: plots/plot-score-table-1.pdf  used on input line 527.
+Package pdftex.def Info: plots/plot-score-table-1.pdf  used on input line 523.
 (pdftex.def)             Requested size: 433.79877pt x 208.06058pt.
 
 LaTeX Warning: `h' float specifier changed to `ht'.
@@ -990,46 +941,35 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  []
 
 [14]
-Overfull \hbox (63.2348pt too wide) in paragraph at lines 539--539
+Overfull \hbox (63.2348pt too wide) in paragraph at lines 535--535
 [][]\T1/lmtt/b/n/10.95 plot_pairwise_comparison[][]\T1/lmtt/m/n/10.95 (pairwise
 )[] []+[] []ggplot2[][]::[][]\T1/lmtt/b/n/10.95 facet_wrap[][]\T1/lmtt/m/n/10.9
 5 ([][]~[][]value_desc,[] []scales[] []=[] []"free_x"[][])[][] 
  []
 
-<plots/plot-pairwise-plot-1.pdf, id=248, 1011.78pt x 519.9425pt>
+<plots/plot-pairwise-plot-1.pdf, id=249, 1011.78pt x 519.9425pt>
 File: plots/plot-pairwise-plot-1.pdf Graphic file (type pdf)
 <use plots/plot-pairwise-plot-1.pdf>
-Package pdftex.def Info: plots/plot-pairwise-plot-1.pdf  used on input line 542
+Package pdftex.def Info: plots/plot-pairwise-plot-1.pdf  used on input line 538
 .
 (pdftex.def)             Requested size: 433.79877pt x 222.92828pt.
 
 LaTeX Warning: `!h' float specifier changed to `!ht'.
 
 
-Overfull \hbox (5.74747pt too wide) in paragraph at lines 559--559
+Overfull \hbox (5.74747pt too wide) in paragraph at lines 555--555
 []    []\T1/lmtt/m/n/10.95 relative_contributions[] []=[] []TRUE[][],[] []x_tex
 t_angle[] []=[] []0[][])[] []+[] []ggplot2[][]::[][]\T1/lmtt/b/n/10.95 coord_fl
 ip[][]\T1/lmtt/m/n/10.95 ()[] []+[][] 
  []
 
-<plots/plot-WIS-components-1.pdf, id=251, 867.24pt x 375.4025pt>
+<plots/plot-WIS-components-1.pdf, id=252, 867.24pt x 375.4025pt>
 File: plots/plot-WIS-components-1.pdf Graphic file (type pdf)
 <use plots/plot-WIS-components-1.pdf>
-Package pdftex.def Info: plots/plot-WIS-components-1.pdf  used on input line 56
-3.
+Package pdftex.def Info: plots/plot-WIS-components-1.pdf  used on input line 55
+9.
 (pdftex.def)             Requested size: 433.79877pt x 187.78098pt.
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-LaTeX Warning: Reference `gneitingProbabilisticForecastsCalibration2007' on pag
-e 15 undefined on input line 568.
-
-LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 5
-68.
-(/usr/share/texmf-dist/tex/latex/lm/ts1lmr.fd
-File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 15
  []
@@ -1038,26 +978,17 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.569 
-       <./plots/plot-score-table-1.pdf>]
-<plots/plot-coverage-1.pdf, id=266, 1011.78pt x 375.4025pt>
-File: plots/plot-coverage-1.pdf Graphic file (type pdf)
-<use plots/plot-coverage-1.pdf>
-Package pdftex.def Info: plots/plot-coverage-1.pdf  used on input line 581.
-(pdftex.def)             Requested size: 177.05879pt x 65.69069pt.
-<plots/plot-coverage-2.pdf, id=267, 1011.78pt x 375.4025pt>
-File: plots/plot-coverage-2.pdf Graphic file (type pdf)
-<use plots/plot-coverage-2.pdf>
-Package pdftex.def Info: plots/plot-coverage-2.pdf  used on input line 582.
-(pdftex.def)             Requested size: 177.05879pt x 65.69069pt.
+l.562 \end{figure}
+                   <./plots/plot-score-table-1.pdf>]
 
+LaTeX Warning: Reference `gneitingProbabilisticForecastsCalibration2007' on pag
+e 16 undefined on input line 564.
 
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-Underfull \vbox (badness 2285) has occurred while \output is active []
-
-
+LaTeX Font Info:    Trying to load font information for TS1+lmr on input line 5
+64.
+(/usr/share/texmf-dist/tex/latex/lm/ts1lmr.fd
+File: ts1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 16 []
  []
@@ -1066,28 +997,39 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.590 
+l.565 
       pdfTeX warning (ext4): destination with the same identifier (name{figure.
 7}) has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.590 
+l.565 
        <./plots/plot-pairwise-plot-1.pdf> <./plots/plot-WIS-components-1.pdf>]
-Overfull \hbox (120.72214pt too wide) in paragraph at lines 612--612
+<plots/plot-coverage-1.pdf, id=281, 1011.78pt x 375.4025pt>
+File: plots/plot-coverage-1.pdf Graphic file (type pdf)
+<use plots/plot-coverage-1.pdf>
+Package pdftex.def Info: plots/plot-coverage-1.pdf  used on input line 577.
+(pdftex.def)             Requested size: 177.05879pt x 65.69069pt.
+<plots/plot-coverage-2.pdf, id=282, 1011.78pt x 375.4025pt>
+File: plots/plot-coverage-2.pdf Graphic file (type pdf)
+<use plots/plot-coverage-2.pdf>
+Package pdftex.def Info: plots/plot-coverage-2.pdf  used on input line 578.
+(pdftex.def)             Requested size: 177.05879pt x 65.69069pt.
+
+Overfull \hbox (120.72214pt too wide) in paragraph at lines 608--608
 [][]\T1/lmtt/m/n/10.95 scoringutils[][]::[][]\T1/lmtt/b/n/10.95 score_heatmap[]
 []\T1/lmtt/m/n/10.95 (scores,[] []metric[] []=[] []"bias"[][],[] []x[] []=[] []
 "geography"[][],[] []facet_formula[] []=[] []~[][]value_desc,[][] 
  []
 
-<plots/plot-calibration-1.pdf, id=285, 1084.05pt x 375.4025pt>
+<plots/plot-calibration-1.pdf, id=284, 1084.05pt x 375.4025pt>
 File: plots/plot-calibration-1.pdf Graphic file (type pdf)
 <use plots/plot-calibration-1.pdf>
-Package pdftex.def Info: plots/plot-calibration-1.pdf  used on input line 616.
+Package pdftex.def Info: plots/plot-calibration-1.pdf  used on input line 612.
 (pdftex.def)             Requested size: 433.79877pt x 150.22134pt.
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
 (./article-knitr.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 17
  []
@@ -1096,15 +1038,8 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
  has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.13 ...}]{bracherEvaluatingEpidemicForecasts2021}
-                                                  pdfTeX warning (ext4): destin
-ation with the same identifier (name{figure.9}) has been already used, duplicat
-e ignored
-<argument> ...shipout:D \box_use:N \l_shipout_box 
-                                                  
-l.13 ...}]{bracherEvaluatingEpidemicForecasts2021}
-                                                   <./plots/plot-coverage-1.pdf
-> <./plots/plot-coverage-2.pdf> <./plots/plot-calibration-1.pdf>]
+l.30 
+      <./plots/plot-coverage-1.pdf> <./plots/plot-coverage-2.pdf>]
 Underfull \hbox (badness 1132) in paragraph at lines 68--75
 \T1/lmr/m/n/10.95 and Sharp-ness.''  \T1/lmr/bx/n/10.95 69\T1/lmr/m/n/10.95 (2)
 , 243--268.  ISSN 1467-9868.  [][]\T1/lmtt/m/n/10.95 doi:$10 . 1111 / j . 1467-
@@ -1119,24 +1054,30 @@ m/n/10.95 https : / / rss . onlinelibrary . wiley . com / doi / abs / 10 . 1111
  []
 
 
+Overfull \hbox (10.94998pt too wide) has occurred while \output is active
+\T1/lmr/m/n/10.95 18 []
+ []
+
+[18pdfTeX warning (ext4): destination with the same identifier (name{figure.9})
+ has been already used, duplicate ignored
+<argument> ...shipout:D \box_use:N \l_shipout_box 
+                                                  
+l.86 ... Kr\"uger, and Lerch(2019)}]{scoringRules}
+                                                   <./plots/plot-calibration-1.
+pdf>]
 Underfull \hbox (badness 4634) in paragraph at lines 93--99
 []\T1/lmr/m/n/10.95 Timmermann A (????).  ``Fore-cast-ing Meth-ods in Fi-nance.
 ''  \T1/lmr/bx/n/10.95 10\T1/lmr/m/n/10.95 (1), 449--479.
  []
 
-
-Overfull \hbox (10.94998pt too wide) has occurred while \output is active
-\T1/lmr/m/n/10.95 18 []
- []
-
-[18])
+)
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 [] \T1/lmr/m/n/10.95 19
  []
 
 [19]
 LaTeX Font Info:    Font shape `T1/pzc/m/n' in size <13> not available
-(Font)              Font shape `T1/pzc/m/it' tried instead on input line 687.
+(Font)              Font shape `T1/pzc/m/it' tried instead on input line 683.
 
 Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 \T1/lmr/m/n/10.95 20 []
@@ -1146,7 +1087,7 @@ Overfull \hbox (10.94998pt too wide) has occurred while \output is active
 has been already used, duplicate ignored
 <argument> ...shipout:D \box_use:N \l_shipout_box 
                                                   
-l.687 \end{document}
+l.683 \end{document}
                     ] (./article-knitr.aux)
 
 LaTeX Warning: There were undefined references.
@@ -1155,34 +1096,36 @@ Package rerunfilecheck Info: File `article-knitr.out' has not changed.
 (rerunfilecheck)             Checksum: A643D71A4FC5CE9585FCF0BE7CEB9DF9;5320.
  ) 
 Here is how much of TeX's memory you used:
- 12362 strings out of 478994
- 182367 string characters out of 5864752
- 513244 words of memory out of 5000000
- 29459 multiletter control sequences out of 15000+600000
- 511356 words of font info for 95 fonts, out of 8000000 for 9000
+ 12349 strings out of 478994
+ 182209 string characters out of 5864752
+ 513793 words of memory out of 5000000
+ 29448 multiletter control sequences out of 15000+600000
+ 506312 words of font info for 86 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 86i,15n,88p,1980b,441s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 86i,15n,88p,1980b,437s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/share/texmf-dist/f
-onts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc
-}{/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf-dist
-/fonts/enc/dvips/base/8r.enc}</usr/share/texmf-dist/fonts/type1/public/lm/lmb10
-.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmbo10.pfb></usr/share/texmf-
-dist/fonts/type1/public/lm/lmbx10.pfb></usr/share/texmf-dist/fonts/type1/public
-/lm/lmbx12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/sh
-are/texmf-dist/fonts/type1/public/lm/lmr10.pfb></usr/share/texmf-dist/fonts/typ
-e1/public/lm/lmri10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmri12.pfb
-></usr/share/texmf-dist/fonts/type1/public/lm/lmro10.pfb></usr/share/texmf-dist
-/fonts/type1/public/lm/lmss10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/
-lmssbx10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmsso10.pfb></usr/sha
-re/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf-dist/fonts/typ
-e1/public/lm/lmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmtt12.pfb
-></usr/share/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/share/texmf-dis
-t/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/fonts/t
-ype1/urw/zapfchan/uzcmi8a.pfb>
-Output written on article-knitr.pdf (20 pages, 796855 bytes).
+onts/enc/dvips/lm/lm-ec.enc}{/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-mathsy
+.enc}{/usr/share/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/share/texmf-dist
+/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/share/texmf-dist/fonts/enc/dvips/base/8
+r.enc}</usr/share/texmf-dist/fonts/type1/public/lm/lmb10.pfb></usr/share/texmf-
+dist/fonts/type1/public/lm/lmbo10.pfb></usr/share/texmf-dist/fonts/type1/public
+/lm/lmbx10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmbx12.pfb></usr/sh
+are/texmf-dist/fonts/type1/public/lm/lmmi10.pfb></usr/share/texmf-dist/fonts/ty
+pe1/public/lm/lmr10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmr8.pfb><
+/usr/share/texmf-dist/fonts/type1/public/lm/lmri10.pfb></usr/share/texmf-dist/f
+onts/type1/public/lm/lmri12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lm
+ro10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/share/te
+xmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/share/texmf-dist/fonts/type1/
+public/lm/lmsso10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></
+usr/share/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/share/texmf-dist/fo
+nts/type1/public/lm/lmtt10.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmt
+t12.pfb></usr/share/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/share/te
+xmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/share/texmf-dist/
+fonts/type1/urw/zapfchan/uzcmi8a.pfb>
+Output written on article-knitr.pdf (20 pages, 1268768 bytes).
 PDF statistics:
- 444 PDF objects out of 1000 (max. 8388607)
- 380 compressed objects within 4 object streams
+ 452 PDF objects out of 1000 (max. 8388607)
+ 387 compressed objects within 4 object streams
  82 named destinations out of 1000 (max. 500000)
  203 words of extra memory for PDF output out of 10000 (max. 10000000)
 

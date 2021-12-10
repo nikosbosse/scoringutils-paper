@@ -207,25 +207,6 @@ Some of the metrics in \pkg{scoringuitls} focus only on sharpness or on calibrat
 % \begin{table}[h!]
 % \centering
 
-<<summary-table, echo=FALSE, eval = FALSE, results='asis'>>=
-
-data <- readRDS("tables/scores-table-summary.rds")
-
-data[, 1:4] %>%
-  kableExtra::kbl(format = "latex", booktabs = TRUE, 
-                  escape = FALSE,
-                  longtable = TRUE,
-                  linesep = c('\\addlinespace')) %>%
-  kableExtra::column_spec(1, width = "12.5cm") %>%
-  # kableExtra::column_spec(2, width = "2cm") %>%
-  # kableExtra::column_spec(3, width = "4.5cm") %>%
-  # kableExtra::column_spec(4, width = "4cm") %>%
-  kableExtra::kable_styling(latex_options = c("striped", "repeat_header", "scale_down"), font_size = 2) 
-
-@
-% \caption{\label{tab:table-summary-scores} Summary table of scores available in scoringutils}
-% \end{table}
-
 \newpage
 \begin{table}[h!]
 \centering
@@ -239,15 +220,15 @@ data[, 1:8] %>%
                   longtable = TRUE,
                   align = c("lccccccl"),
                   linesep = c('\\addlinespace')) %>%
-  kableExtra::column_spec(1, width = "2.0 cm") %>%
-  kableExtra::column_spec(2, width = "1.4cm") %>%
-  kableExtra::column_spec(3, width = "1.4cm") %>%
-  kableExtra::column_spec(4, width = "1.2cm") %>%
-  kableExtra::column_spec(5, width = "1.2cm") %>%
-  kableExtra::column_spec(6, width = "1.4cm") %>%
-  kableExtra::column_spec(7, width = "1.2cm") %>%
-  kableExtra::column_spec(8, width = "4.5cm") %>%
-  kableExtra::kable_styling(latex_options = c("striped", "repeat_header, scale_down"), font_size = 10) 
+  kableExtra::column_spec(1, width = "1.8 cm") %>%
+  kableExtra::column_spec(2, width = "1.2cm") %>%
+  kableExtra::column_spec(3, width = "1.2cm") %>%
+  kableExtra::column_spec(4, width = "1.0cm") %>%
+  kableExtra::column_spec(5, width = "1.0cm") %>%
+  kableExtra::column_spec(6, width = "1.3cm") %>%
+  kableExtra::column_spec(7, width = "1.1cm") %>%
+  kableExtra::column_spec(8, width = "3.4cm") %>%
+  kableExtra::kable_styling(latex_options = c("striped", "repeat_header, scale_down"), font_size = 8) 
 
 @
 \caption{\label{tab:table-summary-scores2} Summary table of scores available in scoringutils}

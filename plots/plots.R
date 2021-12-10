@@ -23,11 +23,29 @@ df <- data.table::data.table(true_value = rep(true_values, each = n_samples),
                                            "Normal(0, 1.4)", "Normal(0, 0.7)"), 
                                          each = n_truth * n_samples))
 
+# get scores
 res <- eval_forecasts(df, 
                       summarise_by = c("model"))
 
+# create pit plots
 pit <- scoringutils::pit_df(df, summarise_by = "model")
 pit_plots <- scoringutils::hist_PIT(pit)
+
+# create coverage plots by transforming to quantile format first
+quantiles <- c(0.01, 0.025, seq(0.05, 0.95, 0.05), 0.975, 0.99)
+df_quantile <- scoringutils::sample_to_quantile(df, 
+                                                quantiles = quantiles)
+
+res_quantile <- eval_forecasts(df_quantile, 
+                               summarise_by = c("model", "range", "quantile"))
+
+res_quantile[, model := factor(model, levels = c("Normal(0, 1)", "Normal(0.5, 1)", "Normal(0, 1.4)", "Normal(0, 0.7)"))]
+
+interval_coverage <- scoringutils::interval_coverage(res_quantile) + 
+  facet_wrap(~ model, nrow = 1)
+
+quantile_coverage <- scoringutils::quantile_coverage(res_quantile) + 
+  facet_wrap(~ model, nrow = 1)
 
 
 # plot with observations
@@ -73,7 +91,9 @@ setcolorder(
 
 (standard_normal | shifted_mean | overdispersion | underdispersion) /
   (pit_plots$`Normal(0, 1)` | pit_plots$`Normal(0.5, 1)` | pit_plots$`Normal(0, 1.4)` | pit_plots$`Normal(0, 0.7)`) / 
+  interval_coverage / 
+  quantile_coverage /
   gridExtra::tableGrob(scores_table)
 
 
-ggsave("plots/calibration-diagnostic-examples.png", width = 12.5, height = 6)
+ggsave("plots/calibration-diagnostic-examples.png", width = 12.5, height = 10)
