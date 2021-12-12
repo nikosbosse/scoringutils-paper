@@ -117,7 +117,7 @@
 
 %% - \Abstract{} almost as usual
 \Abstract{
-  Forecasts play an important role in a variety of fields. Their role in informing public policy has attracted increased attention from the general public with the emergence of the Covid-19 pandemic. Much theoretical work has been done on the development of proper scoring rules and other scoring metrics that can help evaluate these forecasts. Making these theoretical insights available to end users, however, has been less of a focus. In this paper we introduce \pkg{scoringutils}, an \proglang{R} package that facilitates automated forecast evaluation. It gives the user access to a wide range of scoring metrics for various types of forecasts as well as a variety of ways to visualise the evaluation. We give an overview of the evaluation process and the metrics implemented in \pkg{scoringutils} and show a full evaluation of a set of short-term forecasts of public health related targets made by SPI-M during the 2020 Covid-19 epidemic in the United Kingdom. 
+  Forecasts play an important role in a variety of fields. Their role in informing public policy has attracted increased attention from the general public with the emergence of the Covid-19 pandemic. Much theoretical work has been done on the development of proper scoring rules and other scoring metrics that can help evaluate these forecasts. Making these theoretical insights available to end users, however, has been less of a focus. In this paper we introduce \pkg{scoringutils}, an \proglang{R} package that facilitates automated forecast evaluation. It gives the user access to a wide range of scoring metrics for various types of forecasts as well as a variety of ways to visualise the evaluation. We give an overview of the evaluation process and the metrics implemented in \pkg{scoringutils} and show an example evaluation of forecasts for COVID-19 cases and deaths submitted to the European Forecast Hub between May und September 2021. 
 }
 
 %% - \Keywords{} with LaTeX markup, at least one required
@@ -267,7 +267,7 @@ Relative skill & $\sim$ & $\sim$ & $\sim$ & $\sim$ & $\sim$ & $\sim$ & Ranks mod
 \centering
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}
-\includegraphics[width=0.98\textwidth]{/mnt/data/GoogleDrive/Uni/PhD/scoringutils-paper/plots/calibration-diagnostic-examples} 
+\includegraphics[width=\maxwidth]{/mnt/data/GoogleDrive/Uni/PhD/scoringutils-paper/plots/calibration-diagnostic-examples} 
 \end{knitrout}
 
 \caption{\label{fig:calibration-plots} Calibration plots for different forecast distributions. I plan to add interval and quantile coverage plots, but these still have to be made.}
@@ -319,7 +319,8 @@ As the CRPS is a generalisation of the absolute value, overall scores depend on 
 \subsection{Proper scoring rules for non-sample-based forecasts (WIS and BS)}
 For forecasts in an interval or quantile format, \pkg{scoringutils} offers the weighted interval score (WIS) \citep{bracherEvaluatingEpidemicForecasts2021}. 
 % properties of the WIS + decomposition
-The WIS has very similar properties to the CRPS and can be thought of as a quantile-based approximation. For an increasing number of equally-spaced prediction intervals the WIS converges to the CRPS. One additional benefit of the WIS is that it can easily be decomposed into three additive components: an uncertainty penalty (sharpness) for the width of a prediction interval and penalties for over- and underprediction (if a value falls outside of a prediction interval). This can be very helpful in diagnosing model problems. It may even be useful to convert samples into quantiles and use the WIS instead of the CRPS to make use of this decomposition for the purpose of model diagnostics. 
+The WIS has very similar properties to the CRPS and can be thought of as a quantile-based approximation. For an increasing number of equally-spaced prediction intervals the WIS converges to the CRPS. One additional benefit of the WIS is that it can easily be decomposed into three additive components: an uncertainty penalty (called dispersion or sharpness) for the width of a prediction interval and penalties for over- and underprediction (if a value falls outside of a prediction interval). This can be very helpful in diagnosing model problems. It may even be useful to convert samples into quantiles and use the WIS instead of the CRPS to make use of this decomposition for the purpose of model diagnostics. 
+
 % Brier Score
 Binary forecasts can be scored using the Brier score (BS) [CITATION], which corresponds to the squared difference between the given probability and the outcome (either 0 or 1). 
 
@@ -334,211 +335,324 @@ It is in principle possible to obtain p-values that help determine whether two m
 % ==============================================================================
 \section{Evaluating UK short-term forecasts}
 
-The following section shows an example evaluation of short-term predictions of four different Covid-19 related targets in the UK made between March 31 and July 13 2020. Forecasts were produced by six research groups in the UK, and submitted to the Scientific Pandemic Influenza Group on Modelling (SPI-M). The forecasts aimed to assess the likely future burden the UK healthcare system would face from the Covid-19 pandemic. Predictions submitted to SPI-M were aggregated and used to inform UK government health policy through the Strategic Advisory Group of Experts (SAGE). All predictions as well as most of the observed values are now publicly available and discussed in more depth in [FUNK ET AL]. 
+% The following section shows an example evaluation of short-term predictions of four different Covid-19 related targets in the UK made between March 31 and July 13 2020. Forecasts were produced by six research groups in the UK, and submitted to the Scientific Pandemic Influenza Group on Modelling (SPI-M). The forecasts aimed to assess the likely future burden the UK healthcare system would face from the Covid-19 pandemic. Predictions submitted to SPI-M were aggregated and used to inform UK government health policy through the Strategic Advisory Group of Experts (SAGE). All predictions as well as most of the observed values are now publicly available and discussed in more depth in [FUNK ET AL]. 
 % - timing (weekly?) and number of forecast dates
 % - the four targets
 % - the models. 
 
+The following section shows an example evaluation of short-term predictions for COVID-19 cases and deaths submitted to the European Forecast Hub [CITATION]. The full oficial hub evaluations, which also use \pkg{scoringutils}, can be seen at https://covid19forecasthub.eu/. The European Forecast Hub each week collates, aggregates and evaluates one to four week ahead predictions of different COVID-19 related targets submitted by different research groups. Forecasts are submitted in a quantile-based format with a set of 22 quantiles plus the median ($0.01, 0.025, 0.05, ..., 0.5, ... 0.95, 0.975, 0.99$). The following example evaluation is based on a subset of forecasts from the European Forecast Hub which includes one to three week ahead forecasts made between May and September 2021 for COVID-19 cases and deaths from four different models. 
+
+This example data follows a quantile-based format, but the evaluation process would work analogously for forecasts in a different format. We will point out differences to scoring different forecast formats where appropriate. The example data set (as well as versions of it in different formats) is also included in the \pkg{scoringutils} package. 
+
 The evaluation process looks as follows: First we load, prepare and visualise (some of) the data. Then we obtain forecast scores and a model ranking based on pairwise-comparisons, followed by a more detailed analysis of calibration and sharpness. 
 
-\subsection{Preparing and visualising the data}
+\subsection{Checking the data}
 
-We first need to obtain the data by installing and loading the \pkg{covid19.forecasts.uk} using the following commands: 
 % 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# install and load data pacakge from external repository}
-\hlcom{# remotes::install_github('sbfnk/covid19.forecasts.uk')}
-
-\hlcom{# load packages}
-\hlkwd{library}\hlstd{(covid19.forecasts.uk)}
-\hlkwd{library}\hlstd{(dplyr)}
-\hlkwd{library}\hlstd{(scoringutils)}
-
-\hlcom{# load truth data}
-\hlkwd{data}\hlstd{(covid_uk_data)}
-\hlcom{# head(covid_uk_data)}
-
-\hlcom{# load forecasts}
-\hlkwd{data}\hlstd{(uk_forecasts)}
-\hlcom{# head(uk_forecasts)}
+\hlstd{> }\hlcom{# load packages}
+\hlstd{> }\hlkwd{library}\hlstd{(scoringutils)}
+\hlstd{> }\hlkwd{library}\hlstd{(dplyr)}
+\hlstd{> }\hlkwd{library}\hlstd{(data.table)}
+\hlstd{> }\hlkwd{library}\hlstd{(kableExtra)}
+\hlstd{> }
+\hlstd{> }\hlcom{# load forecasts}
+\hlstd{> }\hlkwd{data}\hlstd{(example_quantile)}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 % 
-Let us take a first look a the data:
+All higher level functions that allow for convenient evaluation of forecasts expect a \code{data.frame} or similar. Lower-level functions (discussed in a later section) accept inputs as vectors and matrices. 
+
+
+We omit \code{NA} values as the data set also contains entries for which we have an observed value, but no forecast. 
 % 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{glimpse}\hlstd{(covid_uk_data)}
+\hlstd{> }\hlstd{example_quantile |>}
+\hlstd{+ }    \hlkwd{na.omit}\hlstd{() |>}
+\hlstd{+ }    \hlkwd{glimpse}\hlstd{()}
 \end{alltt}
 \begin{verbatim}
-## Rows: 4,174
-## Columns: 6
-## $ geography  <fct> London, London, London, London, London, London, L~
-## $ value_type <fct> hospital_inc, hospital_inc, hospital_inc, hospita~
-## $ value_desc <fct> Hospital admissions, Hospital admissions, Hospita~
-## $ truncation <dbl> 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0~
-## $ value_date <date> 2020-03-20, 2020-03-21, 2020-03-22, 2020-03-23, ~
-## $ value      <dbl> 18, 232, 280, 241, 313, 353, 516, 637, 677, 546, ~
-\end{verbatim}
-\begin{alltt}
-\hlkwd{glimpse}\hlstd{(uk_forecasts)}
-\end{alltt}
-\begin{verbatim}
-## Rows: 1,254,513
-## Columns: 8
-## $ model         <fct> EpiSoon, EpiSoon, EpiSoon, EpiSoon, EpiSoon, E~
-## $ geography     <chr> "East of England", "East of England", "East of~
-## $ value_type    <fct> hospital_inc, hospital_inc, hospital_inc, hosp~
-## $ creation_date <date> 2020-03-31, 2020-03-31, 2020-03-31, 2020-03-3~
-## $ value_date    <date> 2020-04-01, 2020-04-02, 2020-04-03, 2020-04-0~
-## $ quantile      <dbl> 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05, 0.05~
-## $ value         <dbl> 70, 64, 53, 42, 30, 19, 4, 0, 0, 0, 0, 0, 0, 0~
-## $ value_desc    <fct> Hospital admissions, Hospital admissions, Hosp~
+## Rows: 20,401
+## Columns: 10
+## $ location        <chr> "DE", "DE", "DE", "DE", "DE", "DE", "DE", "DE", "DE", ~
+## $ target_end_date <date> 2021-05-08, 2021-05-08, 2021-05-08, 2021-05-08, 2021-~
+## $ target_type     <chr> "Cases", "Cases", "Cases", "Cases", "Cases", "Cases", ~
+## $ true_value      <dbl> 106987, 106987, 106987, 106987, 106987, 106987, 106987~
+## $ location_name   <chr> "Germany", "Germany", "Germany", "Germany", "Germany",~
+## $ forecast_date   <chr> "2021-05-03", "2021-05-03", "2021-05-03", "2021-05-03"~
+## $ quantile        <dbl> 0.010, 0.025, 0.050, 0.100, 0.150, 0.200, 0.250, 0.300~
+## $ prediction      <int> 82466, 86669, 90285, 95341, 99171, 102990, 105962, 108~
+## $ model           <chr> "EuroCOVIDhub-ensemble", "EuroCOVIDhub-ensemble", "Eur~
+## $ horizon         <dbl> 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, ~
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
 % 
-Some minor changes need to be made to the data before we can evaluate the forecasts. The names of the columns that hold the forecasts and the true observed values need to be changed to \code{prediction} and \code{true_value}. While we could also proceed with separate data sets for the evaluation, we merge the two data sets in order to remove all instances where the forecasts, but not the true observations were made public. The \pkg{scoringutils} package provides a function that attempts to merge the data sets in a sensible way. 
-% 
+
+For forecasts in a quantile-based format it is necessary to have columns called \code{true_value}, \code{prediction} and \code{quantile}. It is recommended (although not necessary except in order to do pairwise comparisons) to have a column called "model" with an identifier for the forecaster.
+Table \ref{tab:column-requirements} shows the columns expected for different input formats. 
+
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{uk_forecasts} \hlkwb{<-} \hlkwd{rename}\hlstd{(uk_forecasts,} \hlkwc{prediction} \hlstd{= value)}
-\hlstd{covid_uk_data} \hlkwb{<-} \hlkwd{rename}\hlstd{(covid_uk_data,} \hlkwc{true_value} \hlstd{= value)}
-
-\hlstd{combined} \hlkwb{<-} \hlkwd{merge_pred_and_obs}\hlstd{(uk_forecasts, covid_uk_data)}
+\hlstd{> }\hlstd{requirements} \hlkwb{<-} \hlkwd{data.table}\hlstd{(}\hlkwc{Format} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"quantile-based"}\hlstd{,} \hlstr{"sample-based"}\hlstd{,}
+\hlstd{+ }    \hlstr{"binary"}\hlstd{,} \hlstr{"pairwise-comparisons"}\hlstd{),} \hlkwc{`Required columns`} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"'true_value', 'prediction', 'quantile'"}\hlstd{,}
+\hlstd{+ }    \hlstr{"'true_value', 'prediction', 'sample'"}\hlstd{,} \hlstr{"'true_value', 'prediction'"}\hlstd{,}
+\hlstd{+ }    \hlstr{"additionally a column 'model'"}\hlstd{))}
+\hlstd{> }
+\hlstd{> }\hlstd{requirements |>}
+\hlstd{+ }    \hlkwd{kable}\hlstd{(}\hlkwc{format} \hlstd{=} \hlstr{"latex"}\hlstd{)}
 \end{alltt}
 \end{kframe}
+\begin{tabular}{l|l}
+\hline
+Format & Required columns\\
+\hline
+quantile-based & 'true\_value', 'prediction', 'quantile'\\
+\hline
+sample-based & 'true\_value', 'prediction', 'sample'\\
+\hline
+binary & 'true\_value', 'prediction'\\
+\hline
+pairwise-comparisons & additionally a column 'model'\\
+\hline
+\end{tabular}
+
 \end{knitrout}
-% 
-It is helpful to start the evaluation process by visualising the available data, as missing forecasts can impact the evaluation if missingness is not random, but instead correlates with performance. The function \fct{show\_avail\_forecasts} returns a heatmap with the number of available forecasts. By default, the function treats a set of different quantiles or samples as one forecast. However, the user can specify manually which elements to treat as one forecast and which categories to sum over to count the number of available forecasts. 
+
+We can check whether the data conforms to the requirements by running \fct{check\_forecasts}. 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlkwd{check_forecasts}\hlstd{(example_quantile)}
+\end{alltt}
+\begin{verbatim}
+## $target_type
+## [1] "integer"
+## 
+## $prediction_type
+## [1] "quantile"
+## 
+## $forecast_unit
+## [1] "location"        "target_end_date" "target_type"     "location_name"  
+## [5] "forecast_date"   "model"           "horizon"        
+## 
+## $unique_values
+##                    model location target_end_date target_type true_value
+## 1: EuroCOVIDhub-ensemble        4              12           2         96
+## 2: EuroCOVIDhub-baseline        4              12           2         96
+## 3:  epiforecasts-EpiNow2        4              12           2         95
+## 4:       UMass-MechBayes        4              12           1         48
+##    location_name forecast_date quantile prediction horizon
+## 1:             4            11       23       3969       3
+## 2:             4            11       23       3733       3
+## 3:             4            11       23       3903       3
+## 4:             4            11       23       1058       3
+## 
+## $warnings
+## [1] "Some values for `prediction` are NA in the data provided"
+## 
+## 
+## Based on your input, scoringutils thinks:
+## Forecasts are for a `integer` target using a `quantile` prediction format.
+## The unit of a single forecast is defined by `location`, `target_end_date`, `target_type`, `location_name`, `forecast_date`, `model`, `horizon`. If this is not as intended, please DELETE UNNECESSARY columns or add new ones.
+## $unique_values shows how many unique values there are per column per model (across the entire data).
+## 
+## You should be aware of the following warnings:
+## Some values for `prediction` are NA in the data provided
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+This returns a list with different entries giving information about what \pkg{scoringutils} infers from the data. \code{target_type} \code{prediction_type} refer to the forecast format. \code{forecast_unit} contains a vector of the columns which \pkg{scoringutils} thinks denote the unit of a single forecast. This means that in this instance a single forecast (with a set of 23 quantiles) can uniquely be identified by the values in the columns "location", "target\_end\_date", "target\_type", "location\_name", "forecast\_date", "model", "horizon". In this example, having "location" as well as "location\_name" included does not make a difference, as they contain duplicated information. In general, however, it is strongly advised to remove all unnecessary columns that do not help identify a single forecast. \code{unique_values} gives an overview of the number of unique values per column across the entire data set, providing a first hint as to whether the forecast set is complete. \code{warnings} shows potential warnings about the data. In this example, \pkg{scoringutils} warns that there are observed values present for which there is no corresponding forecast. These warnings can often be ignored, but may provide important information. If there are errors that cannot be ignored, a list entry \code{errors} will appear. 
+
+It is helpful to start the evaluation process by visualising data availability, as missing forecasts can impact the evaluation if missingness is not random, but instead correlates with performance. The function \fct{show\_avail\_forecasts} returns a heatmap with the number of available forecasts. By default, the function treats a set of different quantiles or samples as one forecast. However, the user can specify manually which elements to treat as one forecast and which categories to sum over to count the number of available forecasts. 
 % 
 \begin{figure}[h]
 \centering
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{show_avail_forecasts}\hlstd{(}\hlkwc{data} \hlstd{= combined,} \hlkwc{x} \hlstd{=} \hlstr{"creation_date"}\hlstd{,} \hlkwc{show_numbers} \hlstd{=} \hlnum{FALSE}\hlstd{,}
-    \hlkwc{legend_position} \hlstd{=} \hlstr{"bottom"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{value_desc)}
+\hlstd{> }\hlkwd{show_avail_forecasts}\hlstd{(}\hlkwc{data} \hlstd{= example_quantile,} \hlkwc{x} \hlstd{=} \hlstr{"target_end_date"}\hlstd{,}
+\hlstd{+ }    \hlkwc{show_numbers} \hlstd{=} \hlnum{FALSE}\hlstd{,} \hlkwc{legend_position} \hlstd{=} \hlstr{"bottom"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{target_type)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.98\textwidth]{plots/plot-show-availability-1} 
+\includegraphics[width=\maxwidth]{plots/plot-show-availability-1} 
 \end{knitrout}
 \caption{\label{fig:avail-forecasts} Overview of the number of available forecasts}
 \end{figure}
 %THINK ABOUT WHETHER THIS FUNCTION CAN BE COMBINED WITH THE OTHER HEATMAP FUNCTION. 
 % 
-The forecasts and observed values themselves can be visualised using the \fct{plot\_predictions} function. Data visualisation is of course highly context-dependent, but the function tries to accommodate most practical use-cases. In addition to basic plotting functionality it offers the user an optional ad hoc way to filter both forecasts and observed values. This makes it possible to tweak the plot in a beginner-friendly way without having to manipulate the data separately. Forecasts and observed values can be passed in separately (and are merged internally) or as a single data.frame. Conditions to filter on need to be provided as a list of strings, where each of the strings represents an expression that can be evaluated to filter the data. To display, for example, death forecasts from the SIRCOVID model made on the 22nd July 2020 for the four UK countries and add three weeks of prior observations to the plot, we can call: % 
+The forecasts and observed values themselves can be visualised using the \fct{plot\_predictions} function. Data visualisation is of course highly context-dependent, but the function tries to accommodate most practical use-cases. In addition to basic plotting functionality it offers the user an optional ad hoc way to filter both forecasts and observed values. This makes it possible to tweak the plot in a beginner-friendly way without having to manipulate the data separately. Forecasts and observed values can be passed in separately (and are merged internally) or as a single data.frame. Conditions to filter on need to be provided as a list of strings, where each of the strings represents an expression that can be evaluated to filter the data. To display, for example, short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021 as well as 5 weeks of prior data, we can call: % 
 \begin{figure}[h!]
 \centering
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{locations} \hlkwb{<-} \hlstr{"c(\textbackslash{}"Scotland\textbackslash{}", \textbackslash{}"Wales\textbackslash{}", \textbackslash{}"Northern Ireland\textbackslash{}", \textbackslash{}"England\textbackslash{}")"}
-\hlkwd{plot_predictions}\hlstd{(}\hlkwc{truth} \hlstd{= covid_uk_data,} \hlkwc{forecasts} \hlstd{= uk_forecasts,} \hlkwc{filter_both} \hlstd{=} \hlkwd{list}\hlstd{(}\hlkwd{paste}\hlstd{(}\hlstr{"geography %in%"}\hlstd{,}
-    \hlstd{locations,} \hlkwc{collapse} \hlstd{=} \hlstr{""}\hlstd{),} \hlstr{"value_type == \textbackslash{}"death_inc_line\textbackslash{}""}\hlstd{),} \hlkwc{filter_truth} \hlstd{=} \hlkwd{list}\hlstd{(}\hlstr{"value_date <= \textbackslash{}"2020-06-22\textbackslash{}""}\hlstd{,}
-    \hlstr{"value_date > \textbackslash{}"2020-06-01\textbackslash{}""}\hlstd{),} \hlkwc{filter_forecasts} \hlstd{=} \hlkwd{list}\hlstd{(}\hlstr{"model == \textbackslash{}"SIRCOVID\textbackslash{}""}\hlstd{,}
-    \hlstr{"creation_date == \textbackslash{}"2020-06-22\textbackslash{}""}\hlstd{),} \hlkwc{x} \hlstd{=} \hlstr{"value_date"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{geography)} \hlopt{+}
-    \hlstd{ggplot2}\hlopt{::}\hlkwd{theme}\hlstd{(}\hlkwc{legend.position} \hlstd{=} \hlstr{"bottom"}\hlstd{)}
+\hlstd{> }\hlkwd{plot_predictions}\hlstd{(}\hlkwc{data} \hlstd{= example_quantile,} \hlkwc{x} \hlstd{=} \hlstr{"target_end_date"}\hlstd{,}
+\hlstd{+ }    \hlkwc{filter_truth} \hlstd{=} \hlkwd{list}\hlstd{(}\hlstr{"target_end_date <= \textbackslash{}"2021-07-15\textbackslash{}""}\hlstd{,}
+\hlstd{+ }        \hlstr{"target_end_date > \textbackslash{}"2021-05-22\textbackslash{}""}\hlstd{),} \hlkwc{filter_forecasts} \hlstd{=} \hlkwd{list}\hlstd{(}\hlstr{"model == 'EuroCOVIDhub-ensemble'"}\hlstd{,}
+\hlstd{+ }        \hlstr{"forecast_date == \textbackslash{}"2021-06-28\textbackslash{}""}\hlstd{),} \hlkwc{facet_formula} \hlstd{= target_type} \hlopt{~}
+\hlstd{+ }        \hlstd{location,} \hlkwc{ncol} \hlstd{=} \hlnum{4}\hlstd{)} \hlopt{+} \hlstd{ggplot2}\hlopt{::}\hlkwd{theme}\hlstd{(}\hlkwc{legend.position} \hlstd{=} \hlstr{"bottom"}\hlstd{)}
 \end{alltt}
 \end{kframe}
+\includegraphics[width=\maxwidth]{plots/plot-show-forecasts-1} 
 \end{knitrout}
-\caption{\label{fig:forecast-visualisation} Short-term forecasts for incident deaths made by the SIRCOVID model on June 22 2020.}
+\caption{\label{fig:forecast-visualisation} Short-term forecasts for COVID-19 cases and deaths made by the EuroCOVIDhub-ensemble model on June 28 2021.}
 \end{figure}
 % 
 The output is shown in Figure \ref{fig:forecast-visualisation}.
 
 \subsection[Scoring forecasts and obtaining a model ranking]{Scoring forecasts with \fct{eval\_forecasts}}
 
-The actual scoring of forecasts based on observed values can be performed using the function \fct{eval\_forecasts}. The function automatically detects the forecast type and format, applies the appropriate scoring metrics and aggregates results as desired by the user. Internally, operations are handled using \pkg{data.table} to allow for fast and efficient computation. The function requires a \code{data.frame} or similar with some pre-specified columns (e.g. a column called "prediction", one called "true\_value" and more depending on the forecast format). Additional columns may be present to indicate a grouping of forecasts, for example forecasts made in different locations or over different forecast horizons. To illustrate the requirements, \pkg{scoringutils} provides example data for all possible forecast formats. It also offers functions to to transform between various formats, e.g. from a sample based format to a quantile format. 
+The actual scoring of forecasts based on observed values can be performed using the function \fct{eval\_forecasts}. The function automatically detects the forecast type and format (as shown in the output of \fct{check\_forecasts}), applies the appropriate scoring metrics and can in addition also aggregate results as well as perform pairwise comparisons between models. Internally, operations are handled using \pkg{data.table} to allow for fast and efficient computation. 
 
-When conducting an evaluation, we need to decide on the level of grouping over which we want to aggregate scores. For the UK short-term forecasts it makes sense to look at the scores achieved by every model separate for all prediction targets. This can be achieved by calling
-% ion G
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(combined,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,} \hlstr{"value_desc"}\hlstd{))}
-
-\hlkwd{glimpse}\hlstd{(scores)}
+\hlstd{> }\hlstd{scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(example_quantile)}
+\hlstd{> }\hlkwd{glimpse}\hlstd{(scores)}
 \end{alltt}
 \begin{verbatim}
-## Rows: 29
-## Columns: 9
-## $ model              <fct> EpiSoon, StructuredODE, Microsimulation, ~
-## $ value_desc         <fct> Hospital admissions, Hospital admissions,~
-## $ interval_score     <dbl> 38.56510, 61.75914, 100.71914, 35.44876, ~
-## $ dispersion         <dbl> 22.886153, 6.133974, 33.985553, 10.365082~
-## $ underprediction    <dbl> 3.66782766, 24.82255866, 33.12350598, 8.5~
-## $ overprediction     <dbl> 12.0111222, 30.8026045, 33.6100814, 16.55~
-## $ coverage_deviation <dbl> 0.034531405, -0.268749094, -0.095652174, ~
-## $ bias               <dbl> 0.26194170, -0.27368253, -0.39217045, -0.~
-## $ aem                <dbl> 45.96333, 73.38096, 138.14395, 53.22563, ~
+## Rows: 887
+## Columns: 14
+## $ location           <chr> "DE", "DE", "DE", "DE", "DE", "DE", "DE", "DE", "DE~
+## $ target_end_date    <date> 2021-05-08, 2021-05-08, 2021-05-08, 2021-05-08, 20~
+## $ target_type        <chr> "Cases", "Cases", "Cases", "Deaths", "Deaths", "Dea~
+## $ location_name      <chr> "Germany", "Germany", "Germany", "Germany", "German~
+## $ forecast_date      <chr> "2021-05-03", "2021-05-03", "2021-05-03", "2021-05-~
+## $ model              <chr> "EuroCOVIDhub-baseline", "EuroCOVIDhub-ensemble", "~
+## $ horizon            <dbl> 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 1, 1, 1, 2, 2, 2, 2, ~
+## $ interval_score     <dbl> 16925.04696, 7990.85478, 25395.96087, 46.79304, 53.~
+## $ dispersion         <dbl> 1649.22087, 5440.98522, 8173.70000, 44.66261, 53.27~
+## $ underprediction    <dbl> 0.0000000, 0.0000000, 0.0000000, 0.0000000, 0.60869~
+## $ overprediction     <dbl> 15275.826087, 2549.869565, 17222.260870, 2.130435, ~
+## $ coverage_deviation <dbl> -0.38521739, 0.04956522, -0.29826087, 0.22347826, 0~
+## $ bias               <dbl> 0.95, 0.50, 0.90, 0.30, -0.10, -0.50, 0.10, 1.00, 0~
+## $ aem                <dbl> 25620, 12271, 44192, 15, 14, 208, 24, 67622, 45731,~
 \end{verbatim}
 \end{kframe}
 \end{knitrout}
-% 
-\fct{eval\_forecasts} aggregates scores by taking the mean over according to the grouping specified in \code{summarise_by}. In the above example, if \code{summarise_by = c("model", "value_type")}, then scores would be averaged over all creation dates, forecast horizons (as represented by the the value dates), locations and quantiles to yield one score per model and forecast target. For a more detailed analysis we could for example specifiy \code{summarise_by = c("mode", "value_type", "geography")} to additionally stratify by location. If we wanted to have one score per quantile or one per prediction interval range, we could use something like \code{summarise_by = c("model", "quantile", "range")}. This would allow us to examine interval or quantile coverage or makes it possible to analyse the accuracy of the tails of the forecasts. In addition to the mean, we can also obtain the standard deviation of the scores over which we average, as well as any desired quantile, by specifying \code{sd = TRUE} and for example \code{quantiles = c(0.5)} for the median. 
 
-The user must, however, exercise some caution when aggregating scores. As explained above, many of the metrics are absolute and scale with the magnitude of the quantity to forecast. This makes it sometimes ill-advised to average over them. In the given example, looking at one score per model (i.e. specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by hospital admissions, while errors on death forecasts would have little influence. Similarly, aggregating over different forecast horizons is often not a good idea as the mean will be dominated by further ahead forecast horizons. 
+The above produces one score for every forecast. However, we usually like to summarise scores to learn about average performance. 
 
-The second important argument of the \fct{eval\_forecasts} function is the \code{by} argument that denotes the unit of a single forecast. In the above example, the unit of a single forecast would be \code{by = c("model", "geography", "value_type", "creation_date", "value_date", "value_desc")} as there is one distinct forecast for each combination of these categories. Quantiles do not need to be included, as several quantiles make up one forecast (and similarly for samples). By default, if \code{by = NULL}, \fct{eval\_forecasts} will automatically use all present columns to determine the unit of a single forecast. In the above example, we did not have to explicitly specify the \code{by} argument, as all available columns were relevant to the unit of a single forecast. If there are additional columns that do not correspond to the unit of a single forecast, like for example the observed temperature in a given location, \code{by} must be specified and these columns must be excluded. 
-
-In order to obtain a model ranking, we recommend to look at the relative skill in terms of an appropriate proper scoring rule instead of the raw score. Relative skill scores can be aggregated more easily across different forecast targets as they are less influenced by the order of magnitude of the quantity to forecast than e.g. the WIS or the CRPS. 
-
-
-
-
-Pairwise comparisons between models [CITATION] can be obtained in two different ways. First, relative skill scores based on pairwise comparisons are by default returned from \fct{eval\_forecasts}. These will be computed separately for the categories defined in the \code{summarise_by} argument (excluding the category 'model'). Alternatively, a set of scores can be post-processed using the separate function \fct{pairwise\_comparison}. This approach is to be used for visualisation and if p-values for the pairwise comparisons are needed, as those are not returned from \fct{eval\_forecasts}. Usually, one would compute scores without specifying a \code{summarise_by} argument, but sometimes it may be sensible to average over certain scores, for example for predictions generated at a certain date. This allows to reduce the correlation between observations that enter the computation of p-values, which in turn makes the test less liberal. 
-Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models as well as the 
-
+We can either run a separate function to summarise the scores, 
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlcom{# unsummarised scores}
-\hlstd{unsummarised_scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(combined)}
-\hlstd{pairwise} \hlkwb{<-} \hlkwd{pairwise_comparison}\hlstd{(unsummarised_scores,} \hlkwc{summarise_by} \hlstd{=} \hlstr{"value_desc"}\hlstd{)}
+\hlstd{> }\hlstd{summarised_scores} \hlkwb{<-} \hlkwd{summarise_scores}\hlstd{(}\hlkwc{scores} \hlstd{= scores,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,}
+\hlstd{+ }    \hlstr{"target_type"}\hlstd{))}
 \end{alltt}
 \end{kframe}
 \end{knitrout}
 
-The result is a \code{data.table} with different scores and metrics in a tidy format that can easily be used for further manipulation and plotting. 
+or we score and summarise in one function call: 
 
-\section{Visualisation and interpretation of evaluation results}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{summarised_scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(example_quantile,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,}
+\hlstd{+ }    \hlstr{"target_type"}\hlstd{))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
 
-\subsection{Visualising aggregate scores and rankings}
-A good starting point for an evaluation is the following score table that visusalises the scores we produced above. We can facet the table to account for the different forecast targets: 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{summarised_scores}
+\end{alltt}
+\begin{verbatim}
+##                    model target_type interval_score dispersion underprediction
+## 1: EuroCOVIDhub-baseline       Cases    28483.57465 4102.50094    10284.972826
+## 2: EuroCOVIDhub-ensemble       Cases    17943.82383 3663.52458     4237.177310
+## 3:  epiforecasts-EpiNow2       Cases    20831.55662 5664.37795     3260.355639
+## 4: EuroCOVIDhub-baseline      Deaths      159.40387   91.40625        2.098505
+## 5: EuroCOVIDhub-ensemble      Deaths       41.42249   30.18099        4.103261
+## 6:       UMass-MechBayes      Deaths       52.65195   26.87239       16.800951
+## 7:  epiforecasts-EpiNow2      Deaths       66.64282   31.85692       15.893314
+##    overprediction coverage_deviation        bias         aem
+## 1:   14096.100883        -0.11211957  0.09796875 38473.60156
+## 2:   10043.121943        -0.09785326 -0.05640625 24101.07031
+## 3:   11906.823030        -0.06660326 -0.07890625 27923.81250
+## 4:      65.899117         0.11614130  0.33906250   233.25781
+## 5:       7.138247         0.19528533  0.07265625    53.13281
+## 6:       8.978601        -0.02312500 -0.02234375    78.47656
+## 7:      18.892583        -0.04287176 -0.00512605   104.74790
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+% 
+\fct{eval\_forecasts} and \fct{summarise\_scores} aggregate scores by taking the mean over according to the grouping specified in \code{summarise_by}. In the above example, if \code{summarise_by = c("model", "target_type")}, then scores would be averaged over all other categories to obtain one score per model and forecast target type. For a more detailed analysis we could for example specify \code{summarise_by = c("mode", "target_type", "location")} to additionally stratify by country. Summarised scores can be visualised using the function \fct{scores\_table} as is shown in Figure \ref{fig:score-table}. 
+
+If we wanted to have one score per quantile or one per prediction interval range, we could use something like \code{summarise_by = c("model", "quantile", "range")}. This would allow us to examine interval or quantile coverage or makes it possible to analyse the accuracy of the tails of the forecasts. In addition to the mean, we can also obtain the standard deviation of the scores over which we average, as well as any desired quantile, by specifying \code{sd = TRUE} and for example \code{quantiles = c(0.5)} for the median. 
+
+The user must, however, exercise some caution when aggregating scores. As explained above, many of the metrics are absolute and scale with the magnitude of the quantity to forecast. This makes it sometimes ill-advised to average over them. In the given example, looking at one score per model (i.e. specifying \code{summarise_by = c("model")}) is problematic, as overall aggregate scores would be dominated by case forecasts, while errors on death forecasts would have little influence. Similarly, aggregating over different forecast horizons is often not a good idea as the mean will be dominated by further ahead forecast horizons. 
 
 \begin{figure}[h]
 \centering
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{score_table}\hlstd{(scores,} \hlkwc{y} \hlstd{=} \hlstr{"model"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{value_desc)}
+\hlstd{> }\hlkwd{score_table}\hlstd{(summarised_scores,} \hlkwc{y} \hlstd{=} \hlstr{"model"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{target_type)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.98\textwidth]{plots/plot-score-table-1} 
+\includegraphics[width=\maxwidth]{plots/plot-score-table-1} 
 \end{knitrout}
 \caption{\label{fig:score-table} Coloured table to visualise the computed scores}
 \end{figure}
 
-The most informative metric in terms of model ranking is the relative\_skill. However, interpretation is not always straightforward and has to be done carefully. We can see that performance varied quite a bit across different metrics, where some models did well on one target, but poorly on another. Especially the Exponential growth/decline model stands out as it received the lowest relative skill score for hospital admissions, but the highest for the total number of beds occupied. Looking back at Figure \ref{fig:avail-forecasts}, we see that the model has only submitted very few forecasts over all. It may therefore be sensible to require all models to have submitted forecasts for at least 50\% of all forecast targets in order to enter the pairwise comparisons. For similar reasons, the interval score may be deceiving if looked at in isolation. As can be seen, the DetSEIRwithNB MLE model received a lower relative skill score, but a higher interval score than the DetSEIRwithNB MCMC model. This, again, can be explained by the fact that they forecasted different targets. The interval score, as an absolute metric, is highly influenced by the absolute value of the quantity that is forecasted. For the same reason, one should be careful when summarising interval scores from different locations or forecast targets, as the average score will be dominated by outliers as well as differences in the absolute level. Assuming a large enough set of available overlapping forecasts, the relative skill score is more robust. It therefore is reasonable to assume that the DetSEIRwithNB MLE forecasted quantities with a higher absolute value, but tended to perform worse than the DetSEIRwithNB MCMC model as far as we can tell based on the set of all pariwise comparisons. This can be confirmed for the direct comparison between the two by looking at the mean score ratios from the pairwise comparisons. These can be obtained by calling
+In order to obtain a model ranking, we recommend to look at the relative skill in terms of an appropriate proper scoring rule instead of the raw score. Relative skill scores can be aggregated more easily across different forecast targets as they are less influenced by the order of magnitude of the quantity to forecast than e.g. the WIS or the CRPS. 
+
+Again there are two possible ways to do pairwise comparisons. First, the function \fct{pairiwse\_comparison} can be called to compare models against each other. Here \code{summarise_by} denotes what relative skill scores shall be computed for. \code{summarise_by = "model"} means there will be one relative skill score per model, while \code{summarise_by = c("target_type", "target_type")} would mean there is one relative skill score per model, computed completely separately for different target types. 
+
+When using \fct{pairwise\_comparison}, it is important that the scores used as input have not been summarised in any way. 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{pairwise} \hlkwb{<-} \hlkwd{pairwise_comparison}\hlstd{(scores,} \hlkwc{baseline} \hlstd{=} \hlstr{"EuroCOVIDhub-baseline"}\hlstd{)}
+\hlstd{> }
+\hlstd{> }\hlstd{pairwise2} \hlkwb{<-} \hlkwd{pairwise_comparison}\hlstd{(scores,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,}
+\hlstd{+ }    \hlstr{"target_type"}\hlstd{),} \hlkwc{baseline} \hlstd{=} \hlstr{"EuroCOVIDhub-baseline"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Pairwise comparisons between models [CITATION] can be obtained in two different ways. First, relative skill scores based on pairwise comparisons are by default returned from \fct{eval\_forecasts}. These will be computed separately for the categories defined in the \code{summarise_by} argument (excluding the category 'model'). Alternatively, a set of scores can be post-processed using the separate function \fct{pairwise\_comparison}. This approach is to be used for visualisation and if p-values for the pairwise comparisons are needed, as those are not returned from \fct{eval\_forecasts}. Usually, one would compute scores without specifying a \code{summarise_by} argument, but sometimes it may be sensible to average over certain scores, for example for predictions generated at a certain date. This allows to reduce the correlation between observations that enter the computation of p-values, which in turn makes the test less liberal. 
+Using the function \fct{plot\_pairwise\_comparison} we can visualise the mean score ratios between all models as well as the 
+
+The result is a \code{data.table} with different scores and metrics in a tidy format that can easily be used for further manipulation and plotting. 
 
 \begin{figure}[h!]
 \centering
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{plot_pairwise_comparison}\hlstd{(pairwise)} \hlopt{+} \hlstd{ggplot2}\hlopt{::}\hlkwd{facet_wrap}\hlstd{(}\hlopt{~}\hlstd{value_desc,} \hlkwc{scales} \hlstd{=} \hlstr{"free_x"}\hlstd{)}
+\hlstd{> }\hlkwd{plot_pairwise_comparison}\hlstd{(pairwise2)} \hlopt{+} \hlstd{ggplot2}\hlopt{::}\hlkwd{facet_wrap}\hlstd{(}\hlopt{~}\hlstd{target_type,}
+\hlstd{+ }    \hlkwc{scales} \hlstd{=} \hlstr{"free_x"}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.98\textwidth]{plots/plot-pairwise-plot-1} 
+\includegraphics[width=\maxwidth]{plots/plot-pairwise-plot-1} 
 \end{knitrout}
 \caption{\label{fig:pairwise-comparison} Ratios of mean scores based on overlapping forecast sets. If a tile is blue, then the model on the y-axis performed better. If it is red, the model on the x-axis performed better in direct comparison. }
 \end{figure}
+
+\section{Visualisation and interpretation of evaluation results}
+
+\subsection{Visualising aggregate scores and rankings}
+A good starting point for an evaluation is the following score table that visusalises the scores we produced above. We can facet the table to account for the different forecast targets: 
+
+
+The most informative metric in terms of model ranking is the relative\_skill. However, interpretation is not always straightforward and has to be done carefully. We can see that performance varied quite a bit across different metrics, where some models did well on one target, but poorly on another. Especially the Exponential growth/decline model stands out as it received the lowest relative skill score for hospital admissions, but the highest for the total number of beds occupied. Looking back at Figure \ref{fig:avail-forecasts}, we see that the model has only submitted very few forecasts over all. It may therefore be sensible to require all models to have submitted forecasts for at least 50\% of all forecast targets in order to enter the pairwise comparisons. For similar reasons, the interval score may be deceiving if looked at in isolation. As can be seen, the DetSEIRwithNB MLE model received a lower relative skill score, but a higher interval score than the DetSEIRwithNB MCMC model. This, again, can be explained by the fact that they forecasted different targets. The interval score, as an absolute metric, is highly influenced by the absolute value of the quantity that is forecasted. For the same reason, one should be careful when summarising interval scores from different locations or forecast targets, as the average score will be dominated by outliers as well as differences in the absolute level. Assuming a large enough set of available overlapping forecasts, the relative skill score is more robust. It therefore is reasonable to assume that the DetSEIRwithNB MLE forecasted quantities with a higher absolute value, but tended to perform worse than the DetSEIRwithNB MCMC model as far as we can tell based on the set of all pariwise comparisons. This can be confirmed for the direct comparison between the two by looking at the mean score ratios from the pairwise comparisons. These can be obtained by calling
 
 In terms of actually understanding \textit{why} one model performs well or badly, the other metrics shown in Figure \ref{fig:score-table} provide additional insight. We turn to them in the following. 
 
@@ -551,32 +665,68 @@ For forecasts in an interval format, looking at the components of the weighted i
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlkwd{wis_components}\hlstd{(scores,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{value_desc,} \hlkwc{scales} \hlstd{=} \hlstr{"free_x"}\hlstd{,}
-    \hlkwc{relative_contributions} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{x_text_angle} \hlstd{=} \hlnum{0}\hlstd{)} \hlopt{+} \hlstd{ggplot2}\hlopt{::}\hlkwd{coord_flip}\hlstd{()} \hlopt{+}
-    \hlstd{ggplot2}\hlopt{::}\hlkwd{theme}\hlstd{(}\hlkwc{legend.position} \hlstd{=} \hlstr{"bottom"}\hlstd{)}
+\hlstd{> }\hlkwd{wis_components}\hlstd{(summarised_scores,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{target_type,}
+\hlstd{+ }    \hlkwc{scales} \hlstd{=} \hlstr{"free_x"}\hlstd{,} \hlkwc{relative_contributions} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{x_text_angle} \hlstd{=} \hlnum{0}\hlstd{)} \hlopt{+}
+\hlstd{+ }    \hlstd{ggplot2}\hlopt{::}\hlkwd{coord_flip}\hlstd{()} \hlopt{+} \hlstd{ggplot2}\hlopt{::}\hlkwd{theme}\hlstd{(}\hlkwc{legend.position} \hlstd{=} \hlstr{"bottom"}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.98\textwidth]{plots/plot-WIS-components-1} 
+\includegraphics[width=\maxwidth]{plots/plot-WIS-components-1} 
 \end{knitrout}
 \caption{\label{fig:wis-components} p-values and ratios together.}
 \end{figure}
 
 We can have a closer look at calibration using the functions \fct{interval\_coverage} and \fct{quantile\_coverage}. The interval coverage plot shows the proportion of all true values that fall within all the different prediction intervals. This gives a visual impression of probabilistic calibration \ref{gneitingProbabilisticForecastsCalibration2007}. Ideally, $x$ percent of true values should be covered by the $x$\%-prediction intervals, resulting in a 45° line. Areas shaded in green indicate that the model is covering more true values than it actually should, while areas in white indicate that the model fails to cover the desired proportion of true values with its prediction intervals. The majority of the models were too confident in their predictions, while some showed showed good calibration. The quantile coverage plot shows the proportion of all true values below certain predictive quantiles. While this plot is slightly harder to interpret, it also includes information about bias as and allows to separate the lower and upper boundaries of the prediction intervals. We can see, for example, that the Exponential growth/decline model was consistently biased downwards. Figure \ref{fig:coverage}
 
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{pit} \hlkwb{<-} \hlkwd{pit_df}\hlstd{(example_quantile,} \hlkwc{summarise_by} \hlstd{=} \hlstr{"model"}\hlstd{,} \hlstr{"target"}\hlstd{)}
+\hlstd{> }
+\hlstd{> }\hlkwd{hist_PIT}\hlstd{(pit)}
+\end{alltt}
+\begin{verbatim}
+## $`EuroCOVIDhub-baseline`
+## 
+## $`EuroCOVIDhub-ensemble`
+## 
+## $`epiforecasts-EpiNow2`
+## 
+## $`UMass-MechBayes`
+\end{verbatim}
+\end{kframe}
+
+\includegraphics[width=0.49\linewidth]{plots/plot-pit-plots-1} 
+\includegraphics[width=0.49\linewidth]{plots/plot-pit-plots-2} 
+\includegraphics[width=0.49\linewidth]{plots/plot-pit-plots-3} 
+\includegraphics[width=0.49\linewidth]{plots/plot-pit-plots-4} 
+\end{knitrout}
+
+
+
 \begin{figure}[h!]
 \centering
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{cov_scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(combined,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,} \hlstr{"range"}\hlstd{,}
-    \hlstr{"quantile"}\hlstd{))}
-\hlstd{scoringutils}\hlopt{::}\hlkwd{interval_coverage}\hlstd{(cov_scores)}
-\hlstd{scoringutils}\hlopt{::}\hlkwd{quantile_coverage}\hlstd{(cov_scores)}
+\hlstd{> }\hlstd{cov_scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(example_quantile,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,}
+\hlstd{+ }    \hlstr{"target_type"}\hlstd{,} \hlstr{"range"}\hlstd{,} \hlstr{"quantile"}\hlstd{))}
+\hlstd{> }
+\hlstd{> }\hlstd{scoringutils}\hlopt{::}\hlkwd{interval_coverage}\hlstd{(cov_scores,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{target_type)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.4\linewidth]{plots/plot-coverage-1} 
-\includegraphics[width=0.4\linewidth]{plots/plot-coverage-2} 
+\includegraphics[width=\maxwidth]{plots/plot-coverage-1} 
 \end{knitrout}
+
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{> }\hlstd{scoringutils}\hlopt{::}\hlkwd{quantile_coverage}\hlstd{(cov_scores,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{target_type)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{plots/plot-quantile-coverage-1} 
+\end{knitrout}
+
 
 \caption{\label{fig:coverage} quantile and interval coverage}
 \end{figure}
@@ -588,7 +738,7 @@ DO I WANT TO INCLUDE PIT PLOTS AS WELL? I GUESS? NEED TO LOOK AT THE IMPLEMENTAT
 % \centering
 % <<
 % pit-plots, echo=TRUE, fig=TRUE, height=5.2, width=12>>=
-% # out <- eval_forecasts(combined, 
+% # out <- eval_forecasts(example_quantile, 
 % #                       summarise_by = c("model"), 
 % #                       pit_plots = TRUE)
 % 
@@ -603,13 +753,13 @@ Look at e.g. bias by location? Figure \ref{fig:bias-heatmap}
 \begin{knitrout}
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
-\hlstd{scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(combined,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,} \hlstr{"value_desc"}\hlstd{,}
-    \hlstr{"geography"}\hlstd{),} \hlkwc{compute_relative_skill} \hlstd{=} \hlnum{FALSE}\hlstd{)}
-\hlstd{scoringutils}\hlopt{::}\hlkwd{score_heatmap}\hlstd{(scores,} \hlkwc{metric} \hlstd{=} \hlstr{"bias"}\hlstd{,} \hlkwc{x} \hlstd{=} \hlstr{"geography"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{value_desc,}
-    \hlkwc{scale} \hlstd{=} \hlstr{"free_x"}\hlstd{)}
+\hlstd{> }\hlstd{scores} \hlkwb{<-} \hlkwd{eval_forecasts}\hlstd{(example_quantile,} \hlkwc{summarise_by} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{"model"}\hlstd{,}
+\hlstd{+ }    \hlstr{"target_type"}\hlstd{,} \hlstr{"location_name"}\hlstd{),} \hlkwc{compute_relative_skill} \hlstd{=} \hlnum{FALSE}\hlstd{)}
+\hlstd{> }\hlstd{scoringutils}\hlopt{::}\hlkwd{score_heatmap}\hlstd{(scores,} \hlkwc{metric} \hlstd{=} \hlstr{"interval_score"}\hlstd{,}
+\hlstd{+ }    \hlkwc{x} \hlstd{=} \hlstr{"location_name"}\hlstd{,} \hlkwc{facet_formula} \hlstd{=} \hlopt{~}\hlstd{target_type,} \hlkwc{scale} \hlstd{=} \hlstr{"free_x"}\hlstd{)}
 \end{alltt}
 \end{kframe}
-\includegraphics[width=0.98\textwidth]{plots/plot-calibration-1} 
+\includegraphics[width=\maxwidth]{plots/plot-calibration-1} 
 \end{knitrout}
 \caption{\label{fig:bias-heatmap} bias by location}
 \end{figure}
